@@ -72,6 +72,16 @@ namespace Vampire
             {
                 upgradeableValue.Upgrade(value);
             }
+            
+            // Track ability upgrade event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackAbilityUsed(
+                    typeof(T).Name, 
+                    "upgrade", 
+                    1.0f
+                );
+            }
         }
 
         /// <summary>

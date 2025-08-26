@@ -102,7 +102,7 @@ namespace Vampire
             rb.velocity += knockback * Mathf.Sqrt(rb.drag);
         }
 
-        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2))
+        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2), string damageSource = "enemy_attack")
         {
             if (alive)
             {
@@ -139,6 +139,16 @@ namespace Vampire
             // Drop loot
             if (killedByPlayer)
                 DropLoot();
+
+            // Track enemy defeat event
+            if (EventTracker.Instance != null && killedByPlayer)
+            {
+                EventTracker.Instance.TrackEnemyDefeated(
+                    monsterBlueprint.name, 
+                    Mathf.RoundToInt(monsterBlueprint.hp), 
+                    "player_attack"
+                );
+            }
 
             if (deathParticles != null)
             {       

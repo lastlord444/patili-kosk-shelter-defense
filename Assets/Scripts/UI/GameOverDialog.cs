@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.Localization;
+using System.Collections.Generic;
 
 namespace Vampire
 {
@@ -22,6 +23,21 @@ namespace Vampire
             damageDealt.text = statsManager.DamageDealt.ToString();
             damageTaken.text = statsManager.DamageTaken.ToString();
             background.SetActive(true);
+            
+            // Track game over event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackEventSafely("game_over", new Dictionary<string, object>
+                {
+                    ["level_passed"] = levelPassed,
+                    ["coins_gained"] = statsManager.CoinsGained,
+                    ["enemies_killed"] = statsManager.MonstersKilled,
+                    ["damage_dealt"] = statsManager.DamageDealt,
+                    ["damage_taken"] = statsManager.DamageTaken,
+                    ["timestamp"] = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+            }
+            
             base.Open();
         }
 

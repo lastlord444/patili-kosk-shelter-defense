@@ -22,12 +22,24 @@ namespace Vampire
         {
             monstersKilled++;
             monstersKilledText.text = monstersKilled.ToString();
+            
+            // Track performance milestone
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackPerformance("monsters_killed", monstersKilled, "count");
+            }
         }
 
         public void IncreaseCoinsGained(int amount)
         {
             coinsGained += amount;
             coinsGainedText.text = coinsGained.ToString();
+            
+            // Track resource collection event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackResourceCollected("Coins", amount, "level_progression");
+            }
         }
 
         public void IncreaseDamageDealt(float damage)

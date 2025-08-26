@@ -161,6 +161,13 @@ namespace Vampire
                 // Level up
                 currentLevel++;
                 UpdateLevelDisplay();
+                
+                // Track level up event
+                if (EventTracker.Instance != null)
+                {
+                    EventTracker.Instance.TrackLevelStarted(currentLevel, "normal");
+                }
+                
                 // Open the level up dialog menu
                 abilitySelectionDialog.Open();
                 // Wait for the menu to be closed
@@ -181,7 +188,7 @@ namespace Vampire
             rb.velocity += knockback * Mathf.Sqrt(rb.drag);
         }
 
-        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2))
+        public override void TakeDamage(float damage, Vector2 knockback = default(Vector2), string damageSource = "enemy_attack")
         {
             if (alive)
             {
@@ -196,6 +203,13 @@ namespace Vampire
                 // Knockback
                 rb.velocity += knockback * Mathf.Sqrt(rb.drag);
                 statsManager.IncreaseDamageTaken(damage);
+                
+                // Track player damage event
+                if (EventTracker.Instance != null)
+                {
+                    EventTracker.Instance.TrackPlayerDamaged(damage, currentHealth, damageSource);
+                }
+                
                 if (currentHealth <= 0)
                 {
                     StartCoroutine(DeathAnimation());

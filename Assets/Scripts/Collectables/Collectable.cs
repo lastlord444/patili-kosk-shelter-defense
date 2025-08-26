@@ -72,6 +72,16 @@ namespace Vampire
 
         public void Use()
         {
+            // Track resource collection event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackResourceCollected(
+                    CollectableType.name, 
+                    1, 
+                    "player_pickup"
+                );
+            }
+            
             OnCollected();
         }
 

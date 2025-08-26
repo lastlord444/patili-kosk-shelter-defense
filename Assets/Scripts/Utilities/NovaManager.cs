@@ -124,7 +124,7 @@ namespace Vampire
                 var userProperties = new Dictionary<string, object>
                 {
                     ["country"] = "US",
-                    ["tier"] = "free"
+                    ["tier"] = "paid"
                 };
 
                 bool userCreated = await NovaSDK.Instance.CreateUser(userId, userProperties);

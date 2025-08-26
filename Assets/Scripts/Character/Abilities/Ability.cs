@@ -69,11 +69,31 @@ namespace Vampire
         protected virtual void Use()
         {
             upgradeableValues.ForEach(x => x.RegisterInUse());
+            
+            // Track ability usage event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackAbilityUsed(
+                    GetType().Name, 
+                    "activation", 
+                    1.0f
+                );
+            }
         }
 
         protected virtual void Upgrade()
         {
             upgradeableValues.ForEach(x => x.Upgrade());
+            
+            // Track ability upgrade event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackAbilityUsed(
+                    GetType().Name, 
+                    "upgrade", 
+                    1.0f
+                );
+            }
         }
 
         public virtual bool RequirementsMet()

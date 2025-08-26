@@ -26,6 +26,12 @@ namespace Vampire
             this.levelBlueprint = levelBlueprint;
             levelTime = 0;
             
+            // Track level started event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackLevelStarted(1, "normal");
+            }
+            
             // Initialize the entity manager
             entityManager.Init(this.levelBlueprint, playerCharacter, inventory, statsManager, infiniteBackground, abilitySelectionDialog);
             // Initialize the ability manager
@@ -110,6 +116,13 @@ namespace Vampire
             Time.timeScale = 0;
             int coinCount = PlayerPrefs.GetInt("Coins");
             PlayerPrefs.SetInt("Coins", coinCount + statsManager.CoinsGained);
+            
+            // Track level completed event
+            if (EventTracker.Instance != null)
+            {
+                EventTracker.Instance.TrackLevelCompleted(1, statsManager.CoinsGained, levelTime);
+            }
+            
             gameOverDialog.Open(true, statsManager);
         }
 

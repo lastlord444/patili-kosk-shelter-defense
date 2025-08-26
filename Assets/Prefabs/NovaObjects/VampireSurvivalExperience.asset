@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3456789012345678901234abcdef0123, type: 3}
   m_Name: VampireSurvivalExperience
   m_EditorClassIdentifier: 
-  ExperienceName: 
-  Description: 
-  GameObjects: []
+  ExperienceName: VampireSurvivalExperience
+  Description: VampireSurvivalExperience
+  GameObjects:
+  - {fileID: 7920183873899445502, guid: 97980748cd24840d88810fca2fed5e53, type: 3}
+  - {fileID: 918806642367682393, guid: a7d65e124d3ef4e15b90e93e64a14173, type: 3}
+  - {fileID: 2135639035804730048, guid: d27ce598828b4418390fc8cd2ba72681, type: 3}
