@@ -60,5 +60,5 @@ MonoBehaviour:
     Description: 
   - PropertyName: healing_effectiveness
     Type: 0
-    DefaultValue: 0
+    DefaultValue: 1
     Description: 

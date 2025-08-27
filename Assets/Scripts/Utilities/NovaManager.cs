@@ -93,6 +93,12 @@ namespace Vampire
             {
                 // Set initializing flag
                 isInitializing = true;
+
+                var playerName = PlayerPrefs.GetString("profile.name", "Player");
+                var country = PlayerPrefs.GetString("profile.country", "Unknown");
+
+                Debug.Log($"🔍 Player Name: {playerName}, Country: {country}");
+
                 
                 // Check if all required components are assigned
                 if (!AreNovaComponentsValid())
