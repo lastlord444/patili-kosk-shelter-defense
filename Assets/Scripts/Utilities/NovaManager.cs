@@ -21,15 +21,66 @@ namespace Vampire
         private GameObject playerProgressionInstance;
         private GameObject combatInstance;
         
-        void Start()
+        // Public method to initialize Nova after onboarding
+        public static void InitializeNovaAfterOnboarding()
         {
-            // Prevent multiple initializations
             if (novaInitialized || isInitializing)
             {
                 Debug.Log("🔄 Nova already initialized or initializing, skipping...");
                 return;
             }
             
+            // Check if onboarding is complete
+            if (!IsOnboardingComplete())
+            {
+                Debug.LogWarning("⚠️ Onboarding not complete, cannot initialize Nova");
+                return;
+            }
+            
+            var instance = FindObjectOfType<NovaManager>();
+            if (instance != null)
+            {
+                instance.StartNovaInitialization();
+            }
+            else
+            {
+                Debug.LogError("❌ NovaManager not found in scene");
+            }
+        }
+        
+        // Check if onboarding is complete
+        private static bool IsOnboardingComplete()
+        {
+            var hasName = PlayerPrefs.HasKey("profile.name");
+            var hasCountry = PlayerPrefs.HasKey("profile.country");
+            var name = PlayerPrefs.GetString("profile.name", "");
+            
+            return hasName && hasCountry && !string.IsNullOrWhiteSpace(name);
+        }
+        
+        // Public method for testing - force Nova initialization
+        [ContextMenu("Force Nova Initialization")]
+        public void ForceNovaInitialization()
+        {
+            if (novaInitialized || isInitializing)
+            {
+                Debug.Log("🔄 Nova already initialized or initializing, skipping...");
+                return;
+            }
+            
+            Debug.Log("🧪 Force initializing Nova (for testing)");
+            StartNovaInitialization();
+        }
+        
+        void Start()
+        {
+            // Don't auto-initialize - wait for onboarding completion
+            Debug.Log("⏳ Nova initialization delayed until onboarding completion...");
+        }
+        
+        // Private method to start Nova initialization
+        private void StartNovaInitialization()
+        {
             // Check if all required components are assigned
             if (!AreNovaComponentsValid())
             {
@@ -126,10 +177,11 @@ namespace Vampire
                 // Create user
                 string userId = GetOrCreateUserId();
 
-                // Create user properties
+                // Create user properties using onboarding data
                 var userProperties = new Dictionary<string, object>
                 {
-                    ["country"] = "US",
+                    ["name"] = playerName,
+                    ["country"] = country,
                     ["tier"] = "paid"
                 };
 

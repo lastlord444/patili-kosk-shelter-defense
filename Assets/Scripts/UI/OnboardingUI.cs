@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vampire;
 
 public class OnboardingUI : MonoBehaviour
 {
@@ -52,8 +53,8 @@ public class OnboardingUI : MonoBehaviour
 
         // Show/hide screens
         bool hasProfile = hasName && hasCountry && !string.IsNullOrWhiteSpace(PlayerPrefs.GetString(KeyName));
-        onboardingRoot.SetActive(!hasProfile);
-        mainMenuRoot.SetActive(hasProfile);
+        onboardingRoot.SetActive(true);
+        mainMenuRoot.SetActive(false);
 
         continueButton.onClick.AddListener(Submit);
     }
@@ -72,6 +73,10 @@ public class OnboardingUI : MonoBehaviour
         PlayerPrefs.SetString(KeyName, playerName);
         PlayerPrefs.SetString(KeyCountry, country);
         PlayerPrefs.Save();
+
+        // Initialize Nova SDK with user profile data
+        Debug.Log($"🚀 Initializing Nova SDK for user: {playerName} from {country}");
+        NovaManager.InitializeNovaAfterOnboarding();
 
         onboardingRoot.SetActive(false);
         mainMenuRoot.SetActive(true);
