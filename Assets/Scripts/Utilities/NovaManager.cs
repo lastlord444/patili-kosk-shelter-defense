@@ -21,6 +21,10 @@ namespace Vampire
         private GameObject playerProgressionInstance;
         private GameObject combatInstance;
         
+        // Events for proper event-driven programming
+        public static System.Action OnNovaInitialized;
+        public static System.Action OnConfigurationLoaded;
+        
         // Public method to initialize Nova after onboarding
         public static void InitializeNovaAfterOnboarding()
         {
@@ -70,6 +74,29 @@ namespace Vampire
             
             Debug.Log("🧪 Force initializing Nova (for testing)");
             StartNovaInitialization();
+        }
+        
+        // Public method to force configuration reload
+        [ContextMenu("Force Configuration Reload")]
+        public void ForceConfigurationReload()
+        {
+            Debug.Log("🔄 Force reloading Nova configuration...");
+            configurationLoaded = false;
+            LoadGameConfiguration();
+        }
+        
+        // Static method to reload configuration from anywhere
+        public static void ReloadConfiguration()
+        {
+            var instance = FindObjectOfType<NovaManager>();
+            if (instance != null)
+            {
+                instance.ForceConfigurationReload();
+            }
+            else
+            {
+                Debug.LogError("❌ NovaManager not found in scene");
+            }
         }
         
         void Start()
@@ -176,6 +203,7 @@ namespace Vampire
                 
                 // Create user
                 string userId = GetOrCreateUserId();
+                //string userId = "1234567890";
 
                 // Create user properties using onboarding data
                 var userProperties = new Dictionary<string, object>
@@ -198,19 +226,16 @@ namespace Vampire
                     await NovaSDK.Instance.FetchExperience(vampireSurvivalExperience);
                     Debug.Log("Nova experience fetched successfully");
                     
-                    // Wait a moment for the experience to be fully loaded
-                    await System.Threading.Tasks.Task.Delay(500);
-                    
-                    // Wait longer for the experience to be fully loaded
-                    Debug.Log($"🔍 Waiting for experience to fully load...");
-                    await System.Threading.Tasks.Task.Delay(1000);
-                    
-                    // Load configuration
+                    // Load configuration immediately after experience is fetched
+                    // No need for arbitrary delays - the experience is ready
                     LoadGameConfiguration();
                     
                     novaInitialized = true;
                     isInitializing = false;
                     Debug.Log("✅ Nova initialization completed successfully");
+                    
+                    // Fire event for other systems to know Nova is ready
+                    OnNovaInitialized?.Invoke();
                 }
                 else
                 {
@@ -304,7 +329,7 @@ namespace Vampire
             
             try
             {
-                Debug.Log("Loading Nova configuration values...");
+                Debug.Log("🔄 Loading Nova configuration values...");
                 
                 // Check if NovaSDK is initialized
                 if (NovaSDK.Instance == null)
@@ -329,10 +354,16 @@ namespace Vampire
                 }
                 
                 // Check if instantiated objects are valid and not destroyed
+                Debug.Log($"🔍 Checking Nova context instances...");
+                Debug.Log($"🔍 GameBalance Instance: {(gameBalanceInstance != null ? "Valid" : "NULL")}");
+                Debug.Log($"🔍 PlayerProgression Instance: {(playerProgressionInstance != null ? "Valid" : "NULL")}");
+                Debug.Log($"🔍 Combat Instance: {(combatInstance != null ? "Valid" : "NULL")}");
+                
                 if (!IsValidUnityObject(gameBalanceInstance) || !IsValidUnityObject(playerProgressionInstance) || !IsValidUnityObject(combatInstance))
                 {
-                    Debug.LogError("❌ One or more Nova context instances are null or destroyed, cannot load configuration");
-                    return;
+                    Debug.LogWarning("⚠️ One or more Nova context instances are null or destroyed, but continuing with direct SDK access");
+                    Debug.LogWarning($"⚠️ GameBalance: {IsValidUnityObject(gameBalanceInstance)}, PlayerProgression: {IsValidUnityObject(playerProgressionInstance)}, Combat: {IsValidUnityObject(combatInstance)}");
+                    // Continue with direct SDK access instead of returning
                 }
                 
                 // Debug: Check if experience is loaded
@@ -396,6 +427,9 @@ namespace Vampire
                 {
                     Debug.LogWarning("🔍 Combat Context is null or destroyed");
                 }
+                
+                // Load configuration values directly from Nova SDK
+                Debug.Log("🔄 Loading configuration values directly from Nova SDK...");
                 
                 // Try getting values with individual try-catch blocks
                 Debug.Log("Loading game balance configuration...");
@@ -565,6 +599,9 @@ namespace Vampire
                 configurationLoaded = true;
                 Debug.Log("✅ Nova configuration loaded successfully");
                 Debug.Log($"📊 Final Values - Spawn Rate: {NovaConfig.GameBalance.SpawnRateMultiplier}, Health: {NovaConfig.GameBalance.HealthMultiplier}, Movement: {NovaConfig.PlayerProgression.MovementSpeed}");
+                
+                // Fire event for other systems to know configuration is loaded
+                OnConfigurationLoaded?.Invoke();
             }
             catch (System.Exception ex)
             {

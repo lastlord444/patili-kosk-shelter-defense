@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OrganisationId: ef1ada60-32b2-4879-a8a9-d188c3fa3159
   AppId: e8479abe-7669-41ba-9712-0f520d044200
-  EnableVerboseLogging: 0
+  EnableVerboseLogging: 1
   ApiBaseUrl: https://nova-manager-475016739432.us-central1.run.app
   CacheExpirationMinutes: 60
-  EventBatchSize: 5
+  EventBatchSize: 1
   EventBatchIntervalSeconds: 10
