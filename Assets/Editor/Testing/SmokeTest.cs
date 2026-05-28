@@ -150,10 +150,21 @@ namespace VampireEditor
                 initialPosition = character.transform.position;
                 Debug.Log($"[SmokeTestObserver] Found player character at {initialPosition}");
                 
-                // Simulate player input movement
-                character.Move(Vector2.right);
-                character.StartWalkAnimation();
-                Debug.Log("[SmokeTestObserver] Simulating move right...");
+                // Find TouchJoystick in scene
+                var joystick = Object.FindFirstObjectByType<TouchJoystick>();
+                if (joystick != null)
+                {
+                    Debug.Log("[SmokeTestObserver] Found TouchJoystick. Simulating joystick drag right...");
+                    joystick.StartTouch(Vector2.zero);
+                    joystick.UpdateTouch(Vector2.right * 100f); // 100f is the joystickRadius
+                }
+                else
+                {
+                    Debug.LogError("[SmokeTestObserver] TouchJoystick NOT found in scene!");
+                    // Fallback to direct movement if joystick is missing
+                    character.Move(Vector2.right);
+                    character.StartWalkAnimation();
+                }
             }
             else
             {

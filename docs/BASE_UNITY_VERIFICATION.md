@@ -19,9 +19,11 @@ Bu doküman, base Unity projesinin Unity 6 (6000.3.16f1) altındaki derleme, oyn
 
 - **Test Edilen Sahne:** `Assets/Scenes/Game/Level 1.unity`
 - **Karakter Bulundu mu:** Evet (`Vampire.Character`)
-- **Karakter Hareketi:** Evet (Karakter girdileri simüle edilmiş ve hareket ettiği doğrulanmıştır)
-- **Monster Spawning:** Evet (Düşman canavarların dalgalar halinde sahneye yüklendiği doğrulanmıştır)
-- **Runtime Hataları/Exception'lar:** 0 (Herhangi bir runtime hatası veya NullReferenceException alınmamıştır)
+- **Karakter Hareketi ve Girdi Doğrulaması:** 
+  - **Klavye Kontrolü (Keyboard Input):** WASD girdileri sorunsuz çalışmaktadır ve karakteri hareket ettirmektedir.
+  - **Sanal Joystick (TouchJoystick Input):** `TouchJoystick.cs` içindeki `SendValueToControl` metodunun yorum satırından çıkarılmasıyla (wiring fix) joystick girdisi Input System'a (`<Gamepad>/leftStick`) başarıyla bağlanmıştır.
+  - **Joystick Hareket Kanıtı (Movement Evidence):** Sağa joystick sürükleme simülasyonunda, karakterin başlangıç konumu `(0.00, 0.00, 0.00)` iken 2 saniye içinde `(2.61, 0.00, 0.00)` konumuna ulaştığı ve Rigidbody2D hızının güncellendiği (`Player Moved: True`) test raporuyla (`smoke_test_report.txt`) kanıtlanmıştır.
+- **Runtime Hataları/Exception'lar:** 0 (Konsol ve çalışma zamanında herhangi bir NullReferenceException veya script hatası alınmamıştır)
 
 ### 3. Android Build Smoke Testi
 
@@ -30,6 +32,7 @@ Bu doküman, base Unity projesinin Unity 6 (6000.3.16f1) altındaki derleme, oyn
 - **Toplam Hata:** 0
 - **Üretilen APK Yolu:** `Build/android_smoke.apk`
 - **APK Boyutu (Gerçek Byte):** 60,802,047 bytes (~60.8 MB)
+
 
 ## Yerel Kanıt ve Log Dosyaları (Local Evidence)
 
