@@ -229,11 +229,64 @@ namespace VampireEditor
                 {
                     playerMoved = character.transform.position != initialPosition || character.Velocity != Vector2.zero;
                 }
+
+                // Verify Placeholders
+                bool playerPlaceholderVerified = false;
+                var playerBlueprint = CrossSceneData.CharacterBlueprint;
+                if (playerBlueprint != null && playerBlueprint.walkSpriteSequence != null && playerBlueprint.walkSpriteSequence.Length > 0)
+                {
+                    playerPlaceholderVerified = playerBlueprint.walkSpriteSequence[0].name == "cat_guardian_placeholder";
+                }
+
+                bool enemyPlaceholderVerified = false;
+                Monster[] monsters = Object.FindObjectsByType<Monster>(FindObjectsSortMode.None);
+                if (monsters.Length > 0)
+                {
+                    var monster = monsters[0];
+                    var field = typeof(Monster).GetField("monsterBlueprint", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (field != null)
+                    {
+                        var monsterBp = field.GetValue(monster) as MonsterBlueprint;
+                        if (monsterBp != null && monsterBp.walkSpriteSequence != null && monsterBp.walkSpriteSequence.Length > 0)
+                        {
+                            enemyPlaceholderVerified = monsterBp.walkSpriteSequence[0].name == "shadow_enemy_placeholder";
+                        }
+                    }
+                }
+                else
+                {
+                    var monsterBp = AssetDatabase.LoadAssetAtPath<MonsterBlueprint>("Assets/Blueprints/Monsters/Melee/初級小兵.asset");
+                    if (monsterBp != null && monsterBp.walkSpriteSequence != null && monsterBp.walkSpriteSequence.Length > 0)
+                    {
+                        enemyPlaceholderVerified = monsterBp.walkSpriteSequence[0].name == "shadow_enemy_placeholder";
+                    }
+                }
+
+                bool coinPlaceholderVerified = false;
+                var coinBp = AssetDatabase.LoadAssetAtPath<CoinBlueprint>("Assets/Blueprints/Coin/Coin.asset");
+                if (coinBp != null && coinBp.coinSprites != null && coinBp.coinSprites.Length > 0)
+                {
+                    // CoinType.Bronze1 is 1
+                    var bronzeSprite = coinBp.coinSprites[0]; // access first index of EnumDataContainer content
+                    coinPlaceholderVerified = bronzeSprite != null && bronzeSprite.name == "food_coin_placeholder";
+                }
+
+                bool gemPlaceholderVerified = false;
+                var gemBp = AssetDatabase.LoadAssetAtPath<ExpGemBlueprint>("Assets/Blueprints/Exp Gem/Exp Gem.asset");
+                if (gemBp != null && gemBp.gemSpritesAndColors != null && gemBp.gemSpritesAndColors.Length > 0)
+                {
+                    var (gemSprite, _) = gemBp.gemSpritesAndColors[0];
+                    gemPlaceholderVerified = gemSprite != null && gemSprite.name == "exp_gem_placeholder";
+                }
                 
                 string result = $"Smoke Test Report:\n" +
                                $"- Player Found: {characterFound}\n" +
                                $"- Player Moved: {playerMoved}\n" +
                                $"- Enemies Spawned: {enemySpawned}\n" +
+                               $"- Player Placeholder Verified: {playerPlaceholderVerified}\n" +
+                               $"- Enemy Placeholder Verified: {enemyPlaceholderVerified}\n" +
+                               $"- Coin Placeholder Verified: {coinPlaceholderVerified}\n" +
+                               $"- Gem Placeholder Verified: {gemPlaceholderVerified}\n" +
                                $"- Runtime Errors/Exceptions:\n{(string.IsNullOrEmpty(logOutput) ? "None" : logOutput)}\n" +
                                $"- Time Elapsed: {timer}s\n";
                 

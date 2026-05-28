@@ -84,6 +84,7 @@ crashlytics-build.properties
 /android_build_report.txt
 /smoke_test_report.txt
 /unity_open.log
+/apply_placeholders.log
 *.slnx
 /.utmp/
 

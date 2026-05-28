@@ -24,9 +24,13 @@
 
 Orijinal projedeki tüm görsel assetler Vampire Survivors esintili spritelardan oluşmaktadır. Bu görsel varlıkların lisans durumları net olmamakla birlikte, oyun ticari bir ürüne dönüştürülmeden önce (Phase 2 kapsamında) **tamamen değiştirilecek**, kedi barınağı temalı orijinal çizimler ve lisanslı assetlerle değiştirilecektir.
 
+Phase 2A kapsamında, lisanssız spriteların bir kısmı Kenney CC0 placeholder assetleri ile değiştirilmiştir:
+
 | Asset | Source | License | Status |
 |---|---|---|---|
-| Monsters / Character Sprites | VampireSurvivorsClone | Unclear (VS IP) | ⚠️ To be replaced in Phase 2 |
+| Monsters / Character Sprites | VampireSurvivorsClone | Unclear (VS IP) | ⚠️ Replaced selectively in Phase 2A |
+| Kenney Pixel Platformer Sprites (cat_guardian, shadow_enemy, food_coin, exp_gem) | Package: **Pixel Platformer**<br>Source: https://kenney.nl/assets/pixel-platformer<br>Download Date: 2026-05-28 | Creative Commons Zero (CC0) | ✔️ Safe. License file at: `Assets/_PatiliKosk/Art/Placeholders/Kenney/Kenney-License.txt`. Attribution optional. Kenney logo is NOT used. |
+
 
 ## Third-Party Font Credits
 
