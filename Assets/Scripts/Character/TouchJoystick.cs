@@ -94,7 +94,7 @@ namespace Vampire
             joystick.localPosition = joystickDelta.magnitude > joystickRadius ? initialTouchPosition + moveDirection * joystickRadius : touchPosition;
             // Invoke on move callback
             onJoystickMoved.Invoke(moveDirection);
-            //SendValueToControl<Vector2>(moveDirection);
+            SendValueToControl<Vector2>(moveDirection);
         }
 
         public void EndTouch()
@@ -105,7 +105,7 @@ namespace Vampire
             joystickBounds.gameObject.SetActive(permanent);
             // Invoke touch ended callback
             onJoystickMoved.Invoke(Vector2.zero);
-            //SendValueToControl<Vector2>(Vector2.zero);
+            SendValueToControl<Vector2>(Vector2.zero);
             onEndTouch.Invoke();
             beingTouched = false;
         }

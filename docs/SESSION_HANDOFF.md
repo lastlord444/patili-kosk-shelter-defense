@@ -18,9 +18,12 @@
   - Gradle `assembleRelease` completed successfully.
   - Generated Output: `Build/android_smoke.apk` (Succeeded).
 - [x] Performed cleanup of local test evidence files and removed `com.coplaydev.unity-mcp` dependency from project manifest.
-- [x] Created `docs/BASE_UNITY_VERIFICATION.md` to document single-source verification results.
+- [x] Resolved **Mobile Virtual Joystick Blocker**: Uncommented `SendValueToControl` in `TouchJoystick.cs`, successfully enabling virtual joystick movement in Input System.
+- [x] Verified **TouchJoystick in Play Mode**: Play Mode smoke test now simulates joystick drag and verifies character movement through the joystick wiring.
+- [x] Created/Updated `docs/BASE_UNITY_VERIFICATION.md` to document single-source verification results and joystick movement evidence.
 
 ## Repo State at Handoff
+
 
 | Item | State |
 |---|---|

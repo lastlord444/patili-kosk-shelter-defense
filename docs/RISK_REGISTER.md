@@ -12,6 +12,7 @@
 | R04 | Audio/music not cleared for commercial use | MEDIUM | MEDIUM | Audit all audio; replace with CC0 or original audio | ⚠️ Open (Focus in Phase 2) |
 | R07 | Scope creep — project remains VS clone instead of shelter defense | MEDIUM | HIGH | Enforce REPO_TRUTH and CONVERSION_PLAN in all PRs | ⚠️ Open |
 | R08 | Android performance issues from base project | LOW | MEDIUM | Profile after core gameplay conversion | ⚠️ Open (Build success verified) |
+| R09 | Mobile virtual joystick input wiring issue | LOW | MEDIUM | Resolved - Uncommented SendValueToControl calls in TouchJoystick.cs | ✔️ Mitigated |
 
 ## Closed Risks
 
@@ -20,8 +21,11 @@
 | R00 | MIT license not preserved | Resolved — LICENSE file preserved in import. |
 | R05 | Unity version incompatibility on dev machine | Resolved — Successfully upgraded from 2021.3.21f1 to Unity 6 (6000.3.16f1) with 0 compiler errors. |
 | R06 | Unity package dependencies with incompatible licenses | Resolved — Audited Packages/manifest.json; all dependencies are official Unity packages under Unity EULA. |
+| R09 | Mobile virtual joystick input wiring issue | Resolved — Uncommented SendValueToControl calls in TouchJoystick.cs. Verified in Play Mode. |
 
 ## Notes
 
 - Art and IP risks (R01, R02) will be addressed immediately in Phase 2.
 - The success of the Android build verified that there are no compiler blockers or SDK/NDK integration blockers on the development environment.
+- Mobile virtual joystick input wiring blocker was successfully resolved and verified via Play Mode smoke test simulation.
+
