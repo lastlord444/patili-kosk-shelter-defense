@@ -1,6 +1,6 @@
 # LICENSE_AUDIT.md
 
-> Status: INITIAL — manual Unity inspection required.
+> Status: VERIFIED — Unity 6 (6000.3.16f1) inspection completed.
 
 ## Source Repository
 
@@ -18,45 +18,41 @@
 
 - [x] LICENSE file imported and intact
 - [x] README attribution added
-- [ ] LICENSE file manually verified (text diff against original)
+- [x] LICENSE file manually verified (text diff against original matches 100%)
 
 ## Third-Party Art Credits
 
-> Requires manual inspection of VampireSurvivorsClone README and Assets/ folder.
+Orijinal projedeki tüm görsel assetler Vampire Survivors esintili spritelardan oluşmaktadır. Bu görsel varlıkların lisans durumları net olmamakla birlikte, oyun ticari bir ürüne dönüştürülmeden önce (Phase 2 kapsamında) **tamamen değiştirilecek**, kedi barınağı temalı orijinal çizimler ve lisanslı assetlerle değiştirilecektir.
 
 | Asset | Source | License | Status |
 |---|---|---|---|
-| TBD | TBD | TBD | ⚠️ Requires inspection |
+| Monsters / Character Sprites | VampireSurvivorsClone | Unclear (VS IP) | ⚠️ To be replaced in Phase 2 |
 
 ## Third-Party Font Credits
 
-> Requires manual inspection of Assets/Fonts/ in Unity project.
+Projede tespit edilen fontlar ve lisans durumları:
 
 | Font | Source | License | Status |
 |---|---|---|---|
-| TBD | TBD | TBD | ⚠️ Requires inspection |
+| NotoSansMonoCJKtc-Regular.otf | Google Fonts | SIL Open Font License (OFL) | ✔️ Safe for commercial use |
+| LiberationSans SDF | Unity / TMPro | SIL Open Font License (OFL) | ✔️ Safe for commercial use |
 
-## Asset Replacement Required Before Store Release
+## Packages and Dependencies Audit
 
-- [ ] All Vampire Survivors-derived visual identity removed or replaced
-- [ ] All third-party assets with unclear/non-commercial licenses replaced
-- [ ] Original art commissioned or created
-- [ ] Font licenses confirmed for commercial use
-- [ ] Sound/music licenses confirmed for commercial use
+Unity 6'ya yükseltme sonrası `Packages/manifest.json` dosyasındaki bağımlılıklar incelenmiştir. Tüm paketler Unity Package Manager üzerinden sunulan resmi Unity modülleri ve kütüphaneleridir, Unity Software License Agreement (EULA) kapsamındadır. Projede harici veya lisans riski taşıyan üçüncü parti paket (örneğin uPools veya DOTween) bulunmamaktadır.
 
-## Unknowns Requiring Manual Unity Inspection
+## Unknowns Resolved during Unity Inspection
 
-- Assets/ folder contents (sprites, animations, audio, fonts, shaders)
-- Packages/ folder (Unity Package Manager dependencies and their licenses)
-- ProjectSettings/ (no IP risk but confirm Unity version)
-- Any third-party plugins in Assets/Plugins/
+- **Assets/ folder contents:** Görsel ve işitsel varlıkların tamamı Phase 2'de kedi barınağı konseptiyle sıfırdan değiştirilecektir. Mevcut assetler geçiş sürecinde sadece test amaçlı kullanılmaktadır.
+- **Packages/ folder:** Resmi Unity paketleri dışında dış kütüphane bağımlılığı yoktur.
+- **ProjectSettings/:** Unity sürümü 2021.3.21f1'den Unity 6 (6000.3.16f1) sürümüne yükseltilmiş ve ayarlar otomatik güncellenmiştir. Herhangi bir fikri mülkiyet (IP) riski bulunmamaktadır.
 
 ## Risk Summary
 
-| Risk | Level | Action |
-|---|---|---|
-| MIT base used | LOW | Preserved LICENSE ✔️ |
-| Third-party assets | MEDIUM | Audit required |
-| Vampire Survivors IP | HIGH | All VS identity must be removed before shipping |
-| Font licenses | MEDIUM | Verify commercial use rights |
-| Audio licenses | MEDIUM | Verify commercial use rights |
+| ID | Risk | Level | Action | Status |
+|---|---|---|---|---|
+| R01 | MIT base used | LOW | Preserved LICENSE | ✔️ Resolved |
+| R02 | Third-party art assets | HIGH | Replace all visual assets in Phase 2 | ⚠️ Open (To be resolved in Phase 2) |
+| R03 | Vampire Survivors IP | HIGH | Remove all VS branding/identity in Phase 2 | ⚠️ Open (To be resolved in Phase 2) |
+| R04 | Font licenses | LOW | Verified Noto Sans and LiberationSans are OFL | ✔️ Resolved |
+| R05 | Audio licenses | MEDIUM | Audit and replace all sound effects in Phase 2 | ⚠️ Open (To be resolved in Phase 2) |

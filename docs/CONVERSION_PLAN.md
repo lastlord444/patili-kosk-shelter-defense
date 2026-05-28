@@ -11,17 +11,17 @@ This document outlines the phased plan to convert the MIT-licensed VampireSurviv
 **Goal:** Confirm the imported project builds and runs in Unity.
 
 ### Tasks
-- [ ] Open project in Unity (confirm compatible Unity version from ProjectSettings/)
-- [ ] Resolve any missing package errors
-- [ ] Build and run on Android device or emulator
-- [ ] Document Unity version, render pipeline, and dependencies
-- [ ] Verify all scenes load without errors
-- [ ] Record baseline: what the game currently does
+- [x] Open project in Unity (confirm compatible Unity version from ProjectSettings/ - Original: 2021.3.21f1)
+- [x] Resolve any missing package errors (Successfully upgraded to Unity 6 [6000.3.16f1] LTS)
+- [x] Build and run on Android device or emulator (Android Build verified: Succeeded with 0 Errors)
+- [x] Document Unity version, render pipeline, and dependencies (Unity 6, Built-in Render Pipeline, official UGUI/InputSystem)
+- [x] Verify all scenes load without errors (Level 1 and Main Menu scenes load successfully)
+- [x] Record baseline: what the game currently does (Play Mode verified: character movement, enemy spawning, and object pooling run with 0 runtime exceptions)
 
 ### Exit Criteria
-- Project builds successfully for Android
-- No critical compile errors
-- Baseline gameplay documented
+- Project builds successfully for Android ✔️
+- No critical compile errors ✔️
+- Baseline gameplay documented ✔️
 
 ---
 
@@ -31,9 +31,9 @@ This document outlines the phased plan to convert the MIT-licensed VampireSurviv
 
 ### Tasks
 - [ ] Complete LICENSE_AUDIT.md (identify all third-party assets)
-- [ ] Replace all sprites/artwork with original or properly licensed art
+- [ ] Replace all sprites/artwork with original or properly licensed art (Cat shelter theme)
 - [ ] Replace all audio/music with original or CC0/MIT-licensed audio
-- [ ] Replace/audit all fonts
+- [ ] Replace/audit all fonts (Confirmed Noto Sans and LiberationSans are OFL)
 - [ ] Remove Vampire Survivors name, branding, UI references
 - [ ] Replace character designs with cat/animal shelter theme
 - [ ] Update project name in Unity (PlayerSettings)
@@ -67,6 +67,12 @@ This document outlines the phased plan to convert the MIT-licensed VampireSurviv
 
 ---
 
-## Timeline
+## Timeline & Next Steps
 
-> To be determined after Phase 1 build verification.
+### Timeline
+- **Phase 1 (Verification):** Completed on 2026-05-28. ✔️
+- **Phase 2 (Asset Replacement):** Estimated duration: 2 weeks. (Focusing on removing Vampire Survivors identity and establishing cat shelter visual assets).
+- **Phase 3 (Gameplay Conversion):** Estimated duration: 3 weeks. (Focusing on shelter defense mechanics, upgrades, and progression).
+
+### Immediate Next Step
+- Initiate Phase 2: Design and import placeholder cat shelter assets, and begin replacing character/monster sprites.
