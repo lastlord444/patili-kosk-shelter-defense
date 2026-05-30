@@ -1,3 +1,14 @@
+<!-- PATILI KOSK SHELTER DEFENSE — BASE REPO NOTICE -->
+> **⚠️ Patili Köşk Shelter Defense — Base Repo Notice**
+>
+> - This project is based on the **MIT-licensed** [VampireSurvivorsClone](https://github.com/matthiasbroske/VampireSurvivorsClone) by **matthiasbroske**.
+> - Original LICENSE and credits are **preserved**.
+> - This repository will be **transformed** into **Patili Köşk Shelter Defense**.
+> - Goal: mobile arena defense / shelter defense where the player protects a cat shelter.
+> - This is **not** intended to ship as a Vampire Survivors clone.
+
+---
+
 # VampireSurvivorsClone
 <p align="center">
   <kbd>
