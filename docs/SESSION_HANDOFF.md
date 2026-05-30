@@ -53,8 +53,14 @@ All detailed verification results, including compile results, smoke test outcome
 
 ### Immediate Next Steps
 
-1. **Initiate Phase 2 (Asset Replacement):**
-   - Begin removing all Vampire Survivors visual and audio assets.
-   - Introduce cat shelter themed temporary/placeholder assets for player and enemies.
-2. **Setup PlayerSettings:**
-   - Update Package Name, Company Name, and Product Name under Project Settings -> Player.
+1. **Asset Placeholder Rollback:**
+   - Completed the rollback of the rejected Kenney placeholder assets that collapsed enemy variety.
+   - Restored 13 blueprints to their base asset references.
+   - Pushed clean rollback branch `feature/kenney-placeholder-rollback-only` to PR #3 head branch `feature/kenney-asset-audit-minimal-replacement`.
+   - PR #3 is NOT ready to merge.
+2. **Visual Direction & Memory Sync:**
+   - Created this docs-only branch (`docs/visual-direction-after-placeholder-rollback`) to lock in `docs/VISUAL_DIRECTION.md` and audit matrix.
+3. **Follow-up Steps:**
+   - After docs sync PR: Create a separate PR for Main Menu navigation smoke testing documentation/evidence.
+   - Then: Create a separate PR for the coin/gold diagnostic (resolving why coin pickup doesn't increment the UI counter).
+   - Then: Shelter HP/damage conversion pipeline.

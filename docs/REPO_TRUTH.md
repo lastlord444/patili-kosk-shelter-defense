@@ -34,3 +34,10 @@ Coins upgrade the shelter.
 - [ ] Build verified
 - [ ] Vampire Survivors identity removed
 - [ ] Shelter defense gameplay implemented
+
+## Visual Direction Principles
+
+- **Core Aesthetic:** Cute, readable, animal/shelter-themed mobile arena defense.
+- **Reference Video:** Serves as design inspiration and quality reference only. It is NOT an asset source. Direct copying of visual/UI assets is prohibited.
+- **Silhouette & Variety:** Enforce distinct silhouettes and visual identity for different enemy types. No mass placeholder replacements that collapse variety.
+- **Mobile Readability:** Visual clarity on Android screens is paramount (large UI, distinct collectibles/sprites).

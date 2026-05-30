@@ -13,6 +13,7 @@
 | R07 | Scope creep — project remains VS clone instead of shelter defense | MEDIUM | HIGH | Enforce REPO_TRUTH and CONVERSION_PLAN in all PRs | ⚠️ Open |
 | R08 | Android performance issues from base project | LOW | MEDIUM | Profile after core gameplay conversion | ⚠️ Open (Build success verified) |
 | R09 | Mobile virtual joystick input wiring issue | LOW | MEDIUM | Resolved - Uncommented SendValueToControl calls in TouchJoystick.cs | ✔️ Mitigated |
+| R14 | Over-aggressive placeholder replacement can destroy enemy variety and reduce product quality | MEDIUM | HIGH | No mass placeholder application; no one-sprite-for-all-enemies; require visual direction doc and replacement matrix before asset replacement; require screenshots and rollback plan. | ⚠️ Open |
 
 ## Closed Risks
 
