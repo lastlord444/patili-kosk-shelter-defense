@@ -13,6 +13,7 @@
 | R07 | Scope creep — project remains VS clone instead of shelter defense | MEDIUM | HIGH | Enforce REPO_TRUTH and CONVERSION_PLAN in all PRs | ⚠️ Open |
 | R08 | Android performance issues from base project | LOW | MEDIUM | Profile after core gameplay conversion | ⚠️ Open (Build success verified) |
 | R09 | Mobile virtual joystick input wiring issue | LOW | MEDIUM | Resolved - Uncommented SendValueToControl calls in TouchJoystick.cs | ✔️ Mitigated |
+| R15 | Unity MCP removal breaks editor-state verification and can lead to fake Unity evidence | LOW | HIGH | Do not remove MCP package from verification branches. MCP unavailable = blocker. | ⚠️ Open |
 
 ## Closed Risks
 

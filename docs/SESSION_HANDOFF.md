@@ -58,3 +58,9 @@ All detailed verification results, including compile results, smoke test outcome
    - Introduce cat shelter themed temporary/placeholder assets for player and enemies.
 2. **Setup PlayerSettings:**
    - Update Package Name, Company Name, and Product Name under Project Settings -> Player.
+
+---
+
+### Special Verification Rule
+
+- **Unity MCP is mandatory for Unity scene/editor validation. MCP removal invalidates Unity verification evidence.** Do not remove or omit the MCP package from verification branches. If MCP is missing, it must be restored immediately.
