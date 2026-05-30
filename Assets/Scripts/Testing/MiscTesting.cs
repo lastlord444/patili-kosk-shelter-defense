@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Vampire;
 
 public class MiscTesting : MonoBehaviour
@@ -26,13 +27,13 @@ public class MiscTesting : MonoBehaviour
         //     expBar.AddPoints(1);
         // if (Input.GetKey(KeyCode.DownArrow))
         //     expBar.SubtractPoints(1);
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
             entityManager.CollectAllCoinsAndGems();//entityManager.DamageAllVisibileEnemies(1);
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame)
             entityManager.DamageAllVisibileEnemies(500);
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
             character.GainExp(1000);
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Keyboard.current != null && Keyboard.current.aKey.wasPressedThisFrame)
             GetComponent<AudioSource>().Play();
     }
 }

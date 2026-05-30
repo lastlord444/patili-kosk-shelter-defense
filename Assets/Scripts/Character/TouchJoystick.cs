@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.OnScreen;
 using UnityEngine.InputSystem.Layouts;
 
@@ -44,7 +45,7 @@ namespace Vampire
                 if (Time.timeScale > 0)
                 {
                     Vector2 touchPosition;
-                    RectTransformUtility.ScreenPointToLocalPointInRectangle(controlRect, Input.mousePosition, null, out touchPosition);
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(controlRect, Pointer.current != null ? Pointer.current.position.ReadValue() : Vector2.zero, null, out touchPosition);
                     UpdateTouch(touchPosition);
                 }
                 else
