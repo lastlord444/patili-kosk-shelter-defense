@@ -55,7 +55,7 @@ Orijinal projedeki tüm görsel ve işitsel referanslar Vampire Survivors esinti
 | `Assets/Sprites/Gems/Gems.png` | Experience Pickups | Belirsiz (RPG style) | **HIGH** | **Replace** (Yarn Ball / Feathers) |
 | `Assets/Sprites/Gems/GemDarkBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | **Replace** (Blue Yarn Ball) |
 | `Assets/Sprites/Gems/GemLightBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | **Replace** (Light Blue Yarn Ball) |
-| `Assets/Sprites/Weapons/Lightsaber.png` | Ability Projectile | Star Wars lightsaber association / IP risk | **P0 - CRITICAL**| **Replace** (Laser Pointer Beam) |
+| `Assets/Sprites/Weapons/Lightsaber.png` | Ability Projectile | self-created simple placeholder (project-owned / MIT-compatible) | **Mitigated** | **Replaced** |
 | `Assets/Sprites/Weapons/Bat.png` | Ability Projectile | Belirsiz | **MEDIUM** | **Replace** (Toy Bat / Ball) |
 | `Assets/Sprites/Weapons/Sword.png` | Ability Projectile | Belirsiz (RPG style) | **MEDIUM** | **Replace** (Cat Claw Slash) |
 | `Assets/Sprites/Weapons/Bazooka.png` | Ability Projectile | Belirsiz | **MEDIUM** | **Replace** (Dry Food Launcher) |
@@ -137,7 +137,7 @@ Tüm materyaller (`Assets/Materials/`) ve dokular (`Assets/Textures/`) Unity 6 B
 | ID | Risk | Seviye | Aksiyon | Durum |
 |---|---|---|---|---|
 | **R01** | MIT Lisansının Korunması | LOW | Lisans ve README atıflarını koru. | ✔️ Korundu (LICENSE dosyası kökte) |
-| **R02** | Star Wars lightsaber association / IP risk | **CRITICAL** | `Lightsaber.png` ve ilgili prefablardaki referansları acilen kaldır/değiştir. | ⚠️ Açık (P0 Değiştirilecek) |
+| **R02** | Star Wars lightsaber association / IP risk | LOW / Mitigated | Replaced with self-created placeholder | ✔️ Resolved |
 | **R03** | Görsel Assetlerin Lisans Belirsizliği (Vampire Survivors-like identity) | **HIGH** | `Assets/Sprites/` altındaki karakter, düşman ve altın spritelarını sıfırdan değiştir. | ⚠️ Açık (P0/P1 Replace) |
 | **R04** | Vampire Survivors-like identity / clone-feel risk | **HIGH** | Oynanışı "Kedi Barınağı Savunması"na dönüştür, isim ve metin referanslarını sil. | ⚠️ Açık (Phase 3 Konsept Dönüşümü) |
 | **R05** | Android APK Boyutu Şişmesi (Büyük Font Dosyaları) | **HIGH** | 15.6 MB'lık CJK OTF fontunu ve 33.7 MB'lık SDF assetini optimize et / tr-TR odaklı font ile değiştir. | ⚠️ Açık (Gelecek Faz Optimizasyonu) |

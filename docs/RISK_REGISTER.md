@@ -32,6 +32,7 @@
 | **R09** | Mobile virtual joystick input wiring issue | Resolved — Uncommented SendValueToControl calls in TouchJoystick.cs. Verified in Play Mode. |
 | **R16** | TextMesh Pro auto-generated shader noise clutters PR diffs | Resolved — Persisted TMP Essential Resources directly in the repository to eliminate recurring editor import prompts. |
 | **R17** | Visual variety collapse from over-aggressive placeholders | Resolved — Rolled back the Kenney placeholder trial and restored original assets to protect gameplay variety. |
+| **R22** | Star Wars lightsaber association / IP risk | Resolved — Lightsaber.png replaced with a self-created safe laser pointer beam placeholder (MIT-compatible). |
 
 ## Notes
 

@@ -1,25 +1,28 @@
 # SESSION_HANDOFF.md
 
 > Last updated: 2026-05-31
-> Status: Phase 2A - License / Asset / Identity Audit Baseline
+> Status: Phase 2B-1 - Replace P0 Lightsaber Sprite Only
 
 ## Session Summary
 
-**Session goal:** Document asset, font, audio, UI, and scene identity risks in the current Unity project without changing code, gameplay, or assets (docs-only audit baseline).
+**Session goal:** Replace the Star Wars lightsaber-associated weapon sprite (`Assets/Sprites/Weapons/Lightsaber.png`) with a safe, Patili Köşk-themed placeholder (`laser pointer beam`) without changing code, gameplay, prefabs, or scenes.
 
 **Completed this session:**
-- [x] Switched to branch `chore/phase2-audit-baseline` based on `main`.
-- [x] Verified that PR #11 (`fix/android-active-input-handling`) has been successfully merged into `main` with commit `e7e3b99`.
-- [x] Completed a comprehensive audit of all files in the `Assets/` folder, checking for image, audio, font, prefab, and scriptable object files.
-- [x] Identified key baseline characteristics:
-  - **Audio:** Zero audio files (.wav, .mp3, etc.) exist in the project. There is one broken clip reference in `經驗球.prefab` (Exp Gem) pointing to missing GUID `1cc34cd39f4e34929ae51c22b318d5d5`.
-  - **Fonts:** `NotoSansMonoCJKtc-Regular.otf` (15.6 MB) and its generated SDF Asset (33.7 MB) are OFL-licensed but present a significant size optimization risk (R18).
-  - **Localization:** Turkish locale (tr-TR) is completely missing, with only English and Chinese supported.
-  - **Chinese Naming Footprint:** Several prefabs and blueprints (e.g. `寶箱.prefab`, `初級小兵.asset`) are named in Chinese characters.
-  - **Critical Copyright Risk:** `Lightsaber.png` is a Star Wars IP claim risk (P0 replacement priority).
-- [x] Documented all findings by updating [LICENSE_AUDIT.md](LICENSE_AUDIT.md) and [RISK_REGISTER.md](RISK_REGISTER.md).
-- [x] Clarified that the actual output APK file `Build/android_smoke.apk` is **60.8 MB** (the 782 MB log size includes all Gradle intermediates, IL2CPP objects, and temp folders generated during the build pipeline).
-- [x] Confirmed zero asset imports, gameplay modifications, scene edits, or package/dependency changes in this PR.
+- [x] Switched to branch `asset/replace-lightsaber-placeholder`.
+- [x] Generated a safe, custom glowing pink laser beam placeholder of size 34x10 in `Assets/Sprites/Weapons/Lightsaber.png` using a Python Pillow script (100% owned, MIT-compatible).
+- [x] Preserved the existing `Assets/Sprites/Weapons/Lightsaber.png.meta` file and its GUID (`6d4c4f6886ff74dc6af61801f282e70e`).
+- [x] Updated [LICENSE_AUDIT.md](LICENSE_AUDIT.md) and [RISK_REGISTER.md](RISK_REGISTER.md) to mark the lightsaber IP association risk (R22/R02) as mitigated and resolved.
+- [x] Verified game integration via the mandatory test flow:
+  * Main Menu scene opened (`Assets/Scenes/Game/Main Menu.unity`)
+  * Play Mode entered
+  * Start clicked
+  * Test character selected
+  * Level 1 loaded successfully
+  * Joystick movement simulated and verified (player position changed from (-0.17, 0.45, 0.00) to (1.33, 0.45, 0.00))
+  * Unity Console is clean of errors and exceptions
+  * Unity Editor remained open
+- [x] Verified that no gameplay code, scenes, prefabs, or project settings were modified.
+- [x] Verified build hygiene (no APK or build logs committed).
 
 ## Repo State at Handoff
 
@@ -27,16 +30,17 @@
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Current Commit | `e7e3b99` (PR #11 merged) |
-| Active branch | `chore/phase2-audit-baseline` |
-| Code changes | None (Docs-only PR) |
+| Current Commit | `56795f4` (PR #12 merged) |
+| Active branch | `asset/replace-lightsaber-placeholder` |
+| Code changes | None |
+| Asset changes | Updated `Assets/Sprites/Weapons/Lightsaber.png` |
 | Doc changes | Updated [LICENSE_AUDIT.md](LICENSE_AUDIT.md), [RISK_REGISTER.md](RISK_REGISTER.md), [SESSION_HANDOFF.md](SESSION_HANDOFF.md) |
-| Compile verified | N/A (No code or asset changes were made, main builds clean) |
+| Compile verified | YES (Unity compiler console is clean, no errors from import) |
 | Unity Version | 6000.3.16f1 (Unity 6) |
 
 ## Next Session: Start Here
 
 ### Immediate Next Step
 
-1. **Proceed to Phase 2B (Visual Sourcing & Curated Asset Replacement):**
-   - Execute the curated, per-asset replacement plan for P0-priority assets (starting with `Lightsaber.png` and main characters/enemies) to replace Vampire Survivors and Star Wars references with cute cat/shelter-themed assets.
+1. **Proceed to remaining Phase 2B Asset replacements:**
+   - Continue replacing other Vampire Survivors-like sprites (characters, monsters, coins, and gems) with cute animal/shelter-themed assets as planned in [ASSET_REPLACEMENT_MATRIX.md](ASSET_REPLACEMENT_MATRIX.md).
