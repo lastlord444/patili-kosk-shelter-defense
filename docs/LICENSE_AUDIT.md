@@ -137,7 +137,7 @@ Tüm materyaller (`Assets/Materials/`) ve dokular (`Assets/Textures/`) Unity 6 B
 | ID | Risk | Seviye | Aksiyon | Durum |
 |---|---|---|---|---|
 | **R01** | MIT Lisansının Korunması | LOW | Lisans ve README atıflarını koru. | ✔️ Korundu (LICENSE dosyası kökte) |
-| **R02** | Star Wars lightsaber association / IP risk | LOW | `Lightsaber.png` ve ilgili prefablardaki referansları acilen kaldır/değiştir. | ✔️ Resolved (Replaced with safe placeholder) |
+| **R02** | Star Wars lightsaber association / IP risk | LOW / Mitigated | Replaced with self-created placeholder | ✔️ Resolved |
 | **R03** | Görsel Assetlerin Lisans Belirsizliği (Vampire Survivors-like identity) | **HIGH** | `Assets/Sprites/` altındaki karakter, düşman ve altın spritelarını sıfırdan değiştir. | ⚠️ Açık (P0/P1 Replace) |
 | **R04** | Vampire Survivors-like identity / clone-feel risk | **HIGH** | Oynanışı "Kedi Barınağı Savunması"na dönüştür, isim ve metin referanslarını sil. | ⚠️ Açık (Phase 3 Konsept Dönüşümü) |
 | **R05** | Android APK Boyutu Şişmesi (Büyük Font Dosyaları) | **HIGH** | 15.6 MB'lık CJK OTF fontunu ve 33.7 MB'lık SDF assetini optimize et / tr-TR odaklı font ile değiştir. | ⚠️ Açık (Gelecek Faz Optimizasyonu) |

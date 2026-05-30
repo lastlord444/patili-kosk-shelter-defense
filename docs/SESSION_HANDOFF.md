@@ -12,6 +12,15 @@
 - [x] Generated a safe, custom glowing pink laser beam placeholder of size 34x10 in `Assets/Sprites/Weapons/Lightsaber.png` using a Python Pillow script (100% owned, MIT-compatible).
 - [x] Preserved the existing `Assets/Sprites/Weapons/Lightsaber.png.meta` file and its GUID (`6d4c4f6886ff74dc6af61801f282e70e`).
 - [x] Updated [LICENSE_AUDIT.md](LICENSE_AUDIT.md) and [RISK_REGISTER.md](RISK_REGISTER.md) to mark the lightsaber IP association risk (R22/R02) as mitigated and resolved.
+- [x] Verified game integration via the mandatory test flow:
+  * Main Menu scene opened (`Assets/Scenes/Game/Main Menu.unity`)
+  * Play Mode entered
+  * Start clicked
+  * Test character selected
+  * Level 1 loaded successfully
+  * Joystick movement simulated and verified (player position changed from (-0.17, 0.45, 0.00) to (1.33, 0.45, 0.00))
+  * Unity Console is clean of errors and exceptions
+  * Unity Editor remained open
 - [x] Verified that no gameplay code, scenes, prefabs, or project settings were modified.
 - [x] Verified build hygiene (no APK or build logs committed).
 
