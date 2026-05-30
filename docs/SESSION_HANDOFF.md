@@ -17,7 +17,7 @@
   - **Localization:** Turkish locale (tr-TR) is completely missing, with only English and Chinese supported.
   - **Chinese Naming Footprint:** Several prefabs and blueprints (e.g. `寶箱.prefab`, `初級小兵.asset`) are named in Chinese characters.
   - **Critical Copyright Risk:** `Lightsaber.png` is a Star Wars IP claim risk (P0 replacement priority).
-- [x] Documented all findings by updating [LICENSE_AUDIT.md](file:///D:/patili-kosk-shelter-defense/docs/LICENSE_AUDIT.md) and [RISK_REGISTER.md](file:///D:/patili-kosk-shelter-defense/docs/RISK_REGISTER.md).
+- [x] Documented all findings by updating [LICENSE_AUDIT.md](LICENSE_AUDIT.md) and [RISK_REGISTER.md](RISK_REGISTER.md).
 - [x] Clarified that the actual output APK file `Build/android_smoke.apk` is **60.8 MB** (the 782 MB log size includes all Gradle intermediates, IL2CPP objects, and temp folders generated during the build pipeline).
 - [x] Confirmed zero asset imports, gameplay modifications, scene edits, or package/dependency changes in this PR.
 
@@ -30,7 +30,7 @@
 | Current Commit | `e7e3b99` (PR #11 merged) |
 | Active branch | `chore/phase2-audit-baseline` |
 | Code changes | None (Docs-only PR) |
-| Doc changes | Updated [LICENSE_AUDIT.md](file:///D:/patili-kosk-shelter-defense/docs/LICENSE_AUDIT.md), [RISK_REGISTER.md](file:///D:/patili-kosk-shelter-defense/docs/RISK_REGISTER.md), [SESSION_HANDOFF.md](file:///D:/patili-kosk-shelter-defense/docs/SESSION_HANDOFF.md) |
+| Doc changes | Updated [LICENSE_AUDIT.md](LICENSE_AUDIT.md), [RISK_REGISTER.md](RISK_REGISTER.md), [SESSION_HANDOFF.md](SESSION_HANDOFF.md) |
 | Compile verified | N/A (No code or asset changes were made, main builds clean) |
 | Unity Version | 6000.3.16f1 (Unity 6) |
 

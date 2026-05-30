@@ -11,15 +11,15 @@
 ## Source License
 
 - Type: **MIT License**
-- File: [LICENSE](file:///D:/patili-kosk-shelter-defense/LICENSE) (preserved in this repo root)
+- File: [LICENSE](../LICENSE) (preserved in this repo root)
 - Copyright: Copyright (c) 2023 matthiasbroske
 - Obligations: Preserve copyright notice and license text. ✔️ Done.
 
 ## Original LICENSE Preserved
 
-- [x] [LICENSE](file:///D:/patili-kosk-shelter-defense/LICENSE) file imported and intact
-- [x] [README.md](file:///D:/patili-kosk-shelter-defense/README.md) attribution added
-- [x] [LICENSE](file:///D:/patili-kosk-shelter-defense/LICENSE) file manually verified (matches 100%)
+- [x] [LICENSE](../LICENSE) file imported and intact
+- [x] [README.md](../README.md) attribution added
+- [x] [LICENSE](../LICENSE) file manually verified (matches 100%)
 
 ---
 
@@ -31,20 +31,20 @@ Orijinal projedeki tüm görsel ve işitsel referanslar Vampire Survivors esinti
 
 | Dosya Yolu (Path) | Türü / Kullanımı | Lisans Durumu | Risk Seviyesi | Aksiyon / Plan |
 |---|---|---|---|---|
-| `Assets/Sprites/Characters/MainCharacterBlue.png` | Playable Character | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Cat Guardian Hero Blue) |
-| `Assets/Sprites/Characters/MainCharacterGray.png` | Playable Character | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Cat Guardian Hero Gray) |
-| `Assets/Sprites/Characters/MainCharacterPurple.png` | Playable Character | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Cat Guardian Hero Purple) |
-| `Assets/Sprites/Characters/MainCharacterWhite.png` | Playable Character (Unused) | Belirsiz (VS IP Klonu) | **LOW** | **Remove-before-store** / Delete |
-| `Assets/Sprites/Monsters/CrabOrange.png` | Melee Monster (Basic) | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Melee Mouse/Rat) |
-| `Assets/Sprites/Monsters/CrabRed.png` | Melee Monster (Variant) | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Melee Mouse/Rat Red) |
-| `Assets/Sprites/Monsters/Alien.png` | Melee Monster (Medium) | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Medium Stray Dog) |
-| `Assets/Sprites/Monsters/PunchMonster.png` | Melee Monster (Hard) | Belirsiz (VS IP Klonu) | **MEDIUM** | **Replace** (Heavy Bully Animal) |
-| `Assets/Sprites/Monsters/GhostFairy.png` | Ranged Monster | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Ranged Net Thrower) |
-| `Assets/Sprites/Monsters/NailHead.png` | Boomerang Monster | Belirsiz (VS IP Klonu) | **MEDIUM** | **Replace** (Ranged Toy Thrower) |
-| `Assets/Sprites/Monsters/WizardMonster.png` | Gravity Monster | Belirsiz (VS IP Klonu) | **MEDIUM** | **Replace** (Area Hazard Spawner) |
-| `Assets/Sprites/Monsters/ExplosiveGuy.png` | Explosive Monster | Belirsiz (VS IP Klonu) | **MEDIUM** | **Replace** (Exploding Toy Cat) |
-| `Assets/Sprites/Monsters/MiniBoss.png` | Elite Miniboss | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Mini Boss Catcher) |
-| `Assets/Sprites/Monsters/Boss.png` | Final Boss | Belirsiz (VS IP Klonu) | **HIGH** | **Replace** (Big Catcher Boss) |
+| `Assets/Sprites/Characters/MainCharacterBlue.png` | Playable Character | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Cat Guardian Hero Blue) |
+| `Assets/Sprites/Characters/MainCharacterGray.png` | Playable Character | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Cat Guardian Hero Gray) |
+| `Assets/Sprites/Characters/MainCharacterPurple.png` | Playable Character | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Cat Guardian Hero Purple) |
+| `Assets/Sprites/Characters/MainCharacterWhite.png` | Playable Character (Unused) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **LOW** | **Remove-before-store** / Delete |
+| `Assets/Sprites/Monsters/CrabOrange.png` | Melee Monster (Basic) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Melee Mouse/Rat) |
+| `Assets/Sprites/Monsters/CrabRed.png` | Melee Monster (Variant) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Melee Mouse/Rat Red) |
+| `Assets/Sprites/Monsters/Alien.png` | Melee Monster (Medium) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Medium Stray Dog) |
+| `Assets/Sprites/Monsters/PunchMonster.png` | Melee Monster (Hard) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **MEDIUM** | **Replace** (Heavy Bully Animal) |
+| `Assets/Sprites/Monsters/GhostFairy.png` | Ranged Monster | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Ranged Net Thrower) |
+| `Assets/Sprites/Monsters/NailHead.png` | Boomerang Monster | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **MEDIUM** | **Replace** (Ranged Toy Thrower) |
+| `Assets/Sprites/Monsters/WizardMonster.png` | Gravity Monster | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **MEDIUM** | **Replace** (Area Hazard Spawner) |
+| `Assets/Sprites/Monsters/ExplosiveGuy.png` | Explosive Monster | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **MEDIUM** | **Replace** (Exploding Toy Cat) |
+| `Assets/Sprites/Monsters/MiniBoss.png` | Elite Miniboss | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Mini Boss Catcher) |
+| `Assets/Sprites/Monsters/Boss.png` | Final Boss | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Big Catcher Boss) |
 | `Assets/Sprites/Coins/Coin1.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | **Replace** (Wet Food Can) |
 | `Assets/Sprites/Coins/Coin2.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | **Replace** (Dry Food Pack) |
 | `Assets/Sprites/Coins/Coin5.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | **Replace** (Cat Treat Pocket) |
@@ -55,7 +55,7 @@ Orijinal projedeki tüm görsel ve işitsel referanslar Vampire Survivors esinti
 | `Assets/Sprites/Gems/Gems.png` | Experience Pickups | Belirsiz (RPG style) | **HIGH** | **Replace** (Yarn Ball / Feathers) |
 | `Assets/Sprites/Gems/GemDarkBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | **Replace** (Blue Yarn Ball) |
 | `Assets/Sprites/Gems/GemLightBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | **Replace** (Light Blue Yarn Ball) |
-| `Assets/Sprites/Weapons/Lightsaber.png` | Ability Projectile | **IP Claim (Star Wars)** | **P0 - CRITICAL**| **Replace** (Laser Pointer Beam) |
+| `Assets/Sprites/Weapons/Lightsaber.png` | Ability Projectile | Star Wars lightsaber association / IP risk | **P0 - CRITICAL**| **Replace** (Laser Pointer Beam) |
 | `Assets/Sprites/Weapons/Bat.png` | Ability Projectile | Belirsiz | **MEDIUM** | **Replace** (Toy Bat / Ball) |
 | `Assets/Sprites/Weapons/Sword.png` | Ability Projectile | Belirsiz (RPG style) | **MEDIUM** | **Replace** (Cat Claw Slash) |
 | `Assets/Sprites/Weapons/Bazooka.png` | Ability Projectile | Belirsiz | **MEDIUM** | **Replace** (Dry Food Launcher) |
@@ -88,9 +88,9 @@ Orijinal projedeki tüm görsel ve işitsel referanslar Vampire Survivors esinti
 - **Tespit Edilen Audio Dosyaları:** Projede (`.mp3`, `.wav`, `.ogg`, `.aac` vb.) hiçbir ses ve müzik dosyası **bulunmamaktadır**.
 - **Ses Dosyası Sayısı:** **0**
 - **Kod/Prefab Düzeyindeki Referanslar:**
-  1. [MiscTesting.cs](file:///D:/patili-kosk-shelter-defense/Assets/Scripts/Testing/MiscTesting.cs) script dosyasında 37. satırda:
+  1. `Assets/Scripts/Testing/MiscTesting.cs` script dosyasında 37. satırda:
      `GetComponent<AudioSource>().Play();` referansı bulunmaktadır (A tuşu ile test).
-  2. [經驗球.prefab](file:///D:/patili-kosk-shelter-defense/Assets/Prefabs/Exp%20Gem/經驗球.prefab) (Exp Gem) prefab'ı üzerinde bir `AudioSource` componenti ve script referansı bulunmaktadır:
+  2. `Assets/Prefabs/Exp Gem/經驗球.prefab` (Exp Gem) prefab'ı üzerinde bir `AudioSource` componenti ve script referansı bulunmaktadır:
      `collectedAudio.clip` alanında `guid: 1cc34cd39f4e34929ae51c22b318d5d5` referansı vardır. Bu dosya projede **mevcut değildir (kırık referans/missing)**.
 - **Risk Seviyesi:** **MEDIUM** (Telif riski yoktur ancak oyunun ses altyapısı ve ses dosyaları tamamen eksiktir).
 - **Aksiyon:** Gelecek fazlarda CC0 veya özgün ses/müzik assetleri projeye dahil edilmeli, kırık referanslar temizlenmeli veya yeni seslerle güncellenmelidir.
@@ -137,9 +137,9 @@ Tüm materyaller (`Assets/Materials/`) ve dokular (`Assets/Textures/`) Unity 6 B
 | ID | Risk | Seviye | Aksiyon | Durum |
 |---|---|---|---|---|
 | **R01** | MIT Lisansının Korunması | LOW | Lisans ve README atıflarını koru. | ✔️ Korundu (LICENSE dosyası kökte) |
-| **R02** | Lightsaber Telif Hakkı (Star Wars IP) | **CRITICAL** | `Lightsaber.png` ve ilgili prefablardaki referansları acilen kaldır/değiştir. | ⚠️ Açık (P0 Değiştirilecek) |
-| **R03** | Görsel Assetlerin Lisans Belirsizliği (VS Clones) | **HIGH** | `Assets/Sprites/` altındaki karakter, düşman ve altın spritelarını sıfırdan değiştir. | ⚠️ Açık (P0/P1 Replace) |
-| **R04** | Vampire Survivors Klon Kimliği / IP Riski | **HIGH** | Oynanışı "Kedi Barınağı Savunması"na dönüştür, isim ve metin referanslarını sil. | ⚠️ Açık (Phase 3 Konsept Dönüşümü) |
+| **R02** | Star Wars lightsaber association / IP risk | **CRITICAL** | `Lightsaber.png` ve ilgili prefablardaki referansları acilen kaldır/değiştir. | ⚠️ Açık (P0 Değiştirilecek) |
+| **R03** | Görsel Assetlerin Lisans Belirsizliği (Vampire Survivors-like identity) | **HIGH** | `Assets/Sprites/` altındaki karakter, düşman ve altın spritelarını sıfırdan değiştir. | ⚠️ Açık (P0/P1 Replace) |
+| **R04** | Vampire Survivors-like identity / clone-feel risk | **HIGH** | Oynanışı "Kedi Barınağı Savunması"na dönüştür, isim ve metin referanslarını sil. | ⚠️ Açık (Phase 3 Konsept Dönüşümü) |
 | **R05** | Android APK Boyutu Şişmesi (Büyük Font Dosyaları) | **HIGH** | 15.6 MB'lık CJK OTF fontunu ve 33.7 MB'lık SDF assetini optimize et / tr-TR odaklı font ile değiştir. | ⚠️ Açık (Gelecek Faz Optimizasyonu) |
 | **R06** | Ses Dosyası Eksikliği ve Kırık Referanslar | **MEDIUM** | Projedeki eksik ses/müzik yapısını kur, `經驗球.prefab` üzerindeki kırık GUID ses referansını çöz. | ⚠️ Açık (Phase 2B/3 Ses Sourcing) |
 | **R07** | Türkçe Dil Desteği Eksikliği (Thematic Gap) | **MEDIUM** | "Patili Köşk" adıyla uyumlu Türkçe (tr-TR) lokalizasyon tablolarını ve çevirilerini ekle. | ⚠️ Açık (Gelecek Faz Eklemesi) |

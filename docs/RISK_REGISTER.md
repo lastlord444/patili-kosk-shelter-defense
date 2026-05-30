@@ -8,10 +8,10 @@
 | ID | Risk | Probability | Impact | Mitigation | Status |
 |---|---|---|---|---|---|
 | **R01** | Third-party art assets with unclear license | MEDIUM | HIGH | Enforce the per-asset replacements detailed in [ASSET_REPLACEMENT_MATRIX.md](ASSET_REPLACEMENT_MATRIX.md). | ⚠️ Open (Phase 2B Focus) |
-| **R02** | Vampire Survivors IP claim (cloning concern) | LOW | HIGH | Replace all VS-like character/enemy sprites and convert core gameplay to shelter defense. | ⚠️ Open (Phase 2B/3 Focus) |
+| **R02** | Vampire Survivors-like identity / clone-feel risk / unclear provenance | LOW | HIGH | Replace all Vampire Survivors-like character/enemy sprites and convert core gameplay to shelter defense. | ⚠️ Open (Phase 2B/3 Focus) |
 | **R03** | Font license not suitable for commercial use | LOW | MEDIUM | Verified Noto Sans & LiberationSans are OFL (safe for commercial use). | ✔️ Mitigated |
 | **R04** | Audio/music not cleared for commercial use | LOW | MEDIUM | Verified there are **0 audio files** in the repo. Audio licensing risk is non-existent, but missing audio is a development risk. | ✔️ Mitigated (License) |
-| **R07** | Scope creep — project remains VS clone instead of shelter defense | MEDIUM | HIGH | Enforce [REPO_TRUTH.md](REPO_TRUTH.md) and [CONVERSION_PLAN.md](CONVERSION_PLAN.md) in all PRs. | ⚠️ Open |
+| **R07** | Scope creep — project remains VS-like clone instead of shelter defense | MEDIUM | HIGH | Enforce [REPO_TRUTH.md](REPO_TRUTH.md) and [CONVERSION_PLAN.md](CONVERSION_PLAN.md) in all PRs. | ⚠️ Open |
 | **R08** | Android performance issues from base project | LOW | MEDIUM | Profile after core gameplay conversion. | ⚠️ Open |
 | **R09** | Mobile virtual joystick input wiring issue | LOW | MEDIUM | Resolved - Uncommented SendValueToControl calls in TouchJoystick.cs. | ✔️ Mitigated |
 | **R15** | Unity MCP removal breaks editor-state verification | LOW | HIGH | Do not remove MCP package from verification branches. | ⚠️ Open |
