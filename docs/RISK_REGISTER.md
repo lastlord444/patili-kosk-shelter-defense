@@ -40,3 +40,4 @@
 - Art and IP risks (R01, R02) will be addressed systematically under the new curated asset mapping protocol (`docs/VISUAL_DIRECTION.md`) and the master replacement matrix (`docs/ASSET_REPLACEMENT_MATRIX.md`).
 - The success of the Android build verified that there are no compiler blockers or SDK/NDK integration blockers on the development environment.
 - Mobile virtual joystick input wiring blocker was successfully resolved and verified via Play Mode smoke test simulation.
+- **Main Character Sprite Replacement (Phase 2B-2):** The Vampire Survivors-like playable character sprites (`MainCharacterBlue.png`, `MainCharacterGray.png`, `MainCharacterPurple.png`, `MainCharacterWhite.png`) have been replaced with 100% project-owned, MIT-compatible cute cat guardian / shelter defender placeholders (animated walk cycles). This mitigates the store-blocking playable character identity risk.
