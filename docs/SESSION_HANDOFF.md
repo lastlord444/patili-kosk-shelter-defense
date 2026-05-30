@@ -11,9 +11,12 @@
 - [x] Merged PR #8 (Persist TMP essential resources) to `main`.
 - [x] Merged PR #9 (Track Unity editor test meta files) to `main`.
 - [x] Verified that TMP Examples & Extras were not imported.
-- [x] Removed unused `com.unity.collab-proxy` dependency to eliminate PlasticSCM DLL console errors.
 - [x] Verified main scene Play Mode smoke test on `Main Menu.unity` (0 compile/runtime errors).
-- [x] Verified Android Build smoke test (Result: Succeeded, 0 errors, 3 warnings, 58 MB APK output).
+- [x] Verified Android Build smoke test (Result: Succeeded, 5 errors, 8 warnings, 58 MB APK output).
+  - Note: Android build showed an "Unsupported Input Handling on Android" modal prompt because the current setting is "Both" in Player Settings.
+  - The build proceeded successfully only after manually clicking "Ignore".
+  - Resolving the Input handling setting requires a separate audited PR.
+  - TMP Importer restart validation is still pending because Unity was not cleanly restarted.
 - [x] Mitigated R16 risk in `docs/RISK_REGISTER.md`.
 
 ## Repo State at Handoff
@@ -36,5 +39,7 @@
    - Review and merge documentation updates recording Phase 1 evidence.
 2. **Unity Editor Restart Validation:**
    - Validate if the TMP Importer prompt is gone upon a clean restart of the Unity editor.
-3. **Initiate Curated Asset Sourcing (Phase 2B):**
+3. **Resolve Active Input Handling setting (separate PR):**
+   - Change Active Input Handling to Input System Package (New) under Player Settings to avoid the build warning modal.
+4. **Initiate Curated Asset Sourcing (Phase 2B):**
    - Source/design cute animal-themed sprites mapping to `docs/ASSET_REPLACEMENT_MATRIX.md`.
