@@ -46,6 +46,25 @@ This document outlines the phased plan to convert the MIT-licensed VampireSurviv
 
 ---
 
+## Phase 2B: Visual Direction Lock & Asset Replacement Matrix
+
+**Goal:** Lock visual style guidelines and prevent low-quality or variety-destroying asset replacement.
+
+### Tasks
+- [x] Create Visual Direction document (`docs/VISUAL_DIRECTION.md`)
+- [ ] Create detailed Asset Replacement Matrix in `docs/ASSET_IDENTITY_AUDIT.md`
+- [x] Roll back mass placeholder replacements that collapsed enemy variety
+- [ ] Establish per-asset review process with screenshots and Android readability checks
+
+### Exit Criteria
+- Visual direction document exists and is approved ✔️
+- Asset replacement matrix exists and is updated
+- No active gameplay blueprint is mass-replaced
+- Enemy variety and silhouettes preserved
+- Android screenshots reviewed for readability
+
+---
+
 ## Phase 3: Convert Gameplay to Shelter Defense
 
 **Goal:** Transform core loop from auto-attack survivor to player-controlled shelter defense.
