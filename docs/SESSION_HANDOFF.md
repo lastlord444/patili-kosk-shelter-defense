@@ -1,23 +1,25 @@
 # SESSION_HANDOFF.md
 
-> Last updated: 2026-05-30
+> Last updated: 2026-05-31
+> Status: Phase 2A - License / Asset / Identity Audit Baseline
 
 ## Session Summary
 
-**Session goal:** Migrate remaining legacy input usage, set Active Input Handling to New Input System only, and verify that the "Unsupported Input Handling on Android" modal prompt is resolved.
+**Session goal:** Document asset, font, audio, UI, and scene identity risks in the current Unity project without changing code, gameplay, or assets (docs-only audit baseline).
 
 **Completed this session:**
-- [x] Switched to branch `fix/android-active-input-handling` based on latest `main`.
-- [x] Migrated legacy `Input.GetKeyDown` keyboard checks in [MiscTesting.cs](file:///d:/patili-kosk-shelter-defense/Assets/Scripts/Testing/MiscTesting.cs) to the new Input System API (`Keyboard.current`).
-- [x] Migrated legacy `Input.GetKeyDown(KeyCode.Escape)` in [EscapeToQuit.cs](file:///d:/patili-kosk-shelter-defense/Assets/Scripts/Utilities/EscapeToQuit.cs) to `Keyboard.current.escapeKey.wasPressedThisFrame`.
-- [x] Upgraded EventSystem components at design-time using Unity Editor MCP tools in [Main Menu.unity](file:///d:/patili-kosk-shelter-defense/Assets/Scenes/Game/Main Menu.unity) and [Level 1.unity](file:///d:/patili-kosk-shelter-defense/Assets/Scenes/Game/Level 1.unity), replacing legacy `StandaloneInputModule` with `InputSystemUIInputModule`.
-- [x] Cleaned up [EscapeToQuit.cs](file:///d:/patili-kosk-shelter-defense/Assets/Scripts/Utilities/EscapeToQuit.cs) to remove dynamic runtime EventSystem upgrading code, keeping only the essential Awake and Keyboard.current escape key quit logic.
-- [x] Migrated legacy `Input.mousePosition` pointer check in [TouchJoystick.cs](file:///d:/patili-kosk-shelter-defense/Assets/Scripts/Character/TouchJoystick.cs) to `Pointer.current.position.ReadValue()`, eliminating Play Mode runtime exception.
-- [x] Configured Active Input Handling in [ProjectSettings.asset](file:///d:/patili-kosk-shelter-defense/ProjectSettings/ProjectSettings.asset) from `Both` (2) to `New Input System` only (1).
-- [x] Verified compilation: Succeeded with **0 compiler errors**.
-- [x] Verified Play Mode smoke test: Runs cleanly on `Main Menu.unity` and `Level 1.unity` scenes without any recurring `InvalidOperationException` or runtime input system errors.
-- [x] Verified Android Build smoke test: Succeeded with **0 errors**, generating an APK of 782 MB. The "Unsupported Input Handling on Android" modal dialog is fully resolved and no longer appears.
-- [x] Verified build hygiene: Built APKs, build logs, and intermediates are excluded by git status and not staged.
+- [x] Switched to branch `chore/phase2-audit-baseline` based on `main`.
+- [x] Verified that PR #11 (`fix/android-active-input-handling`) has been successfully merged into `main` with commit `e7e3b99`.
+- [x] Completed a comprehensive audit of all files in the `Assets/` folder, checking for image, audio, font, prefab, and scriptable object files.
+- [x] Identified key baseline characteristics:
+  - **Audio:** Zero audio files (.wav, .mp3, etc.) exist in the project. There is one broken clip reference in `經驗球.prefab` (Exp Gem) pointing to missing GUID `1cc34cd39f4e34929ae51c22b318d5d5`.
+  - **Fonts:** `NotoSansMonoCJKtc-Regular.otf` (15.6 MB) and its generated SDF Asset (33.7 MB) are OFL-licensed but present a significant size optimization risk (R18).
+  - **Localization:** Turkish locale (tr-TR) is completely missing, with only English and Chinese supported.
+  - **Chinese Naming Footprint:** Several prefabs and blueprints (e.g. `寶箱.prefab`, `初級小兵.asset`) are named in Chinese characters.
+  - **Critical Copyright Risk:** `Lightsaber.png` is a Star Wars IP claim risk (P0 replacement priority).
+- [x] Documented all findings by updating [LICENSE_AUDIT.md](file:///D:/patili-kosk-shelter-defense/docs/LICENSE_AUDIT.md) and [RISK_REGISTER.md](file:///D:/patili-kosk-shelter-defense/docs/RISK_REGISTER.md).
+- [x] Clarified that the actual output APK file `Build/android_smoke.apk` is **60.8 MB** (the 782 MB log size includes all Gradle intermediates, IL2CPP objects, and temp folders generated during the build pipeline).
+- [x] Confirmed zero asset imports, gameplay modifications, scene edits, or package/dependency changes in this PR.
 
 ## Repo State at Handoff
 
@@ -25,18 +27,16 @@
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Active branch | fix/android-active-input-handling |
-| Code changes | Updated `MiscTesting.cs`, `EscapeToQuit.cs`, `TouchJoystick.cs`, `ProjectSettings.asset`, `docs/SESSION_HANDOFF.md` |
-| Asset changes | Upgraded `EventSystem` components in `Main Menu.unity` and `Level 1.unity` (No prefabs, materials, packages, or other scenes modified/created) |
-| Compile verified | YES (0 compiler/runtime errors, Android build succeeded) |
-| Unity MCP status | Active (Port 6400 listening, read_console verified) |
+| Current Commit | `e7e3b99` (PR #11 merged) |
+| Active branch | `chore/phase2-audit-baseline` |
+| Code changes | None (Docs-only PR) |
+| Doc changes | Updated [LICENSE_AUDIT.md](file:///D:/patili-kosk-shelter-defense/docs/LICENSE_AUDIT.md), [RISK_REGISTER.md](file:///D:/patili-kosk-shelter-defense/docs/RISK_REGISTER.md), [SESSION_HANDOFF.md](file:///D:/patili-kosk-shelter-defense/docs/SESSION_HANDOFF.md) |
+| Compile verified | N/A (No code or asset changes were made, main builds clean) |
+| Unity Version | 6000.3.16f1 (Unity 6) |
 
 ## Next Session: Start Here
 
-### Immediate Next Steps
+### Immediate Next Step
 
-1. **Review and Merge PR:**
-   - A pull request has been opened for branch `fix/android-active-input-handling` to merge into `main`.
-2. **Transition to Phase 2 (Asset Sourcing):**
-   - The project settings and input handling are now fully verified and clean.
-   - Start Phase 2 asset replacements matching the cute animal/shelter theme guidelines mapped in `docs/ASSET_REPLACEMENT_MATRIX.md` and `docs/VISUAL_DIRECTION.md`.
+1. **Proceed to Phase 2B (Visual Sourcing & Curated Asset Replacement):**
+   - Execute the curated, per-asset replacement plan for P0-priority assets (starting with `Lightsaber.png` and main characters/enemies) to replace Vampire Survivors and Star Wars references with cute cat/shelter-themed assets.
