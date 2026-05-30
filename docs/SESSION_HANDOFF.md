@@ -4,15 +4,15 @@
 
 ## Session Summary
 
-**Session goal:** Persist TextMesh Pro Essential Resources to fix recurring importer prompt.
+**Session goal:** Persist TextMesh Pro Essential Resources to fix recurring importer prompt and complete Phase 1 verification.
 
 **Completed this session:**
 - [x] Merged PR #7 (Phase 2B asset replacement matrix) to `main`.
-- [x] Restored unrelated local Unity/editor noise (`Infinite Background.mat` and code coverage settings).
-- [x] Created `chore/persist-tmp-essentials` branch.
+- [x] Merged PR #8 (Persist TMP essential resources) to `main`.
+- [x] Merged PR #9 (Track Unity editor test meta files) to `main`.
 - [x] Verified that TMP Examples & Extras were not imported.
-- [x] Persisted required TMP Essential Resources to eliminate recurring import prompts on session startup.
-- [x] Checked Unity Editor console via MCP `read_console` (0 compiler errors).
+- [x] Verified main scene Play Mode smoke test on `Main Menu.unity` (0 compile/runtime errors).
+- [x] Verified Android Build smoke test (Result: Succeeded, 0 errors, 3 warnings, 58 MB APK output).
 - [x] Mitigated R16 risk in `docs/RISK_REGISTER.md`.
 
 ## Repo State at Handoff
@@ -21,17 +21,19 @@
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Active branch | chore/persist-tmp-essentials |
-| Code changes | Updated `docs/RISK_REGISTER.md`, `docs/SESSION_HANDOFF.md`; Persisted `Assets/TextMesh Pro/` resources |
+| Active branch | chore/phase1-verification-evidence |
+| Code changes | Updated `docs/SESSION_HANDOFF.md` |
 | Asset changes | None (No gameplay files, assets, or dependencies modified/imported) |
-| Compile verified | YES (0 compiler errors) |
+| Compile verified | YES (0 compiler/runtime errors, Android build succeeded) |
 | Unity MCP status | Active (Port 6400 listening, read_console verified) |
 
 ## Next Session: Start Here
 
 ### Immediate Next Steps
 
-1. **Review and Merge PR for `chore/persist-tmp-essentials`:**
-   - Verify that TMP essential resources are persisted and the importer prompt is resolved.
-2. **Initiate Curated Asset Sourcing (Phase 2B):**
+1. **Review and Merge PR for `chore/phase1-verification-evidence`:**
+   - Review and merge documentation updates recording Phase 1 evidence.
+2. **Unity Editor Restart Validation:**
+   - Validate if the TMP Importer prompt is gone upon a clean restart of the Unity editor.
+3. **Initiate Curated Asset Sourcing (Phase 2B):**
    - Source/design cute animal-themed sprites mapping to `docs/ASSET_REPLACEMENT_MATRIX.md`.
