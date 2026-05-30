@@ -20,9 +20,16 @@ Bu doküman, projede yer alan mevcut görsel varlıkların (art assets) Vampire 
 
 ## Planlanan Değişiklikler (Phase 2A)
 
-Bu aşamada projedeki tüm varlıkları silmeden, sadece ana oynanış döngüsünü doğrulayabileceğimiz minimum placeholder değişimleri yapılmıştır:
-1. **Oyuncu Karakteri:** `MainCharacterBlue` ve diğer ana kedi karakter prefablara bağlanacak kedi görseli (`cat_guardian_placeholder.png`).
-2. **Düşman Görseli:** Bir adet temel düşman sprite'ı yerine (`shadow_enemy_placeholder.png`).
-3. **Yiyecek/Coin Görseli:** Toplanabilir ödül görseli yerine kedi maması/yiyecek temalı coin placeholder'ı (`food_coin_placeholder.png`).
-4. **Deneyim Kristali:** Ayrı bir nesne olarak takip edilmesi için (`exp_gem_placeholder.png`).
+> [!IMPORTANT]
+> **Rollback Kararı (30.05.2026):** Kenney tekil placeholder uygulaması, tüm düşman çeşitliliğini (Alien, Melee, Boss vb.) tek bir görsel kimliğe indirgediği ve görsel kaliteyi düşürdüğü için **iptal edilmiş ve geri alınmıştır**. 
+> - Oyuncu karakterleri, düşman canavarlar, coin ve deneyim kristali referansları orijinal/base haline geri döndürülmüştür.
+> - `PatiliKoskPlaceholderApplier.cs` aracı projeden silinmiştir.
+> - Kedi barınağı konseptine uygun özgün görsel kimlik çalışması gelecek aşamada doğrudan final özel varlıklarla yapılacaktır.
 
+## Static Placeholder Risk (Statik Placeholder Riski)
+
+> [!WARNING]
+> Phase 2A kapsamında Kenney asset göçüyle birlikte oyuncu ve düşman yürüme sprite dizilimleri 4 kareden 1 kare statik görsele düşmüştür. Bu durum yürüme animasyonlarının tamamen kaybolmasına yol açmıştır.
+> - **Geçici Çözüm (Procedural Motion):** Phase 2B kapsamında, karakterlerin cansız görünmesini engellemek için `SpriteAnimator.cs` içerisine programatik olarak sinüs dalgası tabanlı "Squash, Stretch, Bobbing & Wobble/Tilt" (yaylanma, büzülme ve dönme) hareketi eklenmiş ve sadece karakterlerde `enableProceduralMotion = true` olarak opt-in edilmiştir.
+> - **Kısıtlar:** Bu procedural hareket gerçek bir yürüme animasyonu (walk animation) değildir ve görsel progression eksikliği ile zayıf animasyon kalitesi riski devam etmektedir.
+> - **Kalıcı Çözüm:** Çok kareli (multi-frame) karakter/düşman sprite setlerinin entegre edilmesi veya final art pass yapılması gerekmektedir.

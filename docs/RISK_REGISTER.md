@@ -1,6 +1,6 @@
 # RISK_REGISTER.md
 
-> Last updated: 2026-05-28
+> Last updated: 2026-05-29
 
 ## Risk Table
 
@@ -13,6 +13,11 @@
 | R07 | Scope creep — project remains VS clone instead of shelter defense | MEDIUM | HIGH | Enforce REPO_TRUTH and CONVERSION_PLAN in all PRs | ⚠️ Open |
 | R08 | Android performance issues from base project | LOW | MEDIUM | Profile after core gameplay conversion | ⚠️ Open (Build success verified) |
 | R09 | Mobile virtual joystick input wiring issue | LOW | MEDIUM | Resolved - Uncommented SendValueToControl calls in TouchJoystick.cs | ✔️ Mitigated |
+| R10 | Low visual quality / amateur appearance of weapons/player | HIGH | LOW | Implement alignment and vertical flip in Phase 2B; plan proper art replacement | ✔️ Mitigated (Weapon flip & offset fixed) |
+| R11 | Mismatch between stats upgrades and visual progression (No visual progression for level-up) | MEDIUM | MEDIUM | Document limitation in visual audit; recommend Phase 2C/3 visual feedback | ⚠️ Open |
+| R12 | Static Placeholder Risk (1-frame walk sequences) | HIGH | MEDIUM | Added opt-in procedural squash/stretch bobbing walk animation in SpriteAnimator; require proper multi-frame sprite sheets | ⚠️ Open (Procedural mitigation added) |
+| R13 | Shop/Upgrades features are placeholder only (interactable=false) | LOW | MEDIUM | Mark as "Coming Soon / Phase 3" or temporarily hide from Main Menu UI in Phase 2C | ⚠️ Open |
+| R14 | Over-aggressive placeholder replacement can reduce visual variety and product quality | HIGH | MEDIUM | Reverted generic Kenney replacements; preserve original visual variety until final custom assets are ready | ⚠️ Open (Rollback complete) |
 
 ## Closed Risks
 
@@ -22,10 +27,12 @@
 | R05 | Unity version incompatibility on dev machine | Resolved — Successfully upgraded from 2021.3.21f1 to Unity 6 (6000.3.16f1) with 0 compiler errors. |
 | R06 | Unity package dependencies with incompatible licenses | Resolved — Audited Packages/manifest.json; all dependencies are official Unity packages under Unity EULA. |
 | R09 | Mobile virtual joystick input wiring issue | Resolved — Uncommented SendValueToControl calls in TouchJoystick.cs. Verified in Play Mode. |
+| R10 | Low visual quality / amateur appearance of weapons/player | Resolved — Implemented alignment and vertical flip for Bazooka and Machine Gun in Phase 2B. |
 
 ## Notes
 
 - Art and IP risks (R01, R02) will be addressed immediately in Phase 2.
 - The success of the Android build verified that there are no compiler blockers or SDK/NDK integration blockers on the development environment.
 - Mobile virtual joystick input wiring blocker was successfully resolved and verified via Play Mode smoke test simulation.
-
+- Phase 2B successfully addressed weapon rotation flips and offset alignment, reducing the risk of amateur appearance.
+- Static Placeholder Risk (R12) was introduced by 1-frame Kenney placeholders and mitigated temporarily using procedural squash/stretch bobbing and wobble in `SpriteAnimator.cs`, but final character assets are required.
