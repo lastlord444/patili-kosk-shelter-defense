@@ -12,10 +12,10 @@
 - [x] Merged PR #9 (Track Unity editor test meta files) to `main`.
 - [x] Verified that TMP Examples & Extras were not imported.
 - [x] Verified main scene Play Mode smoke test on `Main Menu.unity` (0 compile/runtime errors).
-- [x] Verified Android Build smoke test (Result: Succeeded, 5 errors, 8 warnings, 58 MB APK output).
-  - Note: Android build showed an "Unsupported Input Handling on Android" modal prompt because the current setting is "Both" in Player Settings.
-  - The build proceeded successfully only after manually clicking "Ignore".
-  - Resolving the Input handling setting requires a separate audited PR.
+- [x] Verified Android Build smoke test (Result: Succeeded, 0 build errors, 3 warnings in build report, 58 MB APK output).
+  - Note: During post-processing, the Android build showed an "Unsupported Input Handling on Android" modal prompt because the current setting is "Both" in Player Settings.
+  - The build completed successfully with 0 build errors only after clicking "Ignore" on the prompt.
+  - Active Input Handling needs to be audited to determine whether the project uses legacy Input Manager, the new Input System, or both, before changing Player Settings in a separate PR.
   - TMP Importer restart validation is still pending because Unity was not cleanly restarted.
 - [x] Mitigated R16 risk in `docs/RISK_REGISTER.md`.
 
@@ -39,7 +39,10 @@
    - Review and merge documentation updates recording Phase 1 evidence.
 2. **Unity Editor Restart Validation:**
    - Validate if the TMP Importer prompt is gone upon a clean restart of the Unity editor.
-3. **Resolve Active Input Handling setting (separate PR):**
-   - Change Active Input Handling to Input System Package (New) under Player Settings to avoid the build warning modal.
+3. **Audit Active Input Handling:**
+   - Search input usage first.
+   - Determine whether the project uses Legacy Input Manager, New Input System, or both.
+   - If both are used, stop and report.
+   - Only change Player Settings in a separate PR after this audit is completed.
 4. **Initiate Curated Asset Sourcing (Phase 2B):**
    - Source/design cute animal-themed sprites mapping to `docs/ASSET_REPLACEMENT_MATRIX.md`.
