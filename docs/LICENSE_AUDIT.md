@@ -20,6 +20,8 @@
 - [x] README attribution added
 - [x] LICENSE file manually verified (text diff against original matches 100%)
 
+---
+
 ## Third-Party Art Credits
 
 Orijinal projedeki tüm görsel assetler Vampire Survivors esintili spritelardan oluşmaktadır. Bu görsel varlıkların lisans durumları net olmamakla birlikte, oyun ticari bir ürüne dönüştürülmeden önce (Phase 2 kapsamında) **tamamen değiştirilecek**, kedi barınağı temalı orijinal çizimler ve lisanslı assetlerle değiştirilecektir.
@@ -27,6 +29,10 @@ Orijinal projedeki tüm görsel assetler Vampire Survivors esintili spritelardan
 | Asset | Source | License | Status |
 |---|---|---|---|
 | Monsters / Character Sprites | VampireSurvivorsClone | Unclear (VS IP) | ⚠️ To be replaced in Phase 2 |
+| Kenney Sprites (Magnet, Skull, etc.) | Kenney.nl | CC0 (Public Domain) | ✔️ Safe for commercial use |
+| Gold Treasure Icons | Bonsaiheldin (OpenGameArt) | CC0 / Custom | ⚠️ To be replaced in Phase 2 |
+
+---
 
 ## Third-Party Font Credits
 
@@ -37,6 +43,8 @@ Projede tespit edilen fontlar ve lisans durumları:
 | NotoSansMonoCJKtc-Regular.otf | Google Fonts | SIL Open Font License (OFL) | ✔️ Safe for commercial use |
 | LiberationSans SDF | Unity / TMPro | SIL Open Font License (OFL) | ✔️ Safe for commercial use |
 
+---
+
 ## Packages and Dependencies Audit
 
 Unity 6'ya yükseltme sonrası `Packages/manifest.json` dosyasındaki bağımlılıklar incelenmiştir. Tüm paketler Unity Package Manager üzerinden sunulan resmi Unity modülleri ve kütüphaneleridir, Unity Software License Agreement (EULA) kapsamındadır. Projede harici veya lisans riski taşıyan üçüncü parti paket (örneğin uPools veya DOTween) bulunmamaktadır.
@@ -46,6 +54,8 @@ Unity 6'ya yükseltme sonrası `Packages/manifest.json` dosyasındaki bağımlı
 - **Assets/ folder contents:** Görsel ve işitsel varlıkların tamamı Phase 2'de kedi barınağı konseptiyle sıfırdan değiştirilecektir. Mevcut assetler geçiş sürecinde sadece test amaçlı kullanılmaktadır.
 - **Packages/ folder:** Resmi Unity paketleri dışında dış kütüphane bağımlılığı yoktur.
 - **ProjectSettings/:** Unity sürümü 2021.3.21f1'den Unity 6 (6000.3.16f1) sürümüne yükseltilmiş ve ayarlar otomatik güncellenmiştir. Herhangi bir fikri mülkiyet (IP) riski bulunmamaktadır.
+
+---
 
 ## Risk Summary
 
