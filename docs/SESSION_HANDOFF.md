@@ -20,7 +20,7 @@
 - [x] Verified game integration via the mandatory test flow:
   * Opened Main Menu scene (`Assets/Scenes/Game/Main Menu.unity`)
   * Entered Play Mode
-  * Programmatically activated the character selection screen and selected the default/first character (Blue)
+  * Start / 開始 button invoked from Main Menu to open character select, then selected the default/first character (Blue)
   * Level 1 loaded successfully
   * Simulated player movement and verified player position updated (changed from (0.00, 0.00, 0.00) to (1.50, 0.00, 0.00))
   * Inspected player SpriteRenderer component and verified it uses texture `MainCharacterBlue` with size 24x24 (sprite `main-character_1`)
@@ -47,6 +47,6 @@
 
 ### Immediate Next Step
 
-1. **Merge this branch:** Open a pull request for `asset/replace-main-character-placeholders`, run sanity checks, and squash merge to `main`.
+1. **Proceed to Phase 2B-3:** After PR #14 is merged, proceed to Phase 2B-3 with a small scoped replacement, preferably one enemy sprite group or one collectible group. Do not combine monsters, coins, gems, and weapons in one PR.
 2. **Proceed to remaining Phase 2B Asset replacements:**
    - Continue replacing other Vampire Survivors-like sprites (monsters/enemies, coins/gems, other weapons) with cute animal/shelter-themed assets as planned in [ASSET_REPLACEMENT_MATRIX.md](ASSET_REPLACEMENT_MATRIX.md).

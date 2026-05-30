@@ -31,10 +31,10 @@ Orijinal projedeki tüm görsel ve işitsel referanslar Vampire Survivors esinti
 
 | Dosya Yolu (Path) | Türü / Kullanımı | Lisans Durumu | Risk Seviyesi | Aksiyon / Plan |
 |---|---|---|---|---|
-| `Assets/Sprites/Characters/MainCharacterBlue.png` | Playable Character | self-created simple placeholder (project-owned / MIT-compatible) | **mitigated** | **Replaced** |
-| `Assets/Sprites/Characters/MainCharacterGray.png` | Playable Character | self-created simple placeholder (project-owned / MIT-compatible) | **mitigated** | **Replaced** |
-| `Assets/Sprites/Characters/MainCharacterPurple.png` | Playable Character | self-created simple placeholder (project-owned / MIT-compatible) | **mitigated** | **Replaced** |
-| `Assets/Sprites/Characters/MainCharacterWhite.png` | Playable Character (Unused) | self-created simple placeholder (project-owned / MIT-compatible) | **mitigated** | **Replaced** |
+| `Assets/Sprites/Characters/MainCharacterBlue.png` | Playable Character | self-created simple placeholder (project-owned / MIT-compatible) | **Mitigated** | **Replaced** |
+| `Assets/Sprites/Characters/MainCharacterGray.png` | Playable Character | self-created simple placeholder (project-owned / MIT-compatible) | **Mitigated** | **Replaced** |
+| `Assets/Sprites/Characters/MainCharacterPurple.png` | Playable Character | self-created simple placeholder (project-owned / MIT-compatible) | **Mitigated** | **Replaced** |
+| `Assets/Sprites/Characters/MainCharacterWhite.png` | Playable Character (Unused) | self-created simple placeholder (project-owned / MIT-compatible) | **Mitigated** | **Replaced** |
 | `Assets/Sprites/Monsters/CrabOrange.png` | Melee Monster (Basic) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Melee Mouse/Rat) |
 | `Assets/Sprites/Monsters/CrabRed.png` | Melee Monster (Variant) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Melee Mouse/Rat Red) |
 | `Assets/Sprites/Monsters/Alien.png` | Melee Monster (Medium) | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Medium Stray Dog) |
