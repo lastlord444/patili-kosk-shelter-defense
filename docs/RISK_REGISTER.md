@@ -6,22 +6,27 @@
 
 | ID | Risk | Probability | Impact | Mitigation | Status |
 |---|---|---|---|---|---|
-| R01 | Third-party art assets with unclear license | MEDIUM | HIGH | Full asset audit in Phase 2; replace all non-clear assets | ⚠️ Open |
-| R02 | Vampire Survivors IP claim (pony cloning concern) | LOW | HIGH | Game design fully converted to shelter defense; VS identity fully removed before shipping | ⚠️ Open |
-| R03 | Font license not suitable for commercial use | MEDIUM | MEDIUM | Audit all fonts; replace with OFL/MIT-licensed fonts | ⚠️ Open |
-| R04 | Audio/music not cleared for commercial use | MEDIUM | MEDIUM | Audit all audio; replace with CC0 or original audio | ⚠️ Open |
-| R05 | Unity version incompatibility on new dev machine | LOW | MEDIUM | Check ProjectSettings/ProjectVersion.txt for exact version | ⚠️ Open |
-| R06 | Unity package dependencies with incompatible licenses | LOW | MEDIUM | Audit Packages/manifest.json; all Unity packages are Unity EULA | ⚠️ Open |
-| R07 | Scope creep — project becomes VS clone instead of shelter defense | MEDIUM | HIGH | Enforce REPO_TRUTH and CONVERSION_PLAN in all PRs | ⚠️ Open |
-| R08 | Android performance issues from base project | LOW | MEDIUM | Profile after Phase 1 build verification | ⚠️ Open |
+| R01 | Third-party art assets with unclear license | MEDIUM | HIGH | Full asset audit in Phase 2; replace all non-clear assets | ⚠️ Open (Focus in Phase 2) |
+| R02 | Vampire Survivors IP claim (cloning concern) | LOW | HIGH | Game design fully converted to shelter defense; VS identity fully removed | ⚠️ Open (Focus in Phase 2) |
+| R03 | Font license not suitable for commercial use | LOW | MEDIUM | Verified Noto Sans & LiberationSans are OFL (safe for commercial use) | ✔️ Mitigated |
+| R04 | Audio/music not cleared for commercial use | MEDIUM | MEDIUM | Audit all audio; replace with CC0 or original audio | ⚠️ Open (Focus in Phase 2) |
+| R07 | Scope creep — project remains VS clone instead of shelter defense | MEDIUM | HIGH | Enforce REPO_TRUTH and CONVERSION_PLAN in all PRs | ⚠️ Open |
+| R08 | Android performance issues from base project | LOW | MEDIUM | Profile after core gameplay conversion | ⚠️ Open (Build success verified) |
+| R09 | Mobile virtual joystick input wiring issue | LOW | MEDIUM | Resolved - Uncommented SendValueToControl calls in TouchJoystick.cs | ✔️ Mitigated |
+| R15 | Unity MCP removal breaks editor-state verification and can lead to fake Unity evidence | LOW | HIGH | Do not remove MCP package from verification branches. MCP unavailable = blocker. | ⚠️ Open |
 
 ## Closed Risks
 
 | ID | Risk | Resolution |
 |---|---|---|
 | R00 | MIT license not preserved | Resolved — LICENSE file preserved in import. |
+| R05 | Unity version incompatibility on dev machine | Resolved — Successfully upgraded from 2021.3.21f1 to Unity 6 (6000.3.16f1) with 0 compiler errors. |
+| R06 | Unity package dependencies with incompatible licenses | Resolved — Audited Packages/manifest.json; all dependencies are official Unity packages under Unity EULA. |
+| R09 | Mobile virtual joystick input wiring issue | Resolved — Uncommented SendValueToControl calls in TouchJoystick.cs. Verified in Play Mode. |
 
 ## Notes
 
-- Risks R01–R04 require manual Unity project inspection (cannot be audited from GitHub alone).
-- All HIGH-impact risks must be resolved before any public/store release.
+- Art and IP risks (R01, R02) will be addressed immediately in Phase 2.
+- The success of the Android build verified that there are no compiler blockers or SDK/NDK integration blockers on the development environment.
+- Mobile virtual joystick input wiring blocker was successfully resolved and verified via Play Mode smoke test simulation.
+
