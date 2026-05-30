@@ -11,6 +11,7 @@
 - [x] Merged PR #8 (Persist TMP essential resources) to `main`.
 - [x] Merged PR #9 (Track Unity editor test meta files) to `main`.
 - [x] Verified that TMP Examples & Extras were not imported.
+- [x] Removed unused `com.unity.collab-proxy` dependency to eliminate PlasticSCM DLL console errors.
 - [x] Verified main scene Play Mode smoke test on `Main Menu.unity` (0 compile/runtime errors).
 - [x] Verified Android Build smoke test (Result: Succeeded, 0 errors, 3 warnings, 58 MB APK output).
 - [x] Mitigated R16 risk in `docs/RISK_REGISTER.md`.
