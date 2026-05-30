@@ -6,8 +6,8 @@
 
 | ID | Risk | Probability | Impact | Mitigation | Status |
 |---|---|---|---|---|---|
-| R01 | Third-party art assets with unclear license | MEDIUM | HIGH | Full asset audit in Phase 2; replace all non-clear assets | ⚠️ Open (Focus in Phase 2) |
-| R02 | Vampire Survivors IP claim (cloning concern) | LOW | HIGH | Game design fully converted to shelter defense; VS identity fully removed | ⚠️ Open (Focus in Phase 2) |
+| R01 | Third-party art assets with unclear license | MEDIUM | HIGH | Enforce the per-asset replacements detailed in `docs/ASSET_REPLACEMENT_MATRIX.md` | ⚠️ Open (Focus in Phase 2B) |
+| R02 | Vampire Survivors IP claim (cloning concern) | LOW | HIGH | Fully replace VS-like character/enemy sprites as listed in the replacement matrix | ⚠️ Open (Focus in Phase 2B) |
 | R03 | Font license not suitable for commercial use | LOW | MEDIUM | Verified Noto Sans & LiberationSans are OFL (safe for commercial use) | ✔️ Mitigated |
 | R04 | Audio/music not cleared for commercial use | MEDIUM | MEDIUM | Audit all audio; replace with CC0 or original audio | ⚠️ Open (Focus in Phase 2) |
 | R07 | Scope creep — project remains VS clone instead of shelter defense | MEDIUM | HIGH | Enforce REPO_TRUTH and CONVERSION_PLAN in all PRs | ⚠️ Open |
@@ -29,6 +29,6 @@
 
 ## Notes
 
-- Art and IP risks (R01, R02) will be addressed systematically under the new curated asset mapping protocol (`docs/VISUAL_DIRECTION.md`).
+- Art and IP risks (R01, R02) will be addressed systematically under the new curated asset mapping protocol (`docs/VISUAL_DIRECTION.md`) and the master replacement matrix (`docs/ASSET_REPLACEMENT_MATRIX.md`).
 - The success of the Android build verified that there are no compiler blockers or SDK/NDK integration blockers on the development environment.
 - Mobile virtual joystick input wiring blocker was successfully resolved and verified via Play Mode smoke test simulation.
