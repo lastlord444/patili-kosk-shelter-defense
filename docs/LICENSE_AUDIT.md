@@ -32,6 +32,8 @@ Orijinal projedeki tüm görsel assetler Vampire Survivors esintili spritelardan
 | Kenney Sprites (Magnet, Skull, etc.) | Kenney.nl | CC0 (Public Domain) | ✔️ Safe for commercial use |
 | Gold Treasure Icons | Bonsaiheldin (OpenGameArt) | CC0 / Custom | ⚠️ To be replaced in Phase 2 |
 
+Detailed file-by-file licensing and risk types are documented in the master **[ASSET_REPLACEMENT_MATRIX.md](ASSET_REPLACEMENT_MATRIX.md)**.
+
 ---
 
 ## Third-Party Font Credits

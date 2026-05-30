@@ -4,7 +4,7 @@
 
 ## Session Summary
 
-**Session goal:** Run Phase 2A: License / Asset / Identity Audit + PR #3 Split Decision + Visual Direction Gate.
+**Session goal:** Start Phase 2B: Asset Replacement Matrix only.
 
 **Completed this session:**
 - [x] Performed full Asset and License Audit of the base project. Verified that:
@@ -22,6 +22,10 @@
 - [x] Updated `docs/RISK_REGISTER.md` to include TMPro shader noise (R16) and visual variety collapse (R17) risks.
 - [x] Verified Unity Editor console via MCP `read_console` (0 compiler errors, only stdio bridge info logs).
 - [x] Verified Play Mode is not left running.
+- [x] **Initiated Phase 2B (Visual Lock):**
+  - Scanned the full project sprites directory and traced GUID references to map exactly which assets are used by ScriptableObject blueprints, scenes, and prefabs.
+  - Created **`docs/ASSET_REPLACEMENT_MATRIX.md`** containing 28+ files, current usage, risk type, current license status, replacement directions, candidates, and visibility checks.
+  - Linked `ASSET_IDENTITY_AUDIT.md`, `LICENSE_AUDIT.md`, and `RISK_REGISTER.md` to the master replacement matrix.
 
 ## Repo State at Handoff
 
@@ -29,10 +33,9 @@
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Active branch | docs/phase-2a-audit |
-| Code changes | Created `docs/PR3_SPLIT_DECISION.md`, `docs/ASSET_IDENTITY_AUDIT.md`, `docs/VISUAL_DIRECTION.md`; Updated `docs/RISK_REGISTER.md`, `docs/LICENSE_AUDIT.md`, `docs/SESSION_HANDOFF.md` |
+| Active branch | docs/asset-replacement-matrix |
+| Code changes | Created `docs/ASSET_REPLACEMENT_MATRIX.md`; Updated `docs/ASSET_IDENTITY_AUDIT.md`, `docs/LICENSE_AUDIT.md`, `docs/RISK_REGISTER.md`, `docs/SESSION_HANDOFF.md` |
 | Asset changes | None (No gameplay files, assets, or dependencies modified/imported) |
-| LICENSE | Preserved (MIT, matthiasbroske) |
 | Compile verified | YES (0 compiler errors on main and audit branches) |
 | Unity MCP status | Active (Port 6400 listening, read_console verified) |
 
@@ -40,13 +43,10 @@
 
 ### Immediate Next Steps
 
-1. **Review and Approve PR #3 Split Decision:**
-   - Close PR #3 without merging.
-2. **Rebase and Clean PR #4:**
-   - Checkout `docs/visual-direction-after-placeholder-rollback` branch.
-   - Rebase on `main`.
-   - Restore the accidental deletion of the mandatory `com.coplaydev.unity-mcp` package in `Packages/manifest.json`.
-   - Restore/remove untracked verification remnants (`link.xml`, `Settings.json`) from the branch diff.
-   - Push and merge PR #4 to main.
+1. **Commit and Push Phase 2B Asset Replacement Matrix:**
+   - Push `docs/asset-replacement-matrix` branch to origin.
+   - Open a PR for review.
+2. **Review and Approve PR #6 (Salvage PR) and Close Stale PR #4:**
+   - Note: PR #6 was created to salvage unique sections from PR #4. Close PR #4 once merged.
 3. **Initiate Curated Asset Sourcing (Phase 2B):**
-   - Source/design multi-frame cat and enemy sprite sets based on `docs/VISUAL_DIRECTION.md` protocols.
+   - Source/design multi-frame cat and enemy sprite sets based on `docs/ASSET_REPLACEMENT_MATRIX.md` guidelines.
