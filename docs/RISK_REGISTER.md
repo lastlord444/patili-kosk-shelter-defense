@@ -21,6 +21,7 @@
 | **R19** | Missing Turkish (tr-TR) localization support | MEDIUM | MEDIUM | The game has Turkish naming ("Patili Köşk") but only English/Chinese localization. Add `tr-TR` locales. | ⚠️ Open |
 | **R20** | Broken/Missing audio asset references in prefabs | HIGH | LOW | `經驗球.prefab` contains a broken reference to a missing audio clip GUID (`1cc34cd39f4e34929ae51c22b318d5d5`). Remove or replace during audio sourcing. | ⚠️ Open |
 | **R21** | Chinese file naming convention footprint | LOW | LOW | Legacy file/folder names (e.g., `寶箱.prefab`, `初級小兵.asset`) represent a clone footprint. Rename files to English in a future cleanup phase. | ⚠️ Open |
+| **R22** | Star Wars lightsaber association / IP risk | LOW | HIGH | Replace Lightsaber.png with a self-created safe cat toy laser pointer beam placeholder. | ✔️ Mitigated |
 
 ## Closed Risks
 
@@ -32,6 +33,7 @@
 | **R09** | Mobile virtual joystick input wiring issue | Resolved — Uncommented SendValueToControl calls in TouchJoystick.cs. Verified in Play Mode. |
 | **R16** | TextMesh Pro auto-generated shader noise clutters PR diffs | Resolved — Persisted TMP Essential Resources directly in the repository to eliminate recurring editor import prompts. |
 | **R17** | Visual variety collapse from over-aggressive placeholders | Resolved — Rolled back the Kenney placeholder trial and restored original assets to protect gameplay variety. |
+| **R22** | Star Wars lightsaber association / IP risk | Resolved — Lightsaber.png replaced with a self-created safe laser pointer beam placeholder (MIT-compatible). |
 
 ## Notes
 
