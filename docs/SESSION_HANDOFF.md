@@ -1,18 +1,18 @@
 # SESSION_HANDOFF.md
 
 > Last updated: 2026-05-31
-> Status: Phase 2.5 / Region-Chapter Progression Contract Locked
+> Status: Phase 2.5 / MCP Verified Working
 
 ## Session Summary
 
-**Session goal:** Patili Köşk Shelter Defense için bölge/chapter ilerleme modelini (Region/Chapter Progression Contract) dokümana kilitlemek. Bu PR docs-only olup, production Unity projesi değiştirilmemiştir.
+**Session goal:** Unity MCP bağlantısının çalıştığını doğrulamak. MCP çalışmadan scene/prefab/asset wiring işlemlerine başlanmayacaktır.
 
 **Completed this session:**
-- [x] Verified repo state: `main` branch, workspace clean. PR #17 is merged and there are no open PRs.
-- [x] Created `docs/REGION_CHAPTER_PROGRESSION.md` to establish the progression model, rescue progress, and non-goals.
-- [x] Updated `docs/CONVERSION_PLAN.md` with Phase 2.5.
-- [x] Updated `docs/RISK_REGISTER.md` with 3 new risks (scope creep, monetization ethics, progression before gameplay).
-- [x] Updated this `docs/SESSION_HANDOFF.md`.
+- [x] Unity Editor process checked (Multiple Unity.exe processes found running, including one at ~1.7GB RAM).
+- [x] Attempted MCP connection (`read_console`, `manage_scene`).
+- [x] MCP connection **SUCCESSFUL**. Connected and retrieved active scene (Main Menu).
+- [x] Play Mode smoke test **SUCCESSFUL**. Entered play mode, read console (no game-breaking errors), exited successfully.
+- [x] Updated this `docs/SESSION_HANDOFF.md` to clear the blocker and approve moving to Phase 3.
 
 ## Decision
 
@@ -31,16 +31,17 @@ Key reasons:
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Next recommended branch | `feat/shelter-core` or `chore/mcp-restore` |
-| Code changes | None (Docs-only PR) |
-| Asset changes | None (Docs-only PR) |
-| Doc changes | New [REGION_CHAPTER_PROGRESSION.md](REGION_CHAPTER_PROGRESSION.md), Updated [CONVERSION_PLAN.md](CONVERSION_PLAN.md), [RISK_REGISTER.md](RISK_REGISTER.md), [SESSION_HANDOFF.md](SESSION_HANDOFF.md) |
+| Next recommended branch | `feat/shelter-core` |
+| Code changes | None (Verification PR) |
+| Asset changes | None (Verification PR) |
+| Doc changes | Updated [SESSION_HANDOFF.md](SESSION_HANDOFF.md) |
 | Workspace Status | 100% Clean |
 
 ## Next Session Steps
 
-1. **MCP Bağlantısını Onar / Check:** MCP çalışmadan scene/prefab/asset wiring yapılmayacak.
-2. Veya docs sonrası küçük controlled implementation plan (Shelter conversion plan veya asset replacement).
+1. **Start Phase 3 (Shelter Core):** MCP bağlantısı doğrulandığı için `feat/shelter-core` branch'ine geçilebilir.
+2. Shelter Entity (sağlık, pozisyon) tasarımı ve kodlamasına başlanabilir.
+3. Asset replacement süreci de bu noktadan sonra başlatılabilir.
 
 > [!IMPORTANT]
 > **Production Rules:** Bu PR docs-only'dir. Production Unity projesi (scene, prefab, asset) değiştirilmemiştir. MCP çalışmadan scene/prefab/asset wiring yapılmayacaktır.
