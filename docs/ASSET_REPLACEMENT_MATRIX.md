@@ -5,6 +5,11 @@
 
 This matrix defines the audit status, risk type, replacement direction, and priority for all risky and temporary visual assets in **Patili Köşk Shelter Defense**.
 
+> [!WARNING]
+> **Kenney Generic Items** ve **Kenney UI Pack** henüz yerel ortama indirilmemiştir.
+> Bu pakette yer alan dosyaların kesin dosya yolları (`PNG/...` vb.) ve dosya adları doğrulanmamıştır, hepsi tahmini/taslak niteliğindedir.
+> Asset paketleri indirilip çıkarılana kadar bu kolonlar "pending pack extraction" (paket çıkarılması bekleniyor) ve "not imported" (içe aktarılmadı) olarak kalacaktır. Tahmini dosya yolu yazmak kesinlikle yasaktır.
+
 ---
 
 ## Asset Replacement Matrix
@@ -50,3 +55,38 @@ No asset replacement commit will be accepted unless it provides the following ve
 2. **Android Silhouette Check:** Screenshots showing 1:1 mobile resolution visibility in both light and dark backgrounds.
 3. **Walk Anim Check:** Confirm walk sequence contains the required frame slices (if multi-frame).
 4. **Compile check:** Gradle build success.
+
+---
+
+## Asset Variant Preservation Contract
+
+Rules:
+
+1. Every source sprite, PNG, spritesheet frame, and sliced sprite must have an explicit target mapping before replacement.
+2. Do not collapse multiple gameplay variants into one visual unless the matrix explicitly marks them as intentionally merged and explains why.
+3. Enemy variants must preserve gameplay readability:
+   * size tier
+   * color/tint tier
+   * HP/damage/speed role if known
+   * elite/boss distinction
+   * collider/scale implications
+4. Collectible variants must preserve value/readability:
+   * Coin1, Coin2, Coin5, Coin10, Coin30, Coin50 must remain visually distinguishable.
+   * XP gem frames must remain visually distinguishable.
+   * UI icon must remain separate from world pickup sprites if the project currently treats it separately.
+5. For every replacement candidate, the matrix must include:
+   * Current asset path
+   * Current GUID if available
+   * Current gameplay role
+   * Current prefab / ScriptableObject / material reference
+   * Source pack
+   * Exact source file path, only after pack extraction
+   * Target repo path
+   * License
+   * Import/slicing settings
+   * Variant preservation note
+   * Test evidence required
+6. If a source pack contains multiple relevant variants, the implementer must map each useful variant separately or explicitly reject it with a reason.
+7. No “single generic monster/coin/gem replacement for all variants” is allowed.
+8. No AI-generated or unverified asset may be used as a final repo asset.
+

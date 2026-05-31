@@ -33,6 +33,11 @@
 
 ## Candidate Source Categories, Exact Files Pending Extraction
 
+> [!WARNING]
+> **Kenney Generic Items** ve **Kenney UI Pack** henüz yerel ortama indirilmemiştir.
+> Bu pakette yer alan dosyaların kesin dosya yolları (`PNG/...` vb.) ve dosya adları doğrulanmamıştır, hepsi tahmini/taslak niteliğindedir.
+> Asset paketleri indirilip çıkarılana kadar bu kolonlar "pending pack extraction" (paket çıkarılması bekleniyor) ve "not imported" (içe aktarılmadı) olarak kalacaktır. Tahmini dosya yolu yazmak kesinlikle yasaktır.
+
 The following table documents the candidate source categories selected from the approved CC0 packs:
 
 | Candidate Category / Use | Source Pack | Exact File in Pack | Proposed Target Repo Path | License | Attribution | AI Gen? | Import Risk |
@@ -53,3 +58,6 @@ The following table documents the candidate source categories selected from the 
 1. **Resolve MCP Connection:** User needs to restart the MCP server in the IDE, or restart the agent session, to restore stdio connection to port 6402.
 2. **Asset Subset Import:** Once MCP is working, download only the selected sprite files from the approved Kenney CC0 packs and import them to the target repo paths (without importing the full packs).
 3. **Asset Wiring:** Update the blueprint assets `Coin.asset` and `Exp Gem.asset` to point to the newly imported sprites.
+
+> [!IMPORTANT]
+> **Before any PR that imports/replaces assets:** Create a source-to-target variant matrix. Do not collapse enemy/collectible/UI variants into a single visual. Every PNG/sprite/frame variant must have its distinct counterpart mapped to preserve visual/gameplay variety.

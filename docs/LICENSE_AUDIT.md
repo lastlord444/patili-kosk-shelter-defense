@@ -146,6 +146,11 @@ Tüm materyaller (`Assets/Materials/`) ve dokular (`Assets/Textures/`) Unity 6 B
 
 ## Candidate Packs AI and License Verification Details
 
+> [!WARNING]
+> **Kenney Generic Items** ve **Kenney UI Pack** henüz yerel ortama indirilmemiştir.
+> Bu pakette yer alan dosyaların kesin dosya yolları (`PNG/...` vb.) ve dosya adları doğrulanmamıştır, hepsi tahmini/taslak niteliğindedir.
+> Asset paketleri indirilip çıkarılana kadar bu kolonlar "pending pack extraction" (paket çıkarılması bekleniyor) ve "not imported" (içe aktarılmadı) olarak kalacaktır. Tahmini dosya yolu yazmak kesinlikle yasaktır.
+
 - **Kenney UI Pack (CC0):**
   - License: Creative Commons CC0 (Public Domain)
   - Commercial use: Allowed

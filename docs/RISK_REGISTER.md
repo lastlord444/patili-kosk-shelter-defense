@@ -24,6 +24,7 @@
 | **R23** | Unity MCP connection returns stdio EOF | HIGH | HIGH | Establish connection or run fallback local audits and request restart from user. | ⚠️ Open (PR Blocker) |
 | **R24** | Missing themed collectible replacement assets | HIGH | HIGH | Document Kenney CC0 Packs as candidate source packs and plan subset import. | ⚠️ Open |
 | **R25** | Unverified exact asset filenames | HIGH | MEDIUM | Exact asset filenames are not verified until the Kenney packs are downloaded/extracted and file list is recorded. | ⚠️ Open |
+| **R26** | Variant collapse risk | HIGH | HIGH | Require explicit source-to-target mapping for every sprite/frame before import or replacement. | ⚠️ Open |
 
 ## Closed Risks
 
