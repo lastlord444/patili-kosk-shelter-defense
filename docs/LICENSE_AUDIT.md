@@ -45,16 +45,16 @@ Orijinal projedeki tüm görsel ve işitsel referanslar Vampire Survivors esinti
 | `Assets/Sprites/Monsters/ExplosiveGuy.png` | Explosive Monster | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **MEDIUM** | **Replace** (Exploding Toy Cat) |
 | `Assets/Sprites/Monsters/MiniBoss.png` | Elite Miniboss | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Mini Boss Catcher) |
 | `Assets/Sprites/Monsters/Boss.png` | Final Boss | Belirsiz (Vampire Survivors-like identity / clone-feel risk) | **HIGH** | **Replace** (Big Catcher Boss) |
-| `Assets/Sprites/Coins/Coin1.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | **Replace** (Wet Food Can) |
-| `Assets/Sprites/Coins/Coin2.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | **Replace** (Dry Food Pack) |
-| `Assets/Sprites/Coins/Coin5.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | **Replace** (Cat Treat Pocket) |
-| `Assets/Sprites/Coins/Coin10.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | **Replace** (Large Salmon Can) |
-| `Assets/Sprites/Coins/Coin30.png` | Collectible Currency | Belirsiz (RPG style) | **MEDIUM** | **Replace** (Premium Fish Bone) |
-| `Assets/Sprites/Coins/Coin50.png` | Collectible Currency | Belirsiz (RPG style) | **MEDIUM** | **Replace** (Cat Golden Trophy) |
-| `Assets/Sprites/UI/UICoin.png` | HUD Coin Icon | Belirsiz (RPG style) | **HIGH** | **Replace** (UI Dry Food Icon) |
-| `Assets/Sprites/Gems/Gems.png` | Experience Pickups | Belirsiz (RPG style) | **HIGH** | **Replace** (Yarn Ball / Feathers) |
-| `Assets/Sprites/Gems/GemDarkBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | **Replace** (Blue Yarn Ball) |
-| `Assets/Sprites/Gems/GemLightBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | **Replace** (Light Blue Yarn Ball) |
+| `Assets/Sprites/Coins/Coin1.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | Replace with Wet Food Can (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Coins/Coin2.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | Replace with Dry Food Pack (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Coins/Coin5.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | Replace with Cat Treat Pocket (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Coins/Coin10.png` | Collectible Currency | Belirsiz (RPG style) | **HIGH** | Replace with Large Salmon Can (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Coins/Coin30.png` | Collectible Currency | Belirsiz (RPG style) | **MEDIUM** | Replace with Premium Fish Bone (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Coins/Coin50.png` | Collectible Currency | Belirsiz (RPG style) | **MEDIUM** | Replace with Cat Golden Trophy (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/UI/UICoin.png` | HUD Coin Icon | Belirsiz (RPG style) | **HIGH** | Replace with UI Dry Food Icon (Candidate: Kenney UI Pack - CC0) |
+| `Assets/Sprites/Gems/Gems.png` | Experience Pickups | Belirsiz (RPG style) | **HIGH** | Replace with Yarn Ball / Feathers (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Gems/GemDarkBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | Replace with Blue Yarn Ball (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Gems/GemLightBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | Replace with Light Blue Yarn Ball (Candidate: Kenney Generic Items - CC0) |
 | `Assets/Sprites/Weapons/Lightsaber.png` | Ability Projectile | self-created simple placeholder (project-owned / MIT-compatible) | **Mitigated** | **Replaced** |
 | `Assets/Sprites/Weapons/Bat.png` | Ability Projectile | Belirsiz | **MEDIUM** | **Replace** (Toy Bat / Ball) |
 | `Assets/Sprites/Weapons/Sword.png` | Ability Projectile | Belirsiz (RPG style) | **MEDIUM** | **Replace** (Cat Claw Slash) |
@@ -143,3 +143,17 @@ Tüm materyaller (`Assets/Materials/`) ve dokular (`Assets/Textures/`) Unity 6 B
 | **R05** | Android APK Boyutu Şişmesi (Büyük Font Dosyaları) | **HIGH** | 15.6 MB'lık CJK OTF fontunu ve 33.7 MB'lık SDF assetini optimize et / tr-TR odaklı font ile değiştir. | ⚠️ Açık (Gelecek Faz Optimizasyonu) |
 | **R06** | Ses Dosyası Eksikliği ve Kırık Referanslar | **MEDIUM** | Projedeki eksik ses/müzik yapısını kur, `經驗球.prefab` üzerindeki kırık GUID ses referansını çöz. | ⚠️ Açık (Phase 2B/3 Ses Sourcing) |
 | **R07** | Türkçe Dil Desteği Eksikliği (Thematic Gap) | **MEDIUM** | "Patili Köşk" adıyla uyumlu Türkçe (tr-TR) lokalizasyon tablolarını ve çevirilerini ekle. | ⚠️ Açık (Gelecek Faz Eklemesi) |
+
+## Candidate Packs AI and License Verification Details
+
+- **Kenney UI Pack (CC0):**
+  - License: Creative Commons CC0 (Public Domain)
+  - Commercial use: Allowed
+  - Attribution: Not required
+  - AI Generated: No (Official Kenney confirmation: no generative AI used)
+- **Kenney Generic Items (CC0):**
+  - License: Creative Commons CC0 (Public Domain)
+  - Commercial use: Allowed
+  - Attribution: Not required
+  - AI Generated: No explicit AI usage claim found on the asset page; license is CC0.
+
