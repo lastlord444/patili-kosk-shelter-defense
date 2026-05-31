@@ -65,6 +65,21 @@ This document outlines the phased plan to convert the MIT-licensed VampireSurviv
 
 ---
 
+## Phase 2.5: Region/Chapter Progression Contract
+
+**Goal:** Lock the region and chapter progression model before core gameplay implementation.
+
+### Tasks
+- [x] Create Region/Chapter Progression document (`docs/REGION_CHAPTER_PROGRESSION.md`)
+- [ ] Align on short mobile session lengths and rescue progress model
+- [ ] Approve the progression contract before starting Phase 3 implementation
+
+### Exit Criteria
+- Region/Chapter Progression Contract is merged and accepted
+- Phase 3 cannot begin without this contract's approval
+
+---
+
 ## Phase 3: Convert Gameplay to Shelter Defense
 
 **Goal:** Transform core loop from auto-attack survivor to player-controlled shelter defense.
@@ -91,7 +106,8 @@ This document outlines the phased plan to convert the MIT-licensed VampireSurviv
 ### Timeline
 - **Phase 1 (Verification):** Completed on 2026-05-28. ✔️
 - **Phase 2 (Asset Replacement):** Estimated duration: 2 weeks. (Focusing on removing Vampire Survivors identity and establishing cat shelter visual assets).
+- **Phase 2.5 (Progression Contract):** In Progress. (Locking the region and chapter progression model).
 - **Phase 3 (Gameplay Conversion):** Estimated duration: 3 weeks. (Focusing on shelter defense mechanics, upgrades, and progression).
 
 ### Immediate Next Step
-- Initiate Phase 2: Design and import placeholder cat shelter assets, and begin replacing character/monster sprites.
+- Region/Chapter Progression Contract tamamlandıktan sonra MCP restore + controlled asset replacement veya shelter conversion plan.

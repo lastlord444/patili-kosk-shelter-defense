@@ -26,6 +26,9 @@
 | **R25** | Unverified exact asset filenames | HIGH | MEDIUM | Exact asset filenames are not verified until the Kenney packs are downloaded/extracted and file list is recorded. | ⚠️ Open |
 | **R26** | Variant collapse risk | HIGH | HIGH | Require explicit source-to-target mapping for every sprite/frame before import or replacement. | ⚠️ Open |
 | **R27** | Template pivot — switching to a different survivor template base | LOW | HIGH | Evaluated 3 alternatives (survivors-roguelike-kit, Monster Survivors, Survival.io). All rejected: AI-generated assets (blocker), Asset Store EULA (no repo commit), pivot cost exceeds gap-fill cost. Decision: continue with current base. See [TEMPLATE_EVALUATION.md](TEMPLATE_EVALUATION.md). | ✅ Mitigated |
+| **R28** | Region/chapter scope creep | MEDIUM | HIGH | Enforce non-goals in [REGION_CHAPTER_PROGRESSION.md](REGION_CHAPTER_PROGRESSION.md). Ensure region system does not turn into a city builder or full shelter simulation. | ⚠️ Open |
+| **R29** | Monetization ethics / pay-to-win risk | LOW | HIGH | Diamonds are strictly for future acceleration/comfort. Strictly prohibit gacha, lootboxes, and locking rescue missions behind paywalls. | ⚠️ Open |
+| **R30** | Progression before core gameplay risk | MEDIUM | HIGH | Too much meta-design could delay the core shelter defense loop. Complete Region/Chapter contract and move swiftly to shelter entity implementation. | ⚠️ Open |
 
 ## Closed Risks
 
