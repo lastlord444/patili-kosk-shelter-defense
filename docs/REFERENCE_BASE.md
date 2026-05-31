@@ -39,3 +39,15 @@ These repos were used for concept research only. No code or assets from them are
 - sentaur-survivors (concept reference)
 - survivors-roguelike-kit (concept reference)
 - uPools (architecture reference)
+
+## Template Evaluation Spike (2026-05-31)
+
+A formal template evaluation was conducted to determine whether to continue with this base or pivot. See [TEMPLATE_EVALUATION.md](TEMPLATE_EVALUATION.md) for the full report.
+
+**Decision: Continue with current base.**
+
+| Evaluated Alternative | Reason for Rejection |
+|---|---|
+| survivors-roguelike-kit (Roo-Roo-Roo) | AI-generated pixel art/UI assets — violates project policy |
+| Monster Survivors - Full Game (October Studio, $99) | Asset Store EULA — cannot commit to repo |
+| Survival.io (Gorodiski Games, $79) | Asset Store EULA — cannot commit to repo |

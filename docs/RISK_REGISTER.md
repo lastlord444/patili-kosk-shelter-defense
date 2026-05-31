@@ -1,7 +1,7 @@
 # RISK_REGISTER.md
 
 > Last updated: 2026-05-31
-> Status: UPDATED (Phase 2A Baseline Audit)
+> Status: UPDATED (Phase 2A Baseline Audit + Template Evaluation Spike)
 
 ## Risk Table
 
@@ -25,6 +25,7 @@
 | **R24** | Missing themed collectible replacement assets | HIGH | HIGH | Document Kenney CC0 Packs as candidate source packs and plan subset import. | ⚠️ Open |
 | **R25** | Unverified exact asset filenames | HIGH | MEDIUM | Exact asset filenames are not verified until the Kenney packs are downloaded/extracted and file list is recorded. | ⚠️ Open |
 | **R26** | Variant collapse risk | HIGH | HIGH | Require explicit source-to-target mapping for every sprite/frame before import or replacement. | ⚠️ Open |
+| **R27** | Template pivot — switching to a different survivor template base | LOW | HIGH | Evaluated 3 alternatives (survivors-roguelike-kit, Monster Survivors, Survival.io). All rejected: AI-generated assets (blocker), Asset Store EULA (no repo commit), pivot cost exceeds gap-fill cost. Decision: continue with current base. See [TEMPLATE_EVALUATION.md](TEMPLATE_EVALUATION.md). | ✅ Mitigated |
 
 ## Closed Risks
 
