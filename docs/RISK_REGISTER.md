@@ -21,7 +21,7 @@
 | **R19** | Missing Turkish (tr-TR) localization support | MEDIUM | MEDIUM | The game has Turkish naming ("Patili Köşk") but only English/Chinese localization. Add `tr-TR` locales. | ⚠️ Open |
 | **R20** | Broken/Missing audio asset references in prefabs | HIGH | LOW | `經驗球.prefab` contains a broken reference to a missing audio clip GUID (`1cc34cd39f4e34929ae51c22b318d5d5`). Remove or replace during audio sourcing. | ⚠️ Open |
 | **R21** | Chinese file naming convention footprint | LOW | LOW | Legacy file/folder names (e.g., `寶箱.prefab`, `初級小兵.asset`) represent a clone footprint. Rename files to English in a future cleanup phase. | ⚠️ Open |
-| **R23** | Unity MCP connection returns stdio EOF | HIGH | HIGH | Establish connection or run fallback local audits and request restart from user. | ⚠️ Open (PR Blocker) |
+| **R23** | Unity MCP connection returns stdio EOF | HIGH | HIGH | Establish connection or run fallback local audits and request restart from user. | ✔️ Verified working |
 | **R24** | Missing themed collectible replacement assets | HIGH | HIGH | Document Kenney CC0 Packs as candidate source packs and plan subset import. | ⚠️ Open |
 | **R25** | Unverified exact asset filenames | HIGH | MEDIUM | Exact asset filenames are not verified until the Kenney packs are downloaded/extracted and file list is recorded. | ⚠️ Open |
 | **R26** | Variant collapse risk | HIGH | HIGH | Require explicit source-to-target mapping for every sprite/frame before import or replacement. | ⚠️ Open |
