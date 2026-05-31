@@ -42,3 +42,6 @@ Coins upgrade the shelter.
 - **Silhouette & Variety:** Enforce distinct silhouettes and visual identity for different enemy types. No mass placeholder replacements that collapse variety.
 - **Mobile Readability:** Visual clarity on Android screens is paramount (large UI, distinct collectibles/sprites).
 
+## Development & Testing Rules
+
+- **Play Mode Testing:** DO NOT run `Level 1.unity` (or any gameplay scene) standalone. Game managers, data, and singletons are initialized in `Main Menu.unity`. Always load `Main Menu` first, start Play Mode, click "Start", then "Select" to enter the game correctly and prevent `NullReferenceException` floods.
