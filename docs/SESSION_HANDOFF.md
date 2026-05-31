@@ -38,7 +38,7 @@ Key reasons:
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Active branch | `spike/template-evaluation` |
+| Active branch | `hotfix/session-handoff` |
 | Code changes | None |
 | Asset changes | None |
 | Doc changes | New [TEMPLATE_EVALUATION.md](TEMPLATE_EVALUATION.md), Updated [REFERENCE_BASE.md](REFERENCE_BASE.md), [RISK_REGISTER.md](RISK_REGISTER.md), [SESSION_HANDOFF.md](SESSION_HANDOFF.md) |
@@ -46,10 +46,9 @@ Key reasons:
 
 ## Next Session Steps
 
-1. **Merge this spike PR** — docs-only, no production impact.
-2. **Phase 2 devam:** Kalan sprite/asset değişimleri (Kenney CC0 collectible'lar, monster sprite'ları).
-3. **Phase 3 hazırlık:** Save sistemi, shop/upgrade menüsü, shelter entity tasarımı.
-4. **MCP bağlantısını kur:** Asset wiring ve prefab doğrulaması için gerekli.
+1. **MCP Bağlantısını Onar:** Unity Editor kapatılmayacak. MCP tam olarak çalışmadan scene/prefab/asset wiring işlerine kesinlikle girilmeyecek.
+2. **Region/Chapter Progression Contract:** Sonraki gerçek tasarım PR'ı bu konu üzerine olacak.
+3. **Phase 2 Devam:** Kenney CC0 collectible import ve monster sprite değişimleri (SADECE MCP ve progression contract sonrasında).
 
 > [!IMPORTANT]
 > **Before any PR that imports/replaces assets:** Create a source-to-target variant matrix. Do not collapse enemy/collectible/UI variants into a single visual. Every PNG/sprite/frame variant must have its distinct counterpart mapped to preserve visual/gameplay variety.
