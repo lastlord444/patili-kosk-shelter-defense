@@ -7,6 +7,18 @@ namespace Vampire
     public class MolotovFire : MonoBehaviour
     {
         [SerializeField] protected ParticleSystem fireParticles;
+        [SerializeField] protected float fireAlpha = 0.09f;
+
+        private void Awake()
+        {
+            var sr = GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                Color c = sr.color;
+                c.a = fireAlpha;
+                sr.color = c;
+            }
+        }
         
         public IEnumerator Burn(MolotovThrowable molotov, float damage, float knockback, float duration, float fireRadius, float fireDamageRate, LayerMask targetLayer)
         {

@@ -17,22 +17,47 @@ namespace Vampire
         protected Vector3 gunDirection = Vector2.right;
         protected float theta = 0;
 
+        protected Vector3 initialGunScale;
+        protected bool isFiring = false;
+        protected bool isInitialScaleStored = false;
+
+        protected override void Use()
+        {
+            base.Use();
+            if (bazookaGun != null && !isInitialScaleStored)
+            {
+                initialGunScale = bazookaGun.transform.localScale;
+                isInitialScaleStored = true;
+            }
+        }
+
         protected override void Update()
         {
             base.Update();
 
-            // Rotate the gun if it is reloading
-            float reloadRotation = 0;
-            float t = timeSinceLastAttack/cooldown.Value;
-            if (t > 0 && t < 1)
+            if (bazookaGun == null) return;
+
+            if (!isInitialScaleStored)
             {
-                reloadRotation = t * 360;
+                initialGunScale = bazookaGun.transform.localScale;
+                isInitialScaleStored = true;
             }
 
-            //gunDirection = new Vector3(Mathf.Cos(theta), Mathf.Sin(theta), 0);
-            currHoverOffset = hoverOffset + Vector2.up * Mathf.Sin(Time.time*5)*0.1f;
-            bazookaGun.transform.position = (Vector2)playerCharacter.CenterTransform.position + currHoverOffset;
-            //bazookaGun.transform.rotation = Quaternion.Euler(0, 0, theta - reloadRotation);
+            // Aim in player's look direction when not firing
+            if (!isFiring)
+            {
+                float targetTheta = Vector2.SignedAngle(Vector2.right, playerCharacter.LookDirection);
+                theta = Mathf.MoveTowardsAngle(theta, targetTheta, 720f * Time.deltaTime);
+                bazookaGun.transform.rotation = Quaternion.Euler(0, 0, theta);
+            }
+
+            // Anchor bazooka close to the player body (held in hand)
+            bazookaGun.transform.position = (Vector2)playerCharacter.CenterTransform.position + playerCharacter.LookDirection * 0.15f + Vector2.up * 0.05f;
+
+            // Flip Y-scale when looking/aiming left so the gun is not head down
+            float normTheta = Mathf.Repeat(theta + 180f, 360f) - 180f;
+            float targetYScale = (Mathf.Abs(normTheta) > 90f) ? -initialGunScale.y : initialGunScale.y;
+            bazookaGun.transform.localScale = new Vector3(initialGunScale.x, targetYScale, initialGunScale.z);
         }
 
         protected override void LaunchProjectile()
@@ -42,6 +67,13 @@ namespace Vampire
 
         protected IEnumerator LaunchProjecileAnimation()
         {
+            isFiring = true;
+            if (bazookaGun != null && !isInitialScaleStored)
+            {
+                initialGunScale = bazookaGun.transform.localScale;
+                isInitialScaleStored = true;
+            }
+
             ISpatialHashGridClient targetEntity = entityManager.Grid.FindClosestInRadius(bazookaGun.transform.position, targetRadius);
             
             Vector2 launchDirection = targetEntity == null ? Random.insideUnitCircle.normalized : (targetEntity.Position - (Vector2)bazookaGun.transform.position).normalized;
@@ -61,7 +93,12 @@ namespace Vampire
                 }
                 theta = Mathf.Lerp(initialTheta, targetTheta, EasingUtils.EaseOutBack(t));
                 bazookaGun.transform.rotation = Quaternion.Euler(0, 0, theta);
-                //bazookaGun.transform.rotation = Quaternion.Lerp(Quaternion.Euler(0, 0, initialTheta), Quaternion.Euler(0, 0, targetTheta), EasingUtils.EaseOutBack(t));
+                
+                // Flip Y scale dynamically during rotation lerping
+                float normTheta = Mathf.Repeat(theta + 180f, 360f) - 180f;
+                float targetYScale = (Mathf.Abs(normTheta) > 90f) ? -initialGunScale.y : initialGunScale.y;
+                bazookaGun.transform.localScale = new Vector3(initialGunScale.x, targetYScale, initialGunScale.z);
+
                 t += Time.deltaTime;
                 yield return null;
             }
@@ -74,7 +111,12 @@ namespace Vampire
                     launchDirection = (targetEntity.Position - (Vector2)bazookaGun.transform.position).normalized;
                     targetTheta = Vector2.SignedAngle(Vector2.right, launchDirection);
                     bazookaGun.transform.rotation = Quaternion.Euler(0, 0, targetTheta);
-                    //bazookaGun.transform.rotation = Quaternion.Lerp(Quaternion.Euler(0, 0, initialTheta), Quaternion.Euler(0, 0, targetTheta), EasingUtils.EaseOutBack(t));
+
+                    // Flip Y scale dynamically during targeting tracking
+                    float normTheta = Mathf.Repeat(targetTheta + 180f, 360f) - 180f;
+                    float targetYScale = (Mathf.Abs(normTheta) > 90f) ? -initialGunScale.y : initialGunScale.y;
+                    bazookaGun.transform.localScale = new Vector3(initialGunScale.x, targetYScale, initialGunScale.z);
+
                     t += Time.deltaTime;
                     yield return null;
                 }
@@ -86,11 +128,18 @@ namespace Vampire
             theta = targetTheta;
             bazookaGun.transform.rotation = Quaternion.Euler(0, 0, theta);
 
+            // Final Y flip after target calculation
+            float finalNormTheta = Mathf.Repeat(theta + 180f, 360f) - 180f;
+            float finalTargetYScale = (Mathf.Abs(finalNormTheta) > 90f) ? -initialGunScale.y : initialGunScale.y;
+            bazookaGun.transform.localScale = new Vector3(initialGunScale.x, finalTargetYScale, initialGunScale.z);
+
             ExplosiveProjectile projectile = (ExplosiveProjectile) entityManager.SpawnProjectile(projectileIndex, launchTransform.position, damage.Value, knockback.Value, speed.Value, monsterLayer);
             projectile.SetupExplosion(damage.Value, explosionAOE.Value, knockback.Value);
             projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
             projectile.Launch(launchDirection);
             launchParticles.Play();
+
+            isFiring = false;
         }
     }
 }
