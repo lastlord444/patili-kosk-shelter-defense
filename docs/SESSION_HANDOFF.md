@@ -1,18 +1,18 @@
 # SESSION_HANDOFF.md
 
 > Last updated: 2026-05-31
-> Status: Phase 2.5 / MCP Verified Working
+> Status: Phase 3 / Minimal Shelter Core Added
 
 ## Session Summary
 
-**Session goal:** Unity MCP bağlantısının çalıştığını doğrulamak. MCP çalışmadan scene/prefab/asset wiring işlemlerine başlanmayacaktır.
+**Session goal:** Phase 3'ün ilk teknik vertical slice'ını (Minimal Shelter entity) oluşturmak ve sahneye yerleştirip doğrulamak.
 
 **Completed this session:**
-- [x] Unity Editor process checked (Multiple Unity.exe processes found running, including one at ~1.7GB RAM).
-- [x] Attempted MCP connection (`read_console`, `manage_scene`).
-- [x] MCP connection **SUCCESSFUL**. Connected and retrieved active scene (Main Menu).
-- [x] Play Mode smoke test **SUCCESSFUL**. Entered play mode, read console (no game-breaking errors), exited successfully.
-- [x] Updated this `docs/SESSION_HANDOFF.md` to clear the blocker and approve moving to Phase 3.
+- [x] Created `Shelter.cs` with HP state, TakeDamage, and Heal methods.
+- [x] Placed `Shelter` GameObject in `Level 1` scene with `Shelter` and `SpriteRenderer` components.
+- [x] Verified via Play Mode smoke test (No compilation errors, game runs successfully).
+- [x] Android build smoke test: not run; compile + Main Menu -> Start -> Select Play Mode smoke passed; Android smoke deferred to next gameplay-affecting PR or pre-merge gate if requested.
+- [x] Updated this `docs/SESSION_HANDOFF.md`.
 
 ## Decision
 
@@ -31,18 +31,17 @@ Key reasons:
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Next recommended branch | `feat/shelter-core` |
-| Code changes | None (Verification PR) |
-| Asset changes | None (Verification PR) |
+| Next recommended branch | `feat/shelter-ai-wiring` or `feat/enemy-ai-target` |
+| Code changes | Added `Assets/_PatiliKosk/Scripts/Shelter/Shelter.cs` |
+| Asset changes | Updated `Assets/Scenes/Game/Level 1.unity` (Level 1 scene contains Unity 6 serialization upgrade noise in addition to Shelter GameObject addition. No ProjectSettings/Packages changes were committed.) |
 | Doc changes | Updated [SESSION_HANDOFF.md](SESSION_HANDOFF.md) |
 | Workspace Status | 100% Clean |
 
 ## Next Session Steps
 
-1. **Start Phase 3 (Shelter Core):** MCP bağlantısı doğrulandığı için `feat/shelter-core` branch'ine geçilebilir.
-2. Shelter Entity (sağlık, pozisyon) tasarımı ve kodlamasına başlanabilir.
-3. Asset replacement süreci de bu noktadan sonra başlatılabilir.
+1. **Enemy AI Target Switching:** Mevcut düşman AI'ı (veya Spawner) güncellenerek player yerine (veya ek olarak) Shelter hedefine gitmesi sağlanacak.
+2. **Game Over Condition:** Shelter canı sıfırlandığında (`IsDestroyed == true`) Game Over State tetiklenecek.
+3. Asset replacement süreci ve UI wiring ilerletilebilir.
 
 > [!IMPORTANT]
-> **Production Rules:** Bu PR docs-only'dir. Production Unity projesi (scene, prefab, asset) değiştirilmemiştir. MCP çalışmadan scene/prefab/asset wiring yapılmayacaktır.
-> **Before any PR that imports/replaces assets:** Create a source-to-target variant matrix. Do not collapse enemy/collectible/UI variants into a single visual. Every PNG/sprite/frame variant must have its distinct counterpart mapped to preserve visual/gameplay variety.
+> **Production Rules:** MCP çalışmaktadır. Herhangi bir asset replacement durumunda mutlaka source-to-target variant matrix çıkarın.
