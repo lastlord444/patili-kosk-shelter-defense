@@ -26,7 +26,7 @@ namespace Vampire
             base.Use();
             if (bazookaGun != null && !isInitialScaleStored)
             {
-                initialGunScale = bazookaGun.transform.localScale;
+                initialGunScale = bazookaGun.transform.localScale * 0.75f;
                 isInitialScaleStored = true;
             }
         }
@@ -39,7 +39,7 @@ namespace Vampire
 
             if (!isInitialScaleStored)
             {
-                initialGunScale = bazookaGun.transform.localScale;
+                initialGunScale = bazookaGun.transform.localScale * 0.75f;
                 isInitialScaleStored = true;
             }
 

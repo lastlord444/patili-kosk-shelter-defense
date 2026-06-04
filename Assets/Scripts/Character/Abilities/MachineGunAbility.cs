@@ -20,7 +20,7 @@ namespace Vampire
             base.Use();
             if (machineGun != null && !isInitialScaleStored)
             {
-                initialGunScale = machineGun.transform.localScale;
+                initialGunScale = machineGun.transform.localScale * 0.75f;
                 isInitialScaleStored = true;
             }
         }
@@ -33,7 +33,7 @@ namespace Vampire
 
             if (!isInitialScaleStored)
             {
-                initialGunScale = machineGun.transform.localScale;
+                initialGunScale = machineGun.transform.localScale * 0.75f;
                 isInitialScaleStored = true;
             }
 
