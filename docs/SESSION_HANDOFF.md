@@ -1,29 +1,27 @@
 # SESSION_HANDOFF.md
 
-> Last updated: 2026-05-31
-> Status: Phase 3 / Minimal Shelter Core Added
+> Last updated: 2026-06-04
+> Status: Phase 3 / Shelter Target Switching & Game Over Implemented
 
 ## Session Summary
 
-**Session goal:** Phase 3'ün ilk teknik vertical slice'ını (Minimal Shelter entity) oluşturmak ve sahneye yerleştirip doğrulamak.
+**Session goal:** Düşmanların barınağı (Shelter) hedef alması (Target Switching), barınağa hasar vermesi ve barınak canı bittiğinde oyunun sonlanması (Game Over) mekaniklerinin MVP dikey kesitinin bitirilmesi.
 
 **Completed this session:**
-- [x] Created `Shelter.cs` with HP state, TakeDamage, and Heal methods.
-- [x] Placed `Shelter` GameObject in `Level 1` scene with `Shelter` and `SpriteRenderer` components.
-- [x] Verified via Play Mode smoke test (No compilation errors, game runs successfully).
-- [x] Android build smoke test: not run; compile + Main Menu -> Start -> Select Play Mode smoke passed; Android smoke deferred to next gameplay-affecting PR or pre-merge gate if requested.
-- [x] Updated this `docs/SESSION_HANDOFF.md`.
+- [x] `Shelter.cs` sınıfı `Vampire.IDamageable`'dan türetildi. `OnDeath` UnityEvent'i ve `TakeDamage`/`Knockback` (no-op) metotları implement edildi.
+- [x] `LevelManager.cs` sahnedeki Shelter referansını `FindFirstObjectByType` ile otomatik bulacak ve `OnDeath` olayına `GameOver` metodunu bağlayacak şekilde güncellendi.
+- [x] `EntityManager.cs` sınıfına `Shelter` referansı eklendi ve `Init` parametresiyle canavarların erişimi için taşındı.
+- [x] `Monster.cs` sınıfına dinamik hedef seçimi sağlayan `TargetTransform` property'si ve flipX yön mantığı entegre edildi.
+- [x] `MeleeMonster.cs` hareket yönü `TargetTransform`'a bağlandı. Çarpışma hasarı doğrudan `playerCharacter` yerine dinamik olarak `IDamageable` üzerinden uygulanacak şekilde genelleştirildi.
+- [x] Derleme ve Android smoke build doğrulaması IL2CPP aşamasında (Bee build) test edildi, C# compile hatasız tamamlandı.
 
 ## Decision
 
-**✅ Continue with current base (VampireSurvivorsClone)**
+**✅ Continue with current base (VampireSurvivorsClone) & Target Explicit Targeting (No Runtime Layer Hack)**
 
 Key reasons:
-1. `survivors-roguelike-kit` has AI-generated pixel art assets — violates project policy (BLOCKER).
-2. Asset Store templates cannot be committed to the repo (EULA restriction).
-3. Phase 1 progress (15 PRs, Android build verified, 3 sprites replaced) would be lost on pivot.
-4. Missing systems (save, shop, shelter entity) are buildable in ~8–13 days.
-5. Current base has adequate architecture: 9 pool types, 119 ScriptableObject assets, SpatialHashGrid, 20+ abilities.
+1. `Shelter` GameObject'ini runtime'da `Player Full` layer'a atama fikri, physics ve collision mask'lerinde gizli yan etki ve debug maliyeti yaratacağı için **reddedildi**.
+2. Hedef belirleme ve hasar verme mekanizmaları katmandan bağımsız olarak explicit targeting (`TargetTransform`) ve `IDamageable` sorgulamasıyla çözüldü.
 
 ## Repo State at Handoff
 
@@ -31,17 +29,17 @@ Key reasons:
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Next recommended branch | `feat/shelter-ai-wiring` or `feat/enemy-ai-target` |
-| Code changes | Added `Assets/_PatiliKosk/Scripts/Shelter/Shelter.cs` |
-| Asset changes | Updated `Assets/Scenes/Game/Level 1.unity` (Level 1 scene contains Unity 6 serialization upgrade noise in addition to Shelter GameObject addition. No ProjectSettings/Packages changes were committed.) |
-| Doc changes | Updated [SESSION_HANDOFF.md](SESSION_HANDOFF.md) |
-| Workspace Status | 100% Clean |
+| Next recommended branch | `feat/ranged-enemy-target-wiring` or `feat/shelter-upgrade-persistence` |
+| Code changes | Updated `Shelter.cs`, `LevelManager.cs`, `EntityManager.cs`, `Monster.cs`, `MeleeMonster.cs` |
+| Asset changes | Updated `Level 1.unity` (serialization upgrade noise in previous commit) |
+| Doc changes | Updated `SESSION_HANDOFF.md`, `RISK_REGISTER.md` |
+| Workspace Status | Dirty (modified script files ready for commit) |
 
 ## Next Session Steps
 
-1. **Enemy AI Target Switching:** Mevcut düşman AI'ı (veya Spawner) güncellenerek player yerine (veya ek olarak) Shelter hedefine gitmesi sağlanacak.
-2. **Game Over Condition:** Shelter canı sıfırlandığında (`IsDestroyed == true`) Game Over State tetiklenecek.
-3. Asset replacement süreci ve UI wiring ilerletilebilir.
+1. **Ranged/Throwable Enemies target targeting:** Uzakçı düşmanların da (RangedMonster, ThrowingMonster, BoomerangMonster) atış ve yön mantıkları `TargetTransform`'a bağlanabilir (Ayrı PR).
+2. **Shelter Upgrade System:** Shelter canı, çit (fence) direnci gibi kalıcı/run içi geliştirme ekonomisi ve veri persistency sistemi (Save/Load) kurulabilir.
 
 > [!IMPORTANT]
-> **Production Rules:** MCP çalışmaktadır. Herhangi bir asset replacement durumunda mutlaka source-to-target variant matrix çıkarın.
+> **Production Rules:** MCP çalışmaktadır. Herhangi bir asset replacement durumunda mutlaka source-to-target variant matrix çıkarın. Explicit targeting ve `IDamageable` mimarisini koruyun.
+

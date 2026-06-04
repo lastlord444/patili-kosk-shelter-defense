@@ -29,6 +29,8 @@
 | **R28** | Region/chapter scope creep | MEDIUM | HIGH | Enforce non-goals in [REGION_CHAPTER_PROGRESSION.md](REGION_CHAPTER_PROGRESSION.md). Ensure region system does not turn into a city builder or full shelter simulation. | ⚠️ Open |
 | **R29** | Monetization ethics / pay-to-win risk | LOW | HIGH | Diamonds are strictly for future acceleration/comfort. Strictly prohibit gacha, lootboxes, and locking rescue missions behind paywalls. | ⚠️ Open |
 | **R30** | Progression before core gameplay risk | MEDIUM | HIGH | Too much meta-design could delay the core shelter defense loop. Complete Region/Chapter contract and move swiftly to shelter entity implementation. | ⚠️ Open |
+| **R31** | Runtime layer hack risk for Shelter targeting | HIGH | HIGH | Rejected runtime layer hacks to avoid physics/collision side effects. Mitigated by using explicit targeting (`TargetTransform`) and dynamic `IDamageable` collision queries. | ✔️ Mitigated |
+
 
 ## Closed Risks
 
