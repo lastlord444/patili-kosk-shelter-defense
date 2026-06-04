@@ -72,7 +72,7 @@ namespace PatiliKosk
             for (int i = 0; i < colors.Length; i++) colors[i] = Color.white;
             tex.SetPixels(colors);
             tex.Apply();
-            cachedWhiteSprite = Sprite.Create(tex, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f));
+            cachedWhiteSprite = Sprite.Create(tex, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f), 1f);
 
             // Background
             GameObject bgObj = new GameObject("Background");
