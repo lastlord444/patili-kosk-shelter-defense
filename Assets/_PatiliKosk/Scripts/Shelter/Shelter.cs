@@ -63,7 +63,7 @@ namespace PatiliKosk
         {
             healthBarGroup = new GameObject("HealthBar");
             healthBarGroup.transform.SetParent(transform, false);
-            healthBarGroup.transform.localPosition = new Vector3(0f, 1.5f, -0.1f);
+            healthBarGroup.transform.localPosition = new Vector3(0f, 2.0f, -0.1f);
             healthBarGroup.transform.localScale = Vector3.one;
 
             // Generate cached white sprite once
@@ -78,7 +78,7 @@ namespace PatiliKosk
             GameObject bgObj = new GameObject("Background");
             bgObj.transform.SetParent(healthBarGroup.transform, false);
             bgObj.transform.localPosition = Vector3.zero;
-            bgObj.transform.localScale = new Vector3(1.54f, 0.19f, 1f);
+            bgObj.transform.localScale = new Vector3(1.84f, 0.24f, 1f);
             barBgRenderer = bgObj.AddComponent<SpriteRenderer>();
             barBgRenderer.sprite = cachedWhiteSprite;
             barBgRenderer.color = Color.black;
@@ -86,20 +86,20 @@ namespace PatiliKosk
             {
                 barBgRenderer.sortingLayerID = visualSpriteRenderer.sortingLayerID;
                 barBgRenderer.sortingLayerName = visualSpriteRenderer.sortingLayerName;
-                barBgRenderer.sortingOrder = visualSpriteRenderer.sortingOrder + 10;
+                barBgRenderer.sortingOrder = visualSpriteRenderer.sortingOrder + 20;
             }
 
             // Fill Anchor
             GameObject anchorObj = new GameObject("FillAnchor");
             anchorObj.transform.SetParent(healthBarGroup.transform, false);
-            anchorObj.transform.localPosition = new Vector3(-0.75f, 0f, -0.01f);
+            anchorObj.transform.localPosition = new Vector3(-0.9f, 0f, -0.01f);
             barFillAnchor = anchorObj.transform;
 
             // Fill Child
             GameObject fillObj = new GameObject("Fill");
             fillObj.transform.SetParent(barFillAnchor, false);
-            fillObj.transform.localPosition = new Vector3(0.75f, 0f, 0f);
-            fillObj.transform.localScale = new Vector3(1.5f, 0.15f, 1f);
+            fillObj.transform.localPosition = new Vector3(0.9f, 0f, 0f);
+            fillObj.transform.localScale = new Vector3(1.8f, 0.20f, 1f);
             barFillRenderer = fillObj.AddComponent<SpriteRenderer>();
             barFillRenderer.sprite = cachedWhiteSprite;
             barFillRenderer.color = Color.green;
@@ -107,7 +107,7 @@ namespace PatiliKosk
             {
                 barFillRenderer.sortingLayerID = visualSpriteRenderer.sortingLayerID;
                 barFillRenderer.sortingLayerName = visualSpriteRenderer.sortingLayerName;
-                barFillRenderer.sortingOrder = visualSpriteRenderer.sortingOrder + 11;
+                barFillRenderer.sortingOrder = visualSpriteRenderer.sortingOrder + 21;
             }
 
             UpdateHealthBar();
