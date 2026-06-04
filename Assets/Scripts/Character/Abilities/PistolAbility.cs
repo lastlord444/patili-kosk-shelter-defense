@@ -24,7 +24,7 @@ namespace Vampire
         protected GameObject pistolVisual;
         protected Vector3 gunDirection = Vector2.right;
         protected float theta = 0f;
-        protected Vector3 initialGunScale = new Vector3(0.5f, 0.5f, 1f); // default scale for procedural gun
+        protected Vector3 initialGunScale = new Vector3(0.8f, 0.8f, 1f); // default scale for procedural gun
 
         private Sprite whitePixelSprite;
 
@@ -50,7 +50,8 @@ namespace Vampire
                     }
                 }
                 texture.Apply();
-                whitePixelSprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f), 100f);
+                // Set pixelsPerUnit to 2 so the sprite base size is exactly 1 unit in world space
+                whitePixelSprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), new Vector2(0.5f, 0.5f), 2f);
             }
 
             // Create PistolVisual parent
@@ -63,8 +64,8 @@ namespace Vampire
             SpriteRenderer bodySR = body.AddComponent<SpriteRenderer>();
             bodySR.sprite = whitePixelSprite;
             bodySR.color = new Color(0.25f, 0.25f, 0.25f, 1f); // sleek dark grey
-            body.transform.localScale = new Vector3(0.20f, 0.07f, 1f);
-            body.transform.localPosition = new Vector3(0.08f, 0.04f, 0f);
+            body.transform.localScale = new Vector3(0.40f, 0.12f, 1f);
+            body.transform.localPosition = new Vector3(0.12f, 0.05f, 0f);
 
             // Create Grip
             GameObject grip = new GameObject("Grip");
@@ -72,13 +73,13 @@ namespace Vampire
             SpriteRenderer gripSR = grip.AddComponent<SpriteRenderer>();
             gripSR.sprite = whitePixelSprite;
             gripSR.color = new Color(0.2f, 0.2f, 0.2f, 1f); // slightly darker grey
-            grip.transform.localScale = new Vector3(0.06f, 0.12f, 1f);
-            grip.transform.localPosition = new Vector3(0.01f, -0.03f, 0f);
+            grip.transform.localScale = new Vector3(0.12f, 0.20f, 1f);
+            grip.transform.localPosition = new Vector3(0.02f, -0.05f, 0f);
 
             // Create Muzzle (for visual alignment of bullet spawn)
             GameObject muzzle = new GameObject("Muzzle");
             muzzle.transform.SetParent(pistolVisual.transform, false);
-            muzzle.transform.localPosition = new Vector3(0.18f, 0.04f, 0f);
+            muzzle.transform.localPosition = new Vector3(0.32f, 0.05f, 0f);
 
             // Copy player sorting order to ensure it renders above character
             if (playerCharacter != null)
@@ -86,8 +87,8 @@ namespace Vampire
                 SpriteRenderer playerSR = playerCharacter.GetComponentInChildren<SpriteRenderer>();
                 if (playerSR != null)
                 {
-                    bodySR.sortingOrder = playerSR.sortingOrder + 5;
-                    gripSR.sortingOrder = playerSR.sortingOrder + 5;
+                    bodySR.sortingOrder = playerSR.sortingOrder + 10;
+                    gripSR.sortingOrder = playerSR.sortingOrder + 10;
                 }
             }
         }
