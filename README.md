@@ -1,48 +1,36 @@
-<!-- PATILI KOSK SHELTER DEFENSE — BASE REPO NOTICE -->
-> **⚠️ Patili Köşk Shelter Defense — Base Repo Notice**
->
+# Patili Köşk Shelter Defense
+
+> **⚠️ Base Repository Notice & Licensing**
 > - This project is based on the **MIT-licensed** [VampireSurvivorsClone](https://github.com/matthiasbroske/VampireSurvivorsClone) by **matthiasbroske**.
-> - Original LICENSE and credits are **preserved**.
-> - This repository will be **transformed** into **Patili Köşk Shelter Defense**.
-> - Goal: mobile arena defense / shelter defense where the player protects a cat shelter.
-> - This is **not** intended to ship as a Vampire Survivors clone.
+> - Original LICENSE and credits are **preserved** (see [LICENSE](LICENSE)).
+> - This project is a controlled conversion of the base. It is **not** a tower defense, **not** pull-the-pin, **not** match-3, and **not** a direct Survivor.io clone.
 
 ---
 
-# VampireSurvivorsClone
-<p align="center">
-  <kbd>
-    <img src="https://github.com/matthiasbroske/VampireSurvivorsClone/assets/82914350/03974781-70b2-45ed-bbd6-7148efcebbd7" alt="Demo"/>
-  </kbd>
-</p>
+## Project Positioning
 
-## About
-A Vampire Survivors inspired mobile game built from scratch in Unity.
+**Patili Köşk Shelter Defense** is an Android-first top-down mobile arena defense shooter. 
 
-### Features
-- 20+ upgradeable weapons and abilities
-- 4 unique enemy types and 2 bosses
-- Level up system
-- Object pools for monsters, projectiles, items, chests, damage text, etc.
-- Infinite background shader
-- Mobile and PC input support
-- Enemy spawn chance/rate keyframe system
-- ScriptableObjects for straightforward character and level design
-- English/简体中文/繁體中文 localization
+Instead of melee swipe mechanics, the game pivots to a top-down shooter feel where the player acts as a guardian protecting a central Cat Shelter from incoming waves of threats. The game features an emotional rescue/shelter hook integrated with a satisfying core combat and upgrade loop.
 
-## How to Play
-1. Download this repository
-2. Open in Unity 2021.3 or later
-3. Proceed to the `Main` scene in the `Assets/Scenes/Game` folder
-4. Press play
+## Core Gameplay Loop
 
-### Controls
-- **Move**: Left Joystick/WASD/Arrow Keys
-- **Use items**: Right DPad/ZXCV/1234
+1. **Move:** The player moves the guardian character around the central shelter using virtual controls.
+2. **Auto-Aim & Shoot:** The player's weapons (starting with the Basic Auto Pistol) automatically lock onto and fire at the nearest valid enemy (`Monster`).
+3. **Protect:** Düşmanlar hem oyuncuyu hem de merkezi barınağı (`Shelter`) hedef alır. Can sıfırlanmadan barınak korunmalıdır.
+4. **Collect Coins:** Slain monsters drop experience gems and coins.
+5. **Upgrade:** Coins are spent to buy permanent or in-run upgrades for weapons, shelter health, and defenses.
 
-## Credit
-### Art
-- [Kenney](https://www.kenney.nl/assets)
-- [Bonsaiheldin](https://opengameart.org/content/gold-treasure-icons-16x16)
-### Fonts
-- [Noto Sans CJK TC](https://fonts.google.com/noto/specimen/Noto+Sans+TC/about)
+## Current Known Issues (MVP Prototype)
+
+- **Pistol Visual Verification Pending:** The procedural visual representation of the pistol may need further refinement/verification in diverse game conditions.
+- **Aggressive Early Enemy Pacing:** The first wave's intensity can be too high for a starter weapon without onboarding buffer space.
+- **Upgrade Pool Hygiene:** The level-up choices currently include original fantasy/magic weapon stats from the base project that do not align with a shooter-themed game loop.
+- **Visual Quality:** Visual assets are currently prototype/programmer-art grade and will be replaced with themed CC0/custom cute animal rescue assets.
+
+---
+
+## Development & Play Testing Rules
+
+- **Play Mode Testing:** DO NOT run `Level 1.unity` (or any gameplay scene) standalone. Game managers, data, and singletons are initialized in `Main Menu.unity`. Always load the `Main Menu` scene first, start Play Mode, click "Start" (or select select options) to enter the game correctly and prevent `NullReferenceException` loops.
+- **Android Builds:** Build verifying checks are compiled locally to produce `Build/android_smoke.apk`.

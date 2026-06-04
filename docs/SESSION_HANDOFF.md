@@ -1,28 +1,29 @@
 # SESSION_HANDOFF.md
 
 > Last updated: 2026-06-04
-> Status: Phase 3 / Basic Auto Pistol Implemented
+> Status: Phase 3 / Shooter Direction Alignment & Pistol Quality Pass Scheduled
 
 ## Session Summary
 
-**Session goal:** Oyuncunun başlangıç saldırı hissini (combat game feel) iyileştirmek, dagger (bıçak/kılıç) melee hissi yerine otomatik nişan alan ranged shooter hissini yerleştirmek ve Basic Auto Pistol sistemini kodlamak.
+**Session goal:** Oyuncunun başlangıç saldırı hissini (combat game feel) iyileştirmek için melee yerine otomatik nişan alan top-down shooter mekaniklerini oturtmak, Basic Auto Pistol kodlamasını tamamlamak ve ürün hedeflerini repo hafızasına sabitlemek.
 
 **Completed this session:**
-- [x] PR #24'ün (readability düzeltmeleri) başarıyla squash-merge edildiği ve `main` üzerine temiz şekilde entegre olduğu doğrulandı.
-- [x] Yeni `PistolAbility.cs` eklenerek en yakın Monster objesini otomatik hedefleyen, hedef yoksa LookDirection yönüne ateş eden ve sola nişan alırken Y-ekseninde flip yaparak ters dönmeyi engelleyen atış mekanizması kodlandı.
-- [x] Arama performansı için SpatialHashGrid üzerinden sadece `Monster` tipindeki ve `HP > 0` olan canlı düşmanları filtreleyen lokal/güvenli filtreleme uygulandı.
-- [x] Bellek/Asset kirliliği yaratmamak için Pistol visual yapısı 2x2'lik runtime-generated beyaz dokudan üretilen Sprite Renderer'lar ile tamamen C# koduyla procedurally çizildi (koyu gri/siyah renklerde).
-- [x] `Pistol Ability.prefab` oluşturuldu. Başlangıç değerleri ayarlandı: damage = 10, speed = 8, knockback = 2, cooldown = 1, range = 5, projectile = Bullet.
-- [x] `Main Character Blueprint.asset` (Blue cat) starter ability listesindeki `Fixed Direction Stab Ability` referansı, yeni `Pistol Ability` ile değiştirildi.
-- [x] `Level 1.asset` ability listesine `Pistol Ability` eklenerek level-up sırasında pistolün geliştirilebilmesi sağlandı.
-- [x] Play Mode Smoke Test başarıyla koşturuldu. Oyuncunun pistol ile başladığı, hareket ettiği, düşmanların spawn olduğu ve hiçbir çalışma zamanı (runtime) hatasının fırlamadığı doğrulandı (0 error).
-- [x] Android smoke build çalıştırıldı ve APK çıktısı alındı.
+- [x] PR #24'ün (readability) başarıyla squash-merge edildiği doğrulandı.
+- [x] `PistolAbility.cs` eklenerek en yakın Monster objesini otomatik hedefleyen, hedef yoksa LookDirection yönüne ateş eden ve sola nişan alırken Y-ekseninde flip yapan atış sistemi entegre edildi.
+- [x] Beyaz dokudan üretilen Sprite Renderer'lar ile tamamen C# koduyla procedurally çizilen pistol visual yapısı entegre edildi.
+- [x] `Pistol Ability.prefab` oluşturularak damage=10, speed=8, knockback=2, cooldown=1, range=5 değerleriyle yapılandırıldı.
+- [x] `Main Character Blueprint.asset` (Blue cat) starter ability referansı `Pistol Ability` olarak güncellendi.
+- [x] Ürün current truth kararları README, REPO_TRUTH, CONVERSION_PLAN ve RISK_REGISTER dokümanlarında top-down mobile shooter yönüne kilitlendi.
 
-## Decisions & Direction
+---
 
-**✅ Shift Core Combat to Top-Down Arena Shooter (Ranged focus)**
-1. Patili Köşk oyunu melee tabanlı bir Vampire Survivors klonundan ziyade, shelter çevresinde otomatik ateş eden bir top-down arena defense shooter hissine evrildi.
-2. Başlangıç silahının otomatik pistol yapılması, melee dagger'ın hedefsiz vuruşlarının yarattığı "nereye vuruyor bu?" hissini tamamen giderdi.
+## User Gözlemleri & PR Kalite Kapısı Blockerları
+
+Basic Auto Pistol branch geliştirmesi tamamlanmış olsa da, oyuncu deneyimi ve oynanış kalitesi açısından aşağıdaki sorunlar giderilmeden bu PR merge edilmeyecektir:
+1. **Pistol Görseli Görünmüyor/Okunmuyor:** Procedural pistol visual'ın Game View'da net çizilmemesi veya sorting layer/active state çakışması riski var.
+2. **İlk Başlangıçta Düşman Baskısı Fazla:** Level 1 açılışında gelen düşman sayısı starter pistol'ün gücünü aşıyor. İlk 30-60 saniye onboarding tadında hafifletilmeli.
+3. **Upgrade Seçenekleri İlgisiz:** Pistol oynanırken gelen level-up yetenek havuzunda alakasız VS büyü/statlarının bulunması.
+4. **Unity Editor Kapanma Vakası:** domain reload veya build işlemleri sırasında Unity Editor'ın beklenmedik şekilde kapanma davranışı incelenmeli.
 
 ---
 
@@ -33,13 +34,13 @@
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
 | Current branch | feature/basic-auto-pistol |
-| Next recommended branch | `feature/basic-auto-pistol` PR merge to main |
+| Next recommended branch | `feature/basic-auto-pistol` (Quality calibration) |
 | Code changes | Updated `Ability.cs`, `PistolAbility.cs`, `Pistol Ability.prefab`, `Main Character Blueprint.asset`, `Level 1.asset` |
-| Asset changes | None (Procedural weapon visuals used - no new asset imports) |
-| Doc changes | Updated `SESSION_HANDOFF.md`, `RISK_REGISTER.md`, `CONVERSION_PLAN.md` |
-| Workspace Status | Ready for PR merge |
+| Doc changes | Updated `README.md`, `REPO_TRUTH.md`, `CONVERSION_PLAN.md`, `RISK_REGISTER.md`, `SESSION_HANDOFF.md` |
+| Workspace Status | Undergoing Quality Pass |
 
-## Next Session Steps
-
-1. **Pistol Upgrade Balance:** Pistolün level up upgrade adımları (damage, firerate, speed, range artışı) test edilerek stat scaling optimize edilebilir.
-2. **Visual Polish:** Gelecek fazlarda procedural visual yerine, Kenney CC0 paketinden veya özgün çizimlerden sevimli bir su tabancası veya kuru mama fırlatıcı sprite'ı eklenebilir.
+## Next Step: Basic Auto Pistol PR Kalite Kapısı & Early Game Tuning
+- Prosedürel tabanca görselinin Game View üzerinde açık şekilde görünür olmasını doğrula (sorting order ve prefab sub-object durumları).
+- Level 1 ilk wave spawner keyframe yoğunluğunu %40-%60 azalt, onboarding pacing'i sağla.
+- Level 1 upgrade pool'unu pistol statları öncelikli olacak şekilde hafiflet (pool sanity pass).
+- Editor.log dosyasını inceleyerek Editor'ın beklenmedik kapanma nedenini raporla.

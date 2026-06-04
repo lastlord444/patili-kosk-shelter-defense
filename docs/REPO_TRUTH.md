@@ -6,42 +6,41 @@
 | **Base** | MIT-licensed VampireSurvivorsClone by matthiasbroske |
 | **Base repo** | https://github.com/matthiasbroske/VampireSurvivorsClone |
 | **Base license** | MIT (preserved in LICENSE file) |
-| **Current state** | Imported base, not yet converted |
-| **Target genre** | Android-first mobile arena defense / top-down horde defense / shelter defense |
+| **Current state** | Controlled conversion from VS base to shooter shelter defense |
+| **Target genre** | Android-first top-down mobile shooter / shelter defense / horde defense |
 | **Platform** | Android (mobile-first) |
 | **Engine** | Unity |
 
 ## Core Conversion Goal
 
-Player protects a cat shelter.
-Enemies threaten the shelter in waves.
-Player moves character, defeats enemies, collects coins.
-Coins upgrade the shelter.
+- Player acts as a guardian protecting a central cat shelter (`Shelter`) from wave spawns.
+- Guardian moves, automated weapons aim at the nearest valid enemy (`Monster`), defeats them, collects coins, and upgrades the shelter, walls, and weapons.
+- Game feel focuses on automatic-targeting top-down mobile shooter mechanics instead of melee/swipe feel.
+
+## Product Decisions & Guidelines
+
+1. **Top-Down Shooter Combat:**
+   - Default combat feel is automated shooter (Basic Auto Pistol starter weapon).
+   - Melee weapons and swipe actions are sidelined from the initial onboarding experience.
+   - Upgrade options must feel cohesive with a shooter loop rather than a fantasy survival pool.
+
+2. **Onboarding & Early Level Curve:**
+   - Real-time weeks are excluded.
+   - Region/chapter structure consists of 5–7 short game missions/levels.
+   - Level 1 starts with a 30–60 second low-intensity onboarding curve (fewer enemies, manageable HP, so player learns shooting + coin collection + upgrades).
+
+3. **No Fake Ad Gameplay:**
+   - Core gameplay is real: player protects the shelter in a mobile shooter loop. There is no fake ad gameplay (no pull-the-pin, no match-3).
 
 ## What This Game Is NOT
 
-- NOT a Vampire Survivors clone (shipping)
-- NOT tower defense
+- NOT a Vampire Survivors clone (sidelined)
+- NOT a pure tower placement/tower defense game
+- NOT pull-the-pin / puzzle
 - NOT match-3
-- NOT pull-the-pin
-- NOT Survivor.io clone
-
-## Import Status
-
-- [x] MIT-licensed base imported
-- [x] LICENSE preserved
-- [ ] Third-party assets audited
-- [ ] Build verified
-- [ ] Vampire Survivors identity removed
-- [ ] Shelter defense gameplay implemented
-
-## Visual Direction Principles
-
-- **Core Aesthetic:** Cute, readable, animal/shelter-themed mobile arena defense.
-- **Reference Video:** Serves as design inspiration and quality reference only. It is NOT an asset source. Direct copying of visual/UI assets is prohibited.
-- **Silhouette & Variety:** Enforce distinct silhouettes and visual identity for different enemy types. No mass placeholder replacements that collapse variety.
-- **Mobile Readability:** Visual clarity on Android screens is paramount (large UI, distinct collectibles/sprites).
+- NOT a direct copy of Survivor.io
 
 ## Development & Testing Rules
 
-- **Play Mode Testing:** DO NOT run `Level 1.unity` (or any gameplay scene) standalone. Game managers, data, and singletons are initialized in `Main Menu.unity`. Always load `Main Menu` first, start Play Mode, click "Start", then "Select" to enter the game correctly and prevent `NullReferenceException` floods.
+- **Play Mode Testing:** Load `Main Menu.unity` first, enter Play Mode, start the level, select select/upgrade options. Avoid running `Level 1.unity` standalone to prevent managers initialization failures.
+- **Android Builds:** Build verifying checks are compiled locally to produce `Build/android_smoke.apk`.
