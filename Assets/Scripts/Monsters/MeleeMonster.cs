@@ -24,7 +24,7 @@ namespace Vampire
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
-            Vector2 moveDirection = (playerCharacter.transform.position - transform.position).normalized;
+            Vector2 moveDirection = TargetTransform != null ? (Vector2)(TargetTransform.position - transform.position).normalized : Vector2.zero;
             rb.linearVelocity += moveDirection * monsterBlueprint.acceleration * Time.fixedDeltaTime;
             entityManager.Grid.UpdateClient(this);
 
@@ -50,10 +50,20 @@ namespace Vampire
 
         void OnCollisionStay2D(Collision2D col)
         {
-            if (alive && ((monsterBlueprint.meleeLayer & (1 << col.collider.gameObject.layer)) != 0) && timeSinceLastAttack >= 1.0f/monsterBlueprint.atkspeed)
+            if (alive && timeSinceLastAttack >= 1.0f/monsterBlueprint.atkspeed)
             {
-                playerCharacter.TakeDamage(monsterBlueprint.atk);
-                timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, 1.0f/monsterBlueprint.atkspeed);
+                IDamageable damageable = col.collider.GetComponentInParent<IDamageable>();
+                if (damageable != null)
+                {
+                    bool isMeleeLayer = (monsterBlueprint.meleeLayer & (1 << col.collider.gameObject.layer)) != 0;
+                    bool isShelter = damageable is PatiliKosk.Shelter;
+                    
+                    if (isMeleeLayer || isShelter)
+                    {
+                        damageable.TakeDamage(monsterBlueprint.atk);
+                        timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, 1.0f/monsterBlueprint.atkspeed);
+                    }
+                }
             }
         }
     }

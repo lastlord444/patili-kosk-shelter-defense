@@ -36,6 +36,18 @@ namespace Vampire
         public Dictionary<int, int> ListIndexByCellIndex { get; set; }
         public int QueryID { get; set; } = -1;
 
+        public Transform TargetTransform
+        {
+            get
+            {
+                if (entityManager != null && entityManager.Shelter != null && !entityManager.Shelter.IsDestroyed)
+                {
+                    return entityManager.Shelter.transform;
+                }
+                return playerCharacter != null ? playerCharacter.transform : null;
+            }
+        }
+
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -89,7 +101,10 @@ namespace Vampire
         protected virtual void Update()
         {
             // Direction
-            monsterSpriteRenderer.flipX = ((playerCharacter.transform.position.x - rb.position.x) < 0);
+            if (TargetTransform != null)
+            {
+                monsterSpriteRenderer.flipX = ((TargetTransform.position.x - rb.position.x) < 0);
+            }
         }
 
         protected virtual void FixedUpdate()

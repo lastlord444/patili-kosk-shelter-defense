@@ -15,6 +15,7 @@ namespace Vampire
         [SerializeField] private StatsManager statsManager;
         [SerializeField] private GameOverDialog gameOverDialog;
         [SerializeField] private GameTimer gameTimer;
+        private PatiliKosk.Shelter shelter;
         private float levelTime = 0;
         private float timeSinceLastMonsterSpawned;
         private float timeSinceLastChestSpawned;
@@ -25,15 +26,24 @@ namespace Vampire
         {
             this.levelBlueprint = levelBlueprint;
             levelTime = 0;
+
+            if (shelter == null)
+            {
+                shelter = FindFirstObjectByType<PatiliKosk.Shelter>();
+            }
             
             // Initialize the entity manager
-            entityManager.Init(this.levelBlueprint, playerCharacter, inventory, statsManager, infiniteBackground, abilitySelectionDialog);
+            entityManager.Init(this.levelBlueprint, playerCharacter, inventory, statsManager, infiniteBackground, abilitySelectionDialog, shelter);
             // Initialize the ability manager
             abilityManager.Init(this.levelBlueprint, entityManager, playerCharacter, abilityManager);
             abilitySelectionDialog.Init(abilityManager, entityManager, playerCharacter);
             // Initialize the character
             playerCharacter.Init(entityManager, abilityManager, statsManager);
             playerCharacter.OnDeath.AddListener(GameOver);
+            if (shelter != null)
+            {
+                shelter.OnDeath.AddListener(GameOver);
+            }
             // Spawn initial gems
             entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
             // Spawn a singular chest
