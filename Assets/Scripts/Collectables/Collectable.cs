@@ -16,6 +16,7 @@ namespace Vampire
         [SerializeField] protected float lerpTime = 1;
         [Header("Attributes")]
         [SerializeField] protected bool magnetic = false;
+        [SerializeField] protected float pullSpeed = 8f;
         protected EntityManager entityManager;
         protected Character playerCharacter;
         protected ZPositioner zPositioner;
@@ -158,6 +159,18 @@ namespace Vampire
                 transform.position = spawnPosition + Vector3.up*EasingUtils.Bounce(t, saHeight) + Vector3.right*horizontalSpeed*t;
                 t += Time.deltaTime*saSpeed;
                 yield return null;
+            }
+        }
+
+        protected virtual void Update()
+        {
+            if (magnetic && !beingCollected && playerCharacter != null)
+            {
+                float distance = Vector2.Distance(transform.position, playerCharacter.CenterTransform.position);
+                if (distance <= playerCharacter.MagnetRadius)
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, playerCharacter.CenterTransform.position, pullSpeed * Time.deltaTime);
+                }
             }
         }
 

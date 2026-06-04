@@ -19,6 +19,9 @@ namespace Vampire
         [SerializeField] protected PointBar expBar;  // 經驗條
         [SerializeField] protected Collider2D collectableCollider;
         [SerializeField] protected Collider2D meleeHitboxCollider;
+        [Header("Magnet Settings")]
+        [SerializeField] protected float magnetRadius = 3.5f;
+        [SerializeField] protected float collectorRadius = 0.5f;
         [SerializeField] protected ParticleSystem dustParticles;
         [SerializeField] protected Material defaultMaterial, hitMaterial, deathMaterial;
         [SerializeField] protected ParticleSystem deathParticles;
@@ -53,6 +56,7 @@ namespace Vampire
         }
         public Transform CenterTransform { get => centerTransform; }
         public Collider2D CollectableCollider { get => collectableCollider; }
+        public float MagnetRadius => magnetRadius;
         public float Luck { get => characterBlueprint.luck; }
         public int CurrentLevel { get => currentLevel; }
         public UnityEvent<float> OnDealDamage { get; } = new UnityEvent<float>();
@@ -103,6 +107,12 @@ namespace Vampire
             armor.Value = characterBlueprint.armor;
             abilityManager.RegisterUpgradeableValue(armor, true);
             zPositioner.Init(transform);
+
+            // Set the collector radius dynamically on the CircleCollider2D
+            if (collectableCollider != null && collectableCollider is CircleCollider2D)
+            {
+                ((CircleCollider2D)collectableCollider).radius = collectorRadius;
+            }
         }
 
         protected virtual void Update()
