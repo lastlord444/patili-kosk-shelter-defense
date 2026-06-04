@@ -61,14 +61,16 @@ namespace Vampire
         public Inventory Inventory { get => inventory; }
         public AbilitySelectionDialog AbilitySelectionDialog { get; private set; }
         public SpatialHashGrid Grid { get => grid; }
+        public PatiliKosk.Shelter Shelter { get; private set; }
 
-        public void Init(LevelBlueprint levelBlueprint, Character character, Inventory inventory, StatsManager statsManager, InfiniteBackground infiniteBackground, AbilitySelectionDialog abilitySelectionDialog)
+        public void Init(LevelBlueprint levelBlueprint, Character character, Inventory inventory, StatsManager statsManager, InfiniteBackground infiniteBackground, AbilitySelectionDialog abilitySelectionDialog, PatiliKosk.Shelter shelter)
         {
             this.playerCharacter = character;
             this.inventory = inventory;
             this.infiniteBackground = infiniteBackground;
             this.statsManager = statsManager;
             AbilitySelectionDialog = abilitySelectionDialog;
+            this.Shelter = shelter;
 
             // Determine the screen size in world space so that we can spawn enemies outside of it
             Vector2 bottomLeft = playerCamera.ViewportToWorldPoint(new Vector3(0, 0, playerCamera.nearClipPlane));

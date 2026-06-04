@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.Events;
+using Vampire;
 
 namespace PatiliKosk
 {
-    public class Shelter : MonoBehaviour
+    public class Shelter : IDamageable
     {
         [SerializeField]
         [Tooltip("Maximum health of the shelter.")]
@@ -15,6 +17,8 @@ namespace PatiliKosk
         public float MaxHealth => maxHealth;
         public float CurrentHealth => currentHealth;
         public bool IsDestroyed => currentHealth <= 0f;
+
+        public UnityEvent OnDeath { get; } = new UnityEvent();
 
         private void Awake()
         {
@@ -39,7 +43,8 @@ namespace PatiliKosk
         /// Applies damage to the shelter.
         /// </summary>
         /// <param name="amount">The amount of damage to apply. Must be positive.</param>
-        public void TakeDamage(float amount)
+        /// <param name="knockback">Optional knockback vector (ignored for shelter).</param>
+        public override void TakeDamage(float amount, Vector2 knockback = default(Vector2))
         {
             if (amount <= 0f || IsDestroyed) return;
 
@@ -48,8 +53,16 @@ namespace PatiliKosk
 
             if (IsDestroyed)
             {
-                // TODO: Trigger game over sequence or destruction event in future PR
+                OnDeath.Invoke();
             }
+        }
+
+        /// <summary>
+        /// Apply knockback (no-op for static shelter).
+        /// </summary>
+        public override void Knockback(Vector2 knockback)
+        {
+            // Shelter is static, no knockback applied.
         }
 
         /// <summary>
