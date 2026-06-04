@@ -32,6 +32,8 @@
 | **R31** | Runtime layer hack risk for Shelter targeting | HIGH | HIGH | Rejected runtime layer hacks to avoid physics/collision side effects. Mitigated by using explicit targeting (`TargetTransform`) and dynamic `IDamageable` collision queries. | ✔️ Mitigated |
 | **R32** | Force-killing Unity Editor / MCP instance confusion | MEDIUM | HIGH | Force-killing active Unity process under MCP control causes instance tracking loss and deadlock. Mitigation: Explicitly bind/select active instance, never force-kill Unity. | ⚠️ Open |
 | **R33** | Incomplete Android build evidence reporting | MEDIUM | HIGH | Reporting partial/compiling state as successful creates regression risk. Mitigation: Only mark as success when full APK/AAB is generated on disk with file verification. | ✔️ Mitigated |
+| **R34** | Programmatic Play Mode simulation bypass risk | MEDIUM | HIGH | Using bypass shortcuts for Play Mode smoke test skips UI/EventSystem verification. Mitigation: Simulate exact user click flow (onClick.Invoke) via EventSystem to trigger scenes. | ✔️ Mitigated |
+
 
 
 
