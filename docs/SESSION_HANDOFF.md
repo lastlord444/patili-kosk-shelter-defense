@@ -23,7 +23,7 @@
 Key reasons:
 1. `Shelter` GameObject'ini runtime'da `Player Full` layer'a atama fikri, physics ve collision mask'lerinde gizli yan etki ve debug maliyeti yaratacağı için **reddedildi**.
 2. Hedef belirleme ve hasar verme mekanizmaları katmandan bağımsız olarak explicit targeting (`TargetTransform`) ve `IDamageable` sorgulamasıyla çözüldü.
-3. PR #20 kapsamını bozmamak için canavar hedefleme ve game over mekanizmaları yeni açılan `feat/enemy-ai-target-shelter` branch'ine taşındı. `feat/shelter-core` branch'i sadece minimal shelter entity olarak remote'daki temiz haline geri getirildi.
+3. PR #20 kapsamını bozmamak için canavar hedefleme ve game over mekanizmaları yeni açılan `feat/enemy-ai-target-shelter` branch'ine taşındı. `feat/shelter-core` branch'i sadece minimal shelter entity olarak remote'daki temiz haline geri getirildi. Ortamdaki `GITHUB_TOKEN` sahte/geçersiz (`github_pat_antigravitydummytoken`) olduğu için GitHub CLI üzerinden otomatik yeni PR açılamamış, PR başlığı ve gövdesi final raporunda sunulmuştur.
 
 ---
 
