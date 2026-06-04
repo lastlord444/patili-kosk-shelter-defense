@@ -33,7 +33,17 @@ namespace Vampire
             timeSinceLastAttack -= slashTime;
             float t = 0;
             weaponSpriteRenderer.enabled = true;
+            
             Vector2 initialDir = playerCharacter.LookDirection;
+            if (entityManager != null && entityManager.Grid != null)
+            {
+                var targetEntity = entityManager.Grid.FindClosestInRadius(playerCharacter.transform.position, 4.0f);
+                if (targetEntity != null)
+                {
+                    initialDir = (targetEntity.Position - (Vector2)playerCharacter.transform.position).normalized;
+                }
+            }
+
             while (t < slashTime)
             {
                 float scaleMultiplier = GetScaleMultiplier(t);

@@ -31,7 +31,17 @@ namespace Vampire
             timeSinceLastAttack -= stabTime;
             float t = 0;
             weaponSpriteRenderer.enabled = true;
+            
             Vector2 dir = playerCharacter.LookDirection;
+            if (entityManager != null && entityManager.Grid != null)
+            {
+                var targetEntity = entityManager.Grid.FindClosestInRadius(playerCharacter.transform.position, 4.0f);
+                if (targetEntity != null)
+                {
+                    dir = (targetEntity.Position - (Vector2)playerCharacter.transform.position).normalized;
+                }
+            }
+
             while (t < stabTime)
             {
                 Vector2 attackBoxPosition = (Vector2)playerCharacter.CenterTransform.position + dir * (weaponSize.x/2 + stabOffset + stabDistance/stabTime*t);
