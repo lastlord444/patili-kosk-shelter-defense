@@ -14,7 +14,7 @@
 - [x] `Monster.cs` sınıfına dinamik hedef seçimi sağlayan `TargetTransform` property'si ve flipX yön mantığı entegre edildi.
 - [x] `MeleeMonster.cs` hareket yönü `TargetTransform`'a bağlandı. Çarpışma hasarı doğrudan `playerCharacter` yerine dinamik olarak `IDamageable` üzerinden uygulanacak şekilde genelleştirildi ve Shelter için layer mask filtresi esnetildi.
 - [x] Play Mode testi zorunlu akış üzerinden (UGUI EventSystem `開始` butonu ve `CharacterCard` tıklama event'leri tetiklenerek `Level 1`'e geçilerek) başarıyla doğrulandı. Canavarların explicit targeting yaptığı, barınak HP'sinin azaldığı ve can 0 olduğunda `Time.timeScale = 0` (GameOver) durumuna geçildiği gözlemlendi.
-- [x] Android build smoke testi başarıyla tamamlandı. `Build/android_smoke.apk` (~76.9 MB) başarıyla diskte oluşturuldu.
+- [x] Android build smoke testi başarıyla tamamlandı. `Build/android_smoke.apk` (~58.36 MB / 61.2 MB) başarıyla diskte oluşturuldu (Build süresi: 639.2 saniye).
 
 ## Decision
 
