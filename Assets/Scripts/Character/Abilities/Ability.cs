@@ -24,7 +24,7 @@ namespace Vampire
         public int Level { get => level; }
         public bool Owned { get => owned; }
         public Sprite Image { get => image; }
-        public string Name { get => localizedName.GetLocalizedString(); }
+        public virtual string Name { get => localizedName.GetLocalizedString(); }
         public float DropWeight { get => (float)rarity; }
         public virtual string Description 
         { 

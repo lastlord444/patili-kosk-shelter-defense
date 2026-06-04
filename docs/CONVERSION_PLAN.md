@@ -82,13 +82,13 @@ This document outlines the phased plan to convert the MIT-licensed VampireSurviv
 
 ## Phase 3: Convert Gameplay to Shelter Defense
 
-**Goal:** Transform core loop from auto-attack survivor to player-controlled shelter defense.
+**Goal:** Transform core loop from auto-attack survivor to top-down arena defense shooter (automatic targeting starter pistol, player movement, coins, and shelter upgrades).
 
 ### Tasks
-- [ ] Design shelter entity: health, position, upgrade system
-- [ ] Modify enemy AI: enemies target shelter, not only player
-- [ ] Add shelter damage / game-over condition
-- [ ] Convert weapon system to player-controlled attacks
+- [x] Design shelter entity: health, position, upgrade system (PR #20 minimal shelter)
+- [x] Modify enemy AI: enemies target shelter, not only player (PR #22 melee targeting)
+- [x] Add shelter damage / game-over condition (PR #22 game over)
+- [x] Convert weapon system to top-down auto-targeting arena shooter attacks (Pistol implemented in feature/basic-auto-pistol)
 - [ ] Implement coin collection and shelter upgrade UI
 - [ ] Design wave progression for shelter defense context
 - [ ] Playtest core loop: move → protect → defeat waves → collect coins → upgrade shelter
