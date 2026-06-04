@@ -1,20 +1,18 @@
 # SESSION_HANDOFF.md
 
 > Last updated: 2026-06-04
-> Status: Phase 3 / Shelter Target Switching & Game Over Implemented
+> Status: Phase 3 / Pickup Magnet & Coin Verification Implemented
 
 ## Session Summary
 
-**Session goal:** Düşmanların barınağı (Shelter) hedef alması (Target Switching), barınağa hasar vermesi ve barınak canı bittiğinde oyunun sonlanması (Game Over) mekaniklerinin MVP dikey kesitinin bitirilmesi.
+**Session goal:** Oyuncunun coin/mama toplama hissini (game feel) iyileştirmek için pickup magnet eklemek ve coin toplama sayacını doğrulamak.
 
 **Completed this session:**
-- [x] `Shelter.cs` sınıfı `Vampire.IDamageable`'dan türetildi. `OnDeath` UnityEvent'i ve `TakeDamage`/`Knockback` (no-op) metotları implement edildi.
-- [x] `LevelManager.cs` sahnedeki Shelter referansını `FindFirstObjectByType` ile otomatik bulacak ve `OnDeath` olayına `GameOver` metodunu bağlayacak şekilde güncellendi.
-- [x] `EntityManager.cs` sınıfına `Shelter` referansı eklendi ve `Init` parametresiyle canavarların erişimi için taşındı.
-- [x] `Monster.cs` sınıfına dinamik hedef seçimi sağlayan `TargetTransform` property'si ve flipX yön mantığı entegre edildi.
-- [x] `MeleeMonster.cs` hareket yönü `TargetTransform`'a bağlandı. Çarpışma hasarı doğrudan `playerCharacter` yerine dinamik olarak `IDamageable` üzerinden uygulanacak şekilde genelleştirildi ve Shelter için layer mask filtresi esnetildi.
-- [x] Play Mode testi zorunlu akış üzerinden (UGUI EventSystem `開始` butonu ve `CharacterCard` tıklama event'leri tetiklenerek `Level 1`'e geçilerek) başarıyla doğrulandı. Canavarların explicit targeting yaptığı, barınak HP'sinin azaldığı ve can 0 olduğunda `Time.timeScale = 0` (GameOver) durumuna geçildiği gözlemlendi.
-- [x] Android build smoke testi başarıyla tamamlandı. `Build/android_smoke.apk` (~58.36 MB / 61.2 MB) başarıyla diskte oluşturuldu (Build süresi: 639.2 saniye).
+- [x] Current merged baseline: PR #20 minimal Shelter entity and PR #22 melee shelter targeting + GameOver are merged into main.
+- [x] `Character.cs` sınıfına `magnetRadius` (sabit 3.5f) ve `collectorRadius` (sabit 0.5f) eklendi ve CircleCollider2D radius'u dinamik olarak eşitlendi.
+- [x] `Collectable.cs` sınıfına `pullSpeed` (8f) ve `Update()` pull mantığı entegre edildi; player yakınına gelen coin/gem objeleri player'a akacak şekilde magnet çekimi sağlandı.
+- [x] Play Mode smoke testiyle coin/mama ve exp gem'lerin çekim yarıçapına girince oyuncuya aktığı ve toplandığında StatsManager sayacının arttığı başarıyla doğrulandı.
+- [x] Android build smoke testi başarıyla tamamlandı ve `Build/android_smoke.apk` (~58.37 MB) başarıyla güncellendi (Derleme süresi: 63 saniye).
 
 ## Decision
 
