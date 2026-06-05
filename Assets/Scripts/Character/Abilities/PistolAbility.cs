@@ -57,9 +57,9 @@ namespace Vampire
             base.Init(abilityManager, entityManager, playerCharacter);
 
             // Starter effectiveness tweaks:
-            if (cooldown.Value > 0.8f) cooldown.Value = 0.8f;
-            if (speed.Value < 12f) speed.Value = 12f;
-            if (damage.Value < 10f) damage.Value = 10f;
+            if (cooldown.Value > 0.7f) cooldown.Value = 0.7f;
+            if (speed.Value < 13f) speed.Value = 13f;
+            if (damage.Value < 12f) damage.Value = 12f;
         }
 
         private void ConfigurePistolUpgrades()

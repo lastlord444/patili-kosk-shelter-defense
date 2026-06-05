@@ -9,6 +9,7 @@ namespace Vampire
     {
         private LevelBlueprint levelBlueprint;
         private Character playerCharacter;
+        private bool firstUpgradeOffered = false;
         private WeightedAbilities newAbilities;
         private WeightedAbilities ownedAbilities;
         private FastList<IUpgradeableValue> registeredUpgradeableValues;
@@ -71,6 +72,21 @@ namespace Vampire
                     
                     Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
                     if (ability == null) continue;
+                    
+                    // Buff generic upgrade effectiveness programmatically
+                    if (ability is DamageUpgradeAbility damageAbility)
+                    {
+                        damageAbility.ConfigureUpgrades(new float[] { 0.40f, 0.40f, 0.40f, 0.40f, 0.40f });
+                    }
+                    else if (ability is CooldownUpgradeAbility cooldownAbility)
+                    {
+                        cooldownAbility.ConfigureUpgrades(new float[] { -0.20f, -0.20f, -0.20f, -0.20f, -0.20f });
+                    }
+                    else if (ability is ProjectileSpeedAbilityUpgrade speedAbility)
+                    {
+                        speedAbility.ConfigureUpgrades(new float[] { 0.25f, 0.25f, 0.25f, 0.25f, 0.25f });
+                    }
+                    
                     ability.Init(abilityManager, entityManager, playerCharacter);
                     newAbilities.Add(ability);
                 }
@@ -128,6 +144,69 @@ namespace Vampire
             // Determine which abilities are currently available (have their requirements met)
             WeightedAbilities availableOwnedAbilities = ExtractAvailableAbilities(ownedAbilities);
             WeightedAbilities availableNewAbilities = ExtractAvailableAbilities(newAbilities);
+
+            // Garantee first upgrade selection (level <= 2 or first time on Level 1) is exactly Damage, Cooldown, and ProjectileSpeed upgrades of the pistol
+            bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
+            if ((playerCharacter != null && playerCharacter.CurrentLevel <= 2) || (isLevel1 && !firstUpgradeOffered))
+            {
+                firstUpgradeOffered = true;
+                Ability damageUpgrade = null;
+                Ability cooldownUpgrade = null;
+                Ability speedUpgrade = null;
+
+                // Find in available lists
+                foreach (Ability ab in availableOwnedAbilities)
+                {
+                    if (ab is DamageUpgradeAbility) damageUpgrade = ab;
+                    else if (ab is CooldownUpgradeAbility) cooldownUpgrade = ab;
+                    else if (ab is ProjectileSpeedAbilityUpgrade) speedUpgrade = ab;
+                }
+                foreach (Ability ab in availableNewAbilities)
+                {
+                    if (ab is DamageUpgradeAbility) damageUpgrade = ab;
+                    else if (ab is CooldownUpgradeAbility) cooldownUpgrade = ab;
+                    else if (ab is ProjectileSpeedAbilityUpgrade) speedUpgrade = ab;
+                }
+
+                // If not found in available lists, find in master lists
+                if (damageUpgrade == null) damageUpgrade = ownedAbilities.FirstOrDefault(ab => ab is DamageUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is DamageUpgradeAbility);
+                if (cooldownUpgrade == null) cooldownUpgrade = ownedAbilities.FirstOrDefault(ab => ab is CooldownUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is CooldownUpgradeAbility);
+                if (speedUpgrade == null) speedUpgrade = ownedAbilities.FirstOrDefault(ab => ab is ProjectileSpeedAbilityUpgrade) ?? newAbilities.FirstOrDefault(ab => ab is ProjectileSpeedAbilityUpgrade);
+
+                // Add to selected list and remove from pools
+                if (damageUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(damageUpgrade);
+                    availableNewAbilities.Remove(damageUpgrade);
+                    ownedAbilities.Remove(damageUpgrade);
+                    newAbilities.Remove(damageUpgrade);
+                    selectedAbilities.Add(damageUpgrade);
+                }
+                if (cooldownUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(cooldownUpgrade);
+                    availableNewAbilities.Remove(cooldownUpgrade);
+                    ownedAbilities.Remove(cooldownUpgrade);
+                    newAbilities.Remove(cooldownUpgrade);
+                    selectedAbilities.Add(cooldownUpgrade);
+                }
+                if (speedUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(speedUpgrade);
+                    availableNewAbilities.Remove(speedUpgrade);
+                    ownedAbilities.Remove(speedUpgrade);
+                    newAbilities.Remove(speedUpgrade);
+                    selectedAbilities.Add(speedUpgrade);
+                }
+
+                // Return all remaining available abilities to their pools
+                foreach (Ability ability in availableNewAbilities)
+                    newAbilities.Add(ability);
+                foreach (Ability ability in availableOwnedAbilities)
+                    ownedAbilities.Add(ability);
+
+                return selectedAbilities;
+            }
 
             // Filter new abilities if we have the starting Pistol active
             WeightedAbilities excludedNewAbilities = null;

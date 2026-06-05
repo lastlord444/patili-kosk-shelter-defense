@@ -6,6 +6,13 @@ namespace Vampire
     public class FloatUpgradeAbility<T> : Ability where T : UpgradeableFloat
     {
         [SerializeField] protected float[] upgrades;
+
+        public void ConfigureUpgrades(float[] newUpgrades)
+        {
+            if (newUpgrades == null || newUpgrades.Length == 0) return;
+            upgrades = (float[])newUpgrades.Clone();
+        }
+
         public override string Description
         {
             get {

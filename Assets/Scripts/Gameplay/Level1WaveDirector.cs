@@ -10,14 +10,11 @@ namespace Vampire
         private LevelManager levelManager;
         private float waveTimer = 0f;
         private float spawnCooldown = 0f;
-        private bool eliteWarningTriggered = false;
-        private bool eliteSpawned = false;
         private bool winConditionTriggered = false;
 
         private bool shownWave1 = false;
         private bool shownWave2 = false;
         private bool shownWave3 = false;
-        private bool shownWave4 = false;
 
         public void Init(LevelManager levelManager, EntityManager entityManager, LevelBlueprint levelBlueprint)
         {
@@ -26,14 +23,11 @@ namespace Vampire
             this.levelBlueprint = levelBlueprint;
             waveTimer = 0f;
             spawnCooldown = 0f;
-            eliteWarningTriggered = false;
-            eliteSpawned = false;
             winConditionTriggered = false;
             shownWave1 = false;
             shownWave2 = false;
             shownWave3 = false;
-            shownWave4 = false;
-            Debug.Log("[Level1WaveDirector] Initialized for Level 1 wave pacing.");
+            Debug.Log("[Level1WaveDirector] Initialized for Level 1 single-lane tutorial onboarding.");
         }
 
         public bool IsActive(float levelTime)
@@ -48,7 +42,7 @@ namespace Vampire
 
             waveTimer += Time.deltaTime;
             
-            // Survived 120 seconds victory check
+            // Victory win condition at 120 seconds
             if (waveTimer >= 120f)
             {
                 if (!winConditionTriggered)
@@ -59,7 +53,7 @@ namespace Vampire
                 return;
             }
 
-            // Trigger wave banner announcements
+            // Trigger wave direction banner announcements
             TriggerWaveAnnouncements();
 
             spawnCooldown -= Time.deltaTime;
@@ -69,92 +63,41 @@ namespace Vampire
                 float currentPeriod = waveTimer;
                 int activeCount = (entityManager.LivingMonsters != null) ? entityManager.LivingMonsters.Count : 0;
                 
-                // Screen crowding safeguards: limit active enemies on screen at once
+                // Active enemy limits on screen at once to prevent player or shelter overwhelm
                 int maxAllowed = 99;
                 if (currentPeriod < 10f) maxAllowed = 2;       // 0-10s: max 2
                 else if (currentPeriod < 30f) maxAllowed = 3;  // 10-30s: max 3
-                else if (currentPeriod < 60f) maxAllowed = 5;  // 30-60s: max 5
-                else if (currentPeriod < 90f) maxAllowed = 8;  // 60-90s: max 8
-                else maxAllowed = 12;                          // 90-120s: max 12
+                else if (currentPeriod < 45f) maxAllowed = 4;  // 30-45s: max 4
+                else if (currentPeriod < 60f) maxAllowed = 4;  // 45-60s: max 4
+                else maxAllowed = 5;                          // 60-120s: max 5
 
                 if (activeCount < maxAllowed)
                 {
-                    if (currentPeriod >= 0f && currentPeriod < 10f)
+                    if (currentPeriod >= 0f && currentPeriod < 45f)
                     {
-                        // 0-10s: Onboarding, very low density (1 normal enemy every 5s) from the Right
-                        SpawnNormalEnemyAtDirection(Vector2.right);
-                        spawnCooldown = 5f;
+                        // 0-45s: Spawns only from the Right side
+                        float cooldownTime = 3.5f;
+                        if (currentPeriod < 10f) cooldownTime = 5f;
+                        
+                        SpawnNormalMeleeEnemyAtDirection(Vector2.right);
+                        spawnCooldown = cooldownTime;
                     }
-                    else if (currentPeriod >= 10f && currentPeriod < 30f)
+                    else if (currentPeriod >= 45f && currentPeriod < 90f)
                     {
-                        // 10-30s: Low/medium pressure (1 normal enemy every 3s) from the Left
-                        SpawnNormalEnemyAtDirection(Vector2.left);
+                        // 45-90s: Spawns only from the Left side
+                        SpawnNormalMeleeEnemyAtDirection(Vector2.left);
                         spawnCooldown = 3f;
                     }
-                    else if (currentPeriod >= 30f && currentPeriod < 60f)
+                    else if (currentPeriod >= 90f && currentPeriod < 120f)
                     {
-                        // 30-60s: Increased pressure (2 normal enemies every 4s) from Top & Bottom
-                        SpawnNormalEnemyAtDirection(Vector2.up);
-                        SpawnNormalEnemyAtDirection(Vector2.down);
-                        spawnCooldown = 4f;
-                    }
-                    else if (currentPeriod >= 60f && currentPeriod < 90f)
-                    {
-                        // 60-90s: All directions (2 normal enemies every 3s)
-                        SpawnNormalEnemyAtDirection(GetRandomDirection());
-                        SpawnNormalEnemyAtDirection(GetRandomDirection());
-                        spawnCooldown = 3f;
-                    }
-                    else if (currentPeriod >= 90f && currentPeriod < 105f)
-                      {
-                        // 90-105s: Constant pressure (2 normal enemies every 3s)
-                        SpawnNormalEnemyAtDirection(GetRandomDirection());
-                        SpawnNormalEnemyAtDirection(GetRandomDirection());
-                        spawnCooldown = 3f;
-                    }
-                    else if (currentPeriod >= 105f && currentPeriod < 108f)
-                    {
-                        // 105-108s: Elite warning buffer, no new spawns
-                        if (!eliteWarningTriggered)
-                        {
-                            Character player = FindFirstObjectByType<Character>();
-                            if (player != null && player.CurrentLevel >= 3)
-                            {
-                                eliteWarningTriggered = true;
-                                EliteWarningUI.CreateProcedural("TEHLIKELI ELIT DUSMAN YAKLASIYOR", 3.5f);
-                            }
-                        }
-                        spawnCooldown = 0.5f; // Keep checking but don't spawn
-                    }
-                    else if (currentPeriod >= 108f && currentPeriod < 120f)
-                    {
-                        // 108s: Conditional Elite spawn
-                        if (!eliteSpawned)
-                        {
-                            eliteSpawned = true;
-                            Character player = FindFirstObjectByType<Character>();
-                            if (player != null && player.CurrentLevel >= 3)
-                            {
-                                SpawnEliteEnemyAtDirection(Vector2.right);
-                            }
-                            else
-                            {
-                                // Spawn a small normal wave instead of elite to prevent unfair death
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    SpawnNormalEnemyAtDirection(GetRandomDirection());
-                                }
-                            }
-                        }
-
-                        // 108-120s: Final light pressure
-                        SpawnNormalEnemyAtDirection(GetRandomDirection());
-                        spawnCooldown = 3.5f;
+                        // 90-120s: Small final wave from the Right side
+                        SpawnNormalMeleeEnemyAtDirection(Vector2.right);
+                        spawnCooldown = 2.5f;
                     }
                 }
                 else
                 {
-                    // Too many enemies on screen, check again in 1s
+                    // Too many enemies on screen, delay checking
                     spawnCooldown = 1f;
                 }
             }
@@ -162,90 +105,61 @@ namespace Vampire
 
         private void TriggerWaveAnnouncements()
         {
-            if (waveTimer >= 0f && waveTimer < 10f && !shownWave1)
+            if (waveTimer >= 0f && waveTimer < 45f && !shownWave1)
             {
                 shownWave1 = true;
                 EliteWarningUI.CreateProcedural("DUSMAN SAGDAN GELIYOR", 3.5f);
             }
-            else if (waveTimer >= 10f && waveTimer < 30f && !shownWave2)
+            else if (waveTimer >= 45f && waveTimer < 90f && !shownWave2)
             {
                 shownWave2 = true;
                 EliteWarningUI.CreateProcedural("DUSMAN SOLDAN GELIYOR", 3.5f);
             }
-            else if (waveTimer >= 30f && waveTimer < 60f && !shownWave3)
+            else if (waveTimer >= 90f && waveTimer < 120f && !shownWave3)
             {
                 shownWave3 = true;
-                EliteWarningUI.CreateProcedural("DUSMAN YUKARIDAN VE ASAGIDAN GELIYOR", 3.5f);
-            }
-            else if (waveTimer >= 60f && waveTimer < 90f && !shownWave4)
-            {
-                shownWave4 = true;
-                EliteWarningUI.CreateProcedural("DUSMAN HER YONDEN GELIYOR", 3.5f);
+                EliteWarningUI.CreateProcedural("SON DALGA SAGDAN GELIYOR", 3.5f);
             }
         }
 
-        private Vector2 GetRandomDirection()
-        {
-            float rand = Random.value;
-            if (rand < 0.25f) return Vector2.right;
-            if (rand < 0.50f) return Vector2.left;
-            if (rand < 0.75f) return Vector2.up;
-            return Vector2.down;
-        }
-
-        private void SpawnNormalEnemyAtDirection(Vector2 direction)
+        private void SpawnNormalMeleeEnemyAtDirection(Vector2 direction)
         {
             if (levelBlueprint.monsters == null || levelBlueprint.monsters.Length == 0) return;
             
-            // Choose a random monster index from standard monsters container
-            int poolIndex = Random.Range(0, levelBlueprint.monsters.Length);
-            var container = levelBlueprint.monsters[poolIndex];
-            if (container.monsterBlueprints == null || container.monsterBlueprints.Length == 0) return;
+            // Level 1 Ranged Enemy Ban: filter out any Ranged, Throwing, Boomerang or Boss blueprints
+            MonsterBlueprint blueprint = null;
+            int poolIndex = 0;
+            int tries = 0;
+            do
+            {
+                poolIndex = Random.Range(0, levelBlueprint.monsters.Length);
+                var container = levelBlueprint.monsters[poolIndex];
+                if (container.monsterBlueprints != null && container.monsterBlueprints.Length > 0)
+                {
+                    int blueprintIndex = Random.Range(0, container.monsterBlueprints.Length);
+                    blueprint = container.monsterBlueprints[blueprintIndex];
+                }
+                tries++;
+            } while ((blueprint == null || 
+                      blueprint is RangedMonsterBlueprint || 
+                      blueprint is ThrowingMonsterBlueprint || 
+                      blueprint is BoomerangMonsterBlueprint || 
+                      blueprint is BossMonsterBlueprint) && tries < 50);
+
+            if (blueprint == null) return;
             
-            int blueprintIndex = Random.Range(0, container.monsterBlueprints.Length);
-            MonsterBlueprint blueprint = container.monsterBlueprints[blueprintIndex];
-            
-            // Dynamic HP scale based on wave time for onboarding / rescue balance
-            float hpValue = blueprint.hp;
-            if (waveTimer < 30f)
+            // Early enemy HP override for onboarding balance (negative value sets absolute HP)
+            float hpValue = -blueprint.hp;
+            if (waveTimer < 60f)
             {
-                hpValue = 15f; // dies in 2 hits of 10 damage
-            }
-            else if (waveTimer < 60f)
-            {
-                hpValue = 20f; // dies in 2 hits
-            }
-            else if (waveTimer < 90f)
-            {
-                hpValue = 25f; // dies in 3 hits
+                hpValue = -10f; // Dies in exactly 1 hit of 12 damage
             }
             else
             {
-                hpValue = 30f; // dies in 3 hits
+                hpValue = -15f; // Dies in 2 hits of 12 damage
             }
             
             entityManager.SpawnMonsterAtDirection(poolIndex, blueprint, direction, hpValue);
-        }
-
-        private void SpawnEliteEnemyAtDirection(Vector2 direction)
-        {
-            if (levelBlueprint.monsters == null || levelBlueprint.monsters.Length == 0) return;
-
-            // Pick first monster pool as the elite template (Melee Crab)
-            int poolIndex = 0; 
-            var container = levelBlueprint.monsters[poolIndex];
-            if (container.monsterBlueprints == null || container.monsterBlueprints.Length == 0) return;
-
-            MonsterBlueprint blueprint = container.monsterBlueprints[0];
-            
-            // Spawn monster at direction
-            Monster elite = entityManager.SpawnMonsterAtDirection(poolIndex, blueprint, direction, blueprint.hp);
-            if (elite != null)
-            {
-                // Apply modifiers: 1.5x HP, 1.05x Speed, 1.2x Scale, purple/red tint, no damage buff
-                elite.ApplyEliteModifiers(1.5f, 1.05f, 1.2f, new Color(0.9f, 0.4f, 0.9f, 1f));
-                Debug.Log($"[Level1WaveDirector] Spawned Elite Monster: {blueprint.name} from {direction} with 1.5x HP, 1.05x Speed.");
-            }
         }
 
         private IEnumerator WinSequence()

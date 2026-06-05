@@ -83,8 +83,16 @@ namespace Vampire
             }
             isElite = false;
 
-            // Reset health to max
-            currentHealth = monsterBlueprint.hp + hpBuff;
+            // Reset health to max (negative hpBuff indicates absolute override)
+            if (hpBuff < 0)
+            {
+                currentHealth = -hpBuff;
+            }
+            else
+            {
+                currentHealth = monsterBlueprint.hp + hpBuff;
+            }
+            
             // Toggle alive flag on
             alive = true;
             // Add to list of living monsters
@@ -108,7 +116,12 @@ namespace Vampire
             centerTransform.position = transform.position + (Vector3)monsterHitbox.offset;
 
             // Set the drag based on acceleration and movespeed
+            bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
             float spd = Random.Range(monsterBlueprint.movespeed-0.1f, monsterBlueprint.movespeed+0.1f);
+            if (isLevel1)
+            {
+                spd *= 0.6f; // reduced speed for Level 1 melee enemies
+            }
             rb.linearDamping = monsterBlueprint.acceleration / (spd * spd);
             // Reset the velocity
             rb.linearVelocity = Vector2.zero;

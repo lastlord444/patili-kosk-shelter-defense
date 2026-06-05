@@ -50,18 +50,40 @@ namespace Vampire
 
         void OnCollisionStay2D(Collision2D col)
         {
-            if (alive && timeSinceLastAttack >= 1.0f/monsterBlueprint.atkspeed)
+            if (alive)
             {
-                IDamageable damageable = col.collider.GetComponentInParent<IDamageable>();
-                if (damageable != null)
+                float attackSpeed = monsterBlueprint.atkspeed;
+                bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
+                if (isLevel1)
                 {
-                    bool isMeleeLayer = (monsterBlueprint.meleeLayer & (1 << col.collider.gameObject.layer)) != 0;
-                    bool isShelter = damageable is PatiliKosk.Shelter;
-                    
-                    if (isMeleeLayer || isShelter)
+                    attackSpeed *= 0.4f; // attacks 2.5x slower
+                }
+
+                if (timeSinceLastAttack >= 1.0f / attackSpeed)
+                {
+                    IDamageable damageable = col.collider.GetComponentInParent<IDamageable>();
+                    if (damageable != null)
                     {
-                        damageable.TakeDamage(monsterBlueprint.atk);
-                        timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, 1.0f/monsterBlueprint.atkspeed);
+                        bool isMeleeLayer = (monsterBlueprint.meleeLayer & (1 << col.collider.gameObject.layer)) != 0;
+                        bool isShelter = damageable is PatiliKosk.Shelter;
+                        
+                        if (isMeleeLayer || isShelter)
+                        {
+                            float finalDamage = monsterBlueprint.atk;
+                            if (isLevel1)
+                            {
+                                if (isShelter)
+                                {
+                                    finalDamage *= 0.3f; // Shelter takes 70% less damage
+                                }
+                                else
+                                {
+                                    finalDamage *= 0.1f; // Player takes 90% less contact damage
+                                }
+                            }
+                            damageable.TakeDamage(finalDamage);
+                            timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, 1.0f / attackSpeed);
+                        }
                     }
                 }
             }
