@@ -44,8 +44,11 @@ namespace Vampire
             {
                 shelter.OnDeath.AddListener(GameOver);
             }
-            // Spawn initial gems
-            entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
+            // Spawn initial gems (Bypassed for Level 1 to prevent instant level up at 00:00)
+            if (SceneManager.GetActiveScene().name != "Level 1" && SceneManager.GetActiveScene().buildIndex != 1)
+            {
+                entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
+            }
             // Spawn a singular chest
             entityManager.SpawnChest(levelBlueprint.chestBlueprint);
             // Initialize the infinite background

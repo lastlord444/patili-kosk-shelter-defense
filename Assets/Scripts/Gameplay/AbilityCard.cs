@@ -39,8 +39,48 @@ namespace Vampire
         {
             if (!initialized) return;
             
-            nameText.text = ability.Name;
-            descriptionText.text = ability.Description;
+            string name = ability.Name;
+            string description = ability.Description;
+
+            // Customize names for Level 1 / Pistol loadout to make them pistol-specific and clear in Turkish
+            Character player = FindFirstObjectByType<Character>();
+            bool hasPistol = player != null && player.GetComponentInChildren<PistolAbility>() != null;
+            if (hasPistol)
+            {
+                if (ability is DamageUpgradeAbility)
+                {
+                    name = "Tabanca Hasari+";
+                    description = "Tabanca hasari %10 artar.";
+                }
+                else if (ability is CooldownUpgradeAbility)
+                {
+                    name = "Tabanca Atis Hizi+";
+                    description = "Tabanca %10 daha hizli ates eder.";
+                }
+                else if (ability is ProjectileSpeedAbilityUpgrade)
+                {
+                    name = "Tabanca Mermi Hizi+";
+                    description = "Tabanca mermileri %10 daha hizli gider.";
+                }
+                else if (ability is ProjectileCountUpgradeAbility)
+                {
+                    name = "Tabanca Cift Atis+";
+                    description = "Tabanca fazladan 1 mermi atar.";
+                }
+                else if (ability is ArmorUpgradeAbility)
+                {
+                    name = "Zirh+";
+                    description = "Alinan hasari 1 azaltir.";
+                }
+                else if (ability is IceSkatesAbility)
+                {
+                    name = "Hareket Hizi+";
+                    description = "Karakter hareket hizi %10 artar.";
+                }
+            }
+
+            nameText.text = name;
+            descriptionText.text = description;
             
             buttonText.text = !ability.Owned ? selectLocalization.GetLocalizedString() : upgradeLocalization.GetLocalizedString() + " (" + ability.Level + " -> " + (ability.Level+1) + ")";
         }

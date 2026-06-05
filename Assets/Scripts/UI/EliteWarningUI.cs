@@ -9,7 +9,7 @@ namespace Vampire
     {
         private CanvasGroup canvasGroup;
 
-        public static void CreateProcedural(float duration)
+        public static void CreateProcedural(string messageText, float duration)
         {
             Canvas canvas = FindFirstObjectByType<Canvas>();
             if (canvas == null)
@@ -23,7 +23,12 @@ namespace Vampire
             warningGo.transform.SetParent(canvas.transform, false);
             
             EliteWarningUI warning = warningGo.AddComponent<EliteWarningUI>();
-            warning.InitializeAndShow(duration);
+            warning.InitializeAndShow(duration, messageText);
+        }
+
+        public static void CreateProcedural(float duration)
+        {
+            CreateProcedural("ELIT DUSMAN YAKLASIYOR", duration);
         }
 
         public void ShowWarning(string text, float duration)

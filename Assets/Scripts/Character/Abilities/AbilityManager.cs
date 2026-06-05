@@ -162,8 +162,61 @@ namespace Vampire
             // Determine how many abilities will be selected in total (3 - 4)
             int selectedAbilitiesCount = 3 + (ResolveChance(FourthChance) ? 1 : 0);
 
+            // Guarantee at least one pistol-specific upgrade card (PistolAbility itself) on first level-up (level <= 2)
+            Ability pistolUpgrade = null;
+            if (playerCharacter != null && playerCharacter.CurrentLevel <= 2)
+            {
+                foreach (Ability ab in availableOwnedAbilities)
+                {
+                    if (ab is PistolAbility)
+                    {
+                        pistolUpgrade = ab;
+                        break;
+                    }
+                }
+                if (pistolUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(pistolUpgrade);
+                    selectedAbilities.Add(pistolUpgrade);
+                }
+            }
+
+            // Exclude ProjectileCountUpgradeAbility on first level-up (level <= 2)
+            Ability tempProjectileCountUpgrade = null;
+            if (playerCharacter != null && playerCharacter.CurrentLevel <= 2)
+            {
+                foreach (Ability ab in availableOwnedAbilities)
+                {
+                    if (ab is ProjectileCountUpgradeAbility)
+                    {
+                        tempProjectileCountUpgrade = ab;
+                        break;
+                    }
+                }
+                if (tempProjectileCountUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(tempProjectileCountUpgrade);
+                }
+                else
+                {
+                    foreach (Ability ab in availableNewAbilities)
+                    {
+                        if (ab is ProjectileCountUpgradeAbility)
+                        {
+                            tempProjectileCountUpgrade = ab;
+                            break;
+                        }
+                    }
+                    if (tempProjectileCountUpgrade != null)
+                    {
+                        availableNewAbilities.Remove(tempProjectileCountUpgrade);
+                    }
+                }
+            }
+
             // Attempt to show the player up to 2 items they already own (so they can upgrade them)
-            int ownedAbilitiesCount = availableOwnedAbilities.Count < 2 ? availableOwnedAbilities.Count : 2;
+            int maxOwnedToSelect = (pistolUpgrade != null) ? 1 : 2;
+            int ownedAbilitiesCount = availableOwnedAbilities.Count < maxOwnedToSelect ? availableOwnedAbilities.Count : maxOwnedToSelect;
             for (int i = 0; i < ownedAbilitiesCount; i++)
             {
                 if (ResolveChance(OwnedChance))
@@ -182,6 +235,15 @@ namespace Vampire
             for (int i = selectedAbilities.Count; i < selectedAbilitiesCount && i - selectedAbilities.Count < availableOwnedAbilities.Count; i++)
             {
                 selectedAbilities.Add(PullAbility(availableOwnedAbilities));
+            }
+
+            // Return tempProjectileCountUpgrade back to the pool
+            if (tempProjectileCountUpgrade != null)
+            {
+                if (tempProjectileCountUpgrade.Owned)
+                    ownedAbilities.Add(tempProjectileCountUpgrade);
+                else
+                    newAbilities.Add(tempProjectileCountUpgrade);
             }
 
             // Return any remaining available abilities that weren't selected back to the new abilities pool

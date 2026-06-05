@@ -14,7 +14,6 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _AVOIDREPITITION_ON
-  - _RESETTING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -79,8 +78,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ResetBlend: 0.72392356
-    - _Resetting: 0
+    - _ResetBlend: 0.6970854
+    - _Resetting: 1
     - _Ripple: 2.76
     - _RippleIntensity: 0.1
     - _RippleWidth: 0.4
@@ -97,7 +96,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _ResetOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _TempResetOffset: {r: -15.0151205, g: -0.0000017221365, b: 0, a: 0}
+    - _TempResetOffset: {r: -14.711659, g: -3.001769, b: 0, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

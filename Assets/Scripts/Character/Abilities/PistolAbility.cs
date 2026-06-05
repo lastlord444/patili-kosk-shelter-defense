@@ -9,15 +9,38 @@ namespace Vampire
         [Header("Pistol Settings")]
         [SerializeField] protected float targetRadius = 5f;
 
-        public override string Name => "Pistol";
+        public override string Name
+        {
+            get
+            {
+                if (!owned) return "Pistol";
+                switch (level)
+                {
+                    case 1: return "Tabanca Hasari+";
+                    case 2: return "Tabanca Atis Hizi+";
+                    case 3: return "Tabanca Hasari+";
+                    case 4: return "Tabanca Mermi Hizi+";
+                    case 5: return "Tabanca Cift Atis+";
+                    default: return "Pistol Upgrade+";
+                }
+            }
+        }
+
         public override string Description
         {
             get
             {
                 if (!owned)
-                    return "Automatically targets and shoots the nearest monster.";
-                else
-                    return GetUpgradeDescriptions();
+                    return "En yakin canavari otomatik olarak hedefler ve ates eder.";
+                switch (level)
+                {
+                    case 1: return "Tabanca hasari %25 artar.";
+                    case 2: return "Tabanca %15 daha hizli ates eder.";
+                    case 3: return "Tabanca hasari %25 artar.";
+                    case 4: return "Tabanca mermileri %20 daha hizli gider.";
+                    case 5: return "Fazladan 1 mermi atesler ve hasari %30 artar.";
+                    default: return "Tabanca nitelikleri gelistirilir.";
+                }
             }
         }
 
