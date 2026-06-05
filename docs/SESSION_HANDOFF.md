@@ -20,7 +20,10 @@
 ## Sonraki Adımlar ve Riskler (Next Steps & Risks)
 
 - **Görsel Kalite İyileştirmeleri (Turret/Support Point Visuals later):** Destek kuleleri ve taretlerin görselleri programmer-art seviyesindedir. Bir sonraki aşamada bunların görsel kalitesi iyileştirilmeli ve kule savunması tür kayması riski (Tower-defense pivot risk) yönetilmelidir.
-- **Taret Entegrasyonu:** İlk silah gücü ve dalga dengesi oturtulduğu için, bir sonraki fazda stashten çekilecek taretlerin entegrasyonuna geçilebilir.
+- **Turret / Support Point Durumu:** Support point/turret bu PR'da yapılmamıştır. Sonraki PR adayı: "Fixed Support Point + Turret Visual Readability v1". Eski turret görselleri programmer-art riski taşımaktadır ve turret mekanikleri ana shooter oynanışını (shooter gameplay) gölgelemeyecek şekilde yardımcı seviyede tutulmalıdır. Destek noktalarının kullanıcı dostu ve anlaşılır olması (UX clarity) kritik hedeftir.
+- **Repo Scout Note:** Kullanıcı tarafından daha uygun bir kule savunması/nişancı temeli (template base) olup olmadığı araştırılmıştır. 
+  - *Karar:* Mevcut MIT lisanslı `VampireSurvivorsClone` base'i ile devam edilmesine karar verilmiştir. Mevcut altyapının sağladığı hazır mobil sanal joystick girdileri, seviye atlama ve yetenek havuzu mimarisi, mermi ve canavar havuzlama (object pooling) sistemleri geliştirme riskini en aza indirmektedir.
+  - *Risk/Değerlendirme:* Saf Tower-Defense şablonları oyunun nişancı (shooter) dinamiklerini tamamen öldürerek tür kayması (pivot) riski yaratmaktadır. Gerekirse ileride taret yerleşim ve menü fikirleri için bu şablonlar incelenerek izole bir "Repo Scout Spike" çalışması yapılabilir ancak bu durum mevcut geliştirme sürecini durdurmayacaktır.
 
 ---
 

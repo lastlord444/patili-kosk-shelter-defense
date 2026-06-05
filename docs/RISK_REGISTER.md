@@ -46,12 +46,16 @@
 | **R45** | Alakasız Geliştirme Havuzu (Upgrade mismatch risk) | MEDIUM | HIGH | Nişancı karakter oynarken havuzun büyüsel/yakın dövüş yetenekleriyle dolması riski. *Çözüm:* `AbilityManager` içinde başlangıç tabancası aktifken bu tür öğeleri engelleyen `IsShooterRelevant` filtresi uygulandı. | ✔️ Mitigated |
 | **R46** | Elit Canavar Görünürlük Eksikliği (Elite telegraph risk) | MEDIUM | HIGH | Güçlü/elit düşmanın ekrana aniden çıkıp oyuncuyu haksızca öldürmesi riski. *Çözüm:* 60. saniyede prosedürel top-center `EliteWarningUI` ile `"ELIT DUSMAN YAKLASIYOR"` uyarısı verilerek oyuncu hazırlandı. | ✔️ Mitigated |
 | **R47** | Ekonomi / Yetersiz Coin Düşüşü (Coin economy/drop risk) | LOW | MEDIUM | Canavarların az coin düşürmesi ve ilk dakikada yükseltme yapılamaması riski. *Çözüm:* MonsterBlueprint loot table kontrol edildi, mıknatıs ve coin toplama akışı manuel test edildi. | ✔️ Mitigated |
-| **R48** | Taret & Destek Noktası Görsel Kalitesi (Turret/support point visual quality risk) | HIGH | MEDIUM | Destek kulesi ve yerleştirme alanlarının programmer-art seviyesinde kötü görünmesi riski. *Çözüm:* Bu PR'da taret kodu eklenmedi, görsel kalitesi ve entegrasyonu sonraki aşamaya ertelendi. | ⚠️ Open |
-| **R49** | Kule Savunması Tür Kayması (Tower-defense pivot risk) | MEDIUM | HIGH | Oyunun kule savunmasına (Tower Defense) fazla kayarak nişancı oyun modunu bozması riski. *Çözüm:* Destek noktaları ve taretler sadece yardımcı eleman olarak planlandı, serbest yerleştirme kaldırıldı. | ⚠️ Open |
-| **R50** | Android Derleme Bozulması (Android build regression risk) | HIGH | HIGH | Yeni C# kodlarının Android / IL2CPP platformunda derleme hatalarına veya performans kayıplarına yol açması riski. *Çözüm:* `SmokeTest/BuildAndroid` çalıştırılarak derlemenin hatasız bittiği ve APK'nın üretildiği doğrulandı. | ✔️ Mitigated |
-
-
-
+| **R48** | Taret & Destek Noktası Görsel Kalitesi (Turret/support point visual quality risk) | HIGH | MEDIUM | Bu PR'da taret kodu eklenmedi, görsel kalitesi ve entegrasyonu sonraki aşamaya ertelendi. | ⚠️ Open |
+| **R49** | Kule Savunması Tür Kayması (Tower-defense pivot risk) | MEDIUM | HIGH | Destek noktaları ve taretler sadece yardımcı eleman olarak planlandı, serbest yerleştirme kaldırıldı. Eski turret görselleri shooter hissiyatını bozmamalı. | ⚠️ Open |
+| **R50** | Android Derleme Bozulması (Android build regression risk) | HIGH | HIGH | `SmokeTest/BuildAndroid` çalıştırılarak derlemenin hatasız bittiği ve APK'nın üretildiği doğrulandı. | ✔️ Mitigated |
+| **R51** | Destek Noktası Arayüz Anlaşılırlığı Riski (Support point UX clarity risk) | MEDIUM | HIGH | Oyuncuların taret yerleşim alanlarını ve interaktif noktaları anlamakta zorluk yaşaması riski. Sonraki PR'da görsel kılavuzlar ve belirgin UI vurguları eklenmeli. | ⚠️ Open |
+| **R52** | Şablon Değiştirme / Tür Kayması Riski (Base pivot risk) | LOW | HIGH | Başka bir kule savunma şablonuna geçildiğinde nişancı dinamiklerinin kaybolma riski. *Çözüm:* Mevcut survivors base'i korundu. | ✔️ Mitigated |
+| **R53** | Repo Değiştirme Maliyeti Riski (Repo switching cost risk) | LOW | HIGH | Repo değiştirildiğinde mobile input, pool, ve seviye sistemlerini sıfırdan kurmanın getirdiği zaman kaybı riski. *Çözüm:* Mevcut base'in korunmasına karar verildi. | ✔️ Mitigated |
+| **R54** | Level 1 Haksız Zorluk Riski (Level 1 unfair difficulty risk) | HIGH | HIGH | Başlangıçta canavar sayısının ve canlarının fazla olması nedeniyle oyuncunun haksız yere hemen ölmesi riski. *Çözüm:* Canavar HP'leri dinamik olarak erken evrede 15-20 HP düzeyine çekildi (2 vuruşta ölüm). | ✔️ Mitigated |
+| **R55** | Elit Düşmanın Çok Erken Gelmesi (Elite too early risk) | MEDIUM | HIGH | Yetersiz yükseltmeyle 60. saniyede gelen elit düşmanın oyuncuyu ezmesi riski. *Çözüm:* Elite doğumu 108. saniyeye ötelendi ve Level >= 3 koşuluna bağlandı. Koşul sağlanmazsa normal canavar dalgası gelir. | ✔️ Mitigated |
+| **R56** | Gelişim ve Ekonomi Dengesizliği Riski (XP/coin pacing insufficiency risk) | MEDIUM | HIGH | Oyuncunun ilk 60 saniyede yeterli XP toplayıp tabanca geliştirmesi alamaması riski. *Çözüm:* Seviye 1 başlangıç seviye atlama eşiği düşük tutuldu, 60s içinde en az 1 upgrade garantilendi. | ✔️ Mitigated |
+| **R57** | Sonsuz Bölüm Belirsizliği Riski (Endless level clarity risk) | MEDIUM | MEDIUM | Oyuncuların "bölüm ne zaman bitecek" sorusunu sorması ve hedefin belirsiz olması riski. *Çözüm:* Seviye 1 için 120 saniyelik net win condition (Barınak Korundu) eklendi. | ✔️ Mitigated |
 
 ## Closed Risks
 
