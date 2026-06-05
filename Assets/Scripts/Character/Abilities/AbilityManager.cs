@@ -93,6 +93,31 @@ namespace Vampire
             }
         }
 
+        private bool IsShooterRelevant(Ability ability)
+        {
+            if (ability is DamageUpgradeAbility || 
+                ability is CooldownUpgradeAbility || 
+                ability is ArmorUpgradeAbility || 
+                ability is IceSkatesAbility || 
+                ability is ProjectileSpeedAbilityUpgrade ||
+                ability is ProjectileCountUpgradeAbility ||
+                ability is KnockbackUpgradeAbility)
+            {
+                return true;
+            }
+
+            if (ability is PistolAbility || 
+                ability is MachineGunAbility || 
+                ability is BazookaGunAbility || 
+                ability is GrenadeThrowableAbility || 
+                ability is MolotovAbility)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Select abilities.
         /// </summary>
@@ -103,6 +128,36 @@ namespace Vampire
             // Determine which abilities are currently available (have their requirements met)
             WeightedAbilities availableOwnedAbilities = ExtractAvailableAbilities(ownedAbilities);
             WeightedAbilities availableNewAbilities = ExtractAvailableAbilities(newAbilities);
+
+            // Filter new abilities if we have the starting Pistol active
+            WeightedAbilities excludedNewAbilities = null;
+            bool hasPistol = playerCharacter != null && (ownedAbilities.Any(a => a is PistolAbility) || availableOwnedAbilities.Any(a => a is PistolAbility));
+            if (hasPistol)
+            {
+                WeightedAbilities filteredNewAbilities = new WeightedAbilities();
+                excludedNewAbilities = new WeightedAbilities();
+                foreach (Ability ability in availableNewAbilities)
+                {
+                    if (IsShooterRelevant(ability))
+                    {
+                        filteredNewAbilities.Add(ability);
+                    }
+                    else
+                    {
+                        excludedNewAbilities.Add(ability);
+                    }
+                }
+                
+                // Only use filtered ones if we have at least some, otherwise fallback to prevent empty pool
+                if (filteredNewAbilities.Count > 0)
+                {
+                    availableNewAbilities = filteredNewAbilities;
+                }
+                else
+                {
+                    excludedNewAbilities = null; // No exclusion if we had nothing else
+                }
+            }
 
             // Determine how many abilities will be selected in total (3 - 4)
             int selectedAbilitiesCount = 3 + (ResolveChance(FourthChance) ? 1 : 0);
@@ -132,6 +187,14 @@ namespace Vampire
             // Return any remaining available abilities that weren't selected back to the new abilities pool
             foreach (Ability ability in availableNewAbilities)
                 newAbilities.Add(ability);
+
+            // Return excluded ones back to the new abilities pool
+            if (excludedNewAbilities != null)
+            {
+                foreach (Ability ability in excludedNewAbilities)
+                    newAbilities.Add(ability);
+            }
+
             foreach (Ability ability in availableOwnedAbilities)
                 ownedAbilities.Add(ability);
 

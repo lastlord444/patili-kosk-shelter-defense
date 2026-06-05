@@ -162,3 +162,7 @@ Tüm materyaller (`Assets/Materials/`) ve dokular (`Assets/Textures/`) Unity 6 B
   - Attribution: Not required
   - AI Generated: No explicit AI usage claim found on the asset page; license is CC0.
 
+
+## Audit Update (2026-06-05)
+
+- No new assets imported. Only procedural visuals and existing code are used.

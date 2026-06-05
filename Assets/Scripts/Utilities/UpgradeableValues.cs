@@ -28,6 +28,11 @@ namespace Vampire
         public UnityEvent OnChanged { get; } = new UnityEvent();
 
         public void Register(AbilityManager abilityManager) { this.abilityManager = abilityManager; }
+        public void ConfigureRuntimeUpgrades(T[] newUpgrades)
+        {
+            if (newUpgrades == null || newUpgrades.Length == 0) return;
+            upgrades = (T[])newUpgrades.Clone();
+        }
         public abstract void RegisterInUse();
         public virtual void Upgrade()
         {

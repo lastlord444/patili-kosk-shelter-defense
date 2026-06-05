@@ -52,11 +52,27 @@ namespace Vampire
             infiniteBackground.Init(this.levelBlueprint.backgroundTexture, playerCharacter.transform);
             // Initialize inventory
             inventory.Init();
+
+            // Initialize Level 1 Wave Director if present
+            Level1WaveDirector waveDirector = GetComponent<Level1WaveDirector>();
+            if (waveDirector != null)
+            {
+                waveDirector.Init(this, entityManager, levelBlueprint);
+            }
         }
 
         // Start is called before the first frame update
         void Start()
         {
+            // Programmatically attach Level1WaveDirector for Level 1 scene
+            if (SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                if (gameObject.GetComponent<Level1WaveDirector>() == null)
+                {
+                    gameObject.AddComponent<Level1WaveDirector>();
+                }
+            }
+
             Init(levelBlueprint);
         }
 
@@ -66,19 +82,27 @@ namespace Vampire
             // Time
             levelTime += Time.deltaTime;
             gameTimer.SetTime(levelTime);
+
+            // Check if Level1WaveDirector is active and handling spawning
+            Level1WaveDirector waveDirector = GetComponent<Level1WaveDirector>();
+            bool waveDirectorActive = waveDirector != null && waveDirector.IsActive(levelTime);
+
             // Monster spawning timer
             if (levelTime < levelBlueprint.levelTime)
             {
-                timeSinceLastMonsterSpawned += Time.deltaTime;
-                float spawnRate = levelBlueprint.monsterSpawnTable.GetSpawnRate(levelTime/levelBlueprint.levelTime);
-                float monsterSpawnDelay = spawnRate > 0 ? 1.0f/spawnRate : float.PositiveInfinity;
-                if (timeSinceLastMonsterSpawned >= monsterSpawnDelay)
+                if (!waveDirectorActive)
                 {
-                    (int monsterIndex, float hpMultiplier) = levelBlueprint.monsterSpawnTable.SelectMonsterWithHPMultiplier(levelTime/levelBlueprint.levelTime);
-                    (int poolIndex, int blueprintIndex) = levelBlueprint.MonsterIndexMap[monsterIndex];
-                    MonsterBlueprint monsterBlueprint = levelBlueprint.monsters[poolIndex].monsterBlueprints[blueprintIndex];
-                    entityManager.SpawnMonsterRandomPosition(poolIndex, monsterBlueprint, monsterBlueprint.hp * hpMultiplier);
-                    timeSinceLastMonsterSpawned = Mathf.Repeat(timeSinceLastMonsterSpawned, monsterSpawnDelay);
+                    timeSinceLastMonsterSpawned += Time.deltaTime;
+                    float spawnRate = levelBlueprint.monsterSpawnTable.GetSpawnRate(levelTime/levelBlueprint.levelTime);
+                    float monsterSpawnDelay = spawnRate > 0 ? 1.0f/spawnRate : float.PositiveInfinity;
+                    if (timeSinceLastMonsterSpawned >= monsterSpawnDelay)
+                    {
+                        (int monsterIndex, float hpMultiplier) = levelBlueprint.monsterSpawnTable.SelectMonsterWithHPMultiplier(levelTime/levelBlueprint.levelTime);
+                        (int poolIndex, int blueprintIndex) = levelBlueprint.MonsterIndexMap[monsterIndex];
+                        MonsterBlueprint monsterBlueprint = levelBlueprint.monsters[poolIndex].monsterBlueprints[blueprintIndex];
+                        entityManager.SpawnMonsterRandomPosition(poolIndex, monsterBlueprint, monsterBlueprint.hp * hpMultiplier);
+                        timeSinceLastMonsterSpawned = Mathf.Repeat(timeSinceLastMonsterSpawned, monsterSpawnDelay);
+                    }
                 }
             }
             // Boss spawning

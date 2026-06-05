@@ -28,6 +28,20 @@ namespace Vampire
 
         private Sprite whitePixelSprite;
 
+        public override void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter)
+        {
+            ConfigurePistolUpgrades();
+            base.Init(abilityManager, entityManager, playerCharacter);
+        }
+
+        private void ConfigurePistolUpgrades()
+        {
+            damage.ConfigureRuntimeUpgrades(new float[] { 0.25f, 0f, 0.25f, 0f, 0.30f });
+            cooldown.ConfigureRuntimeUpgrades(new float[] { 0f, -0.15f, 0f, 0f, 0f });
+            speed.ConfigureRuntimeUpgrades(new float[] { 0f, 0f, 0f, 0.20f, 0f });
+            projectileCount.ConfigureRuntimeUpgrades(new int[] { 0, 0, 0, 0, 1 });
+        }
+
         protected override void Use()
         {
             base.Use();
