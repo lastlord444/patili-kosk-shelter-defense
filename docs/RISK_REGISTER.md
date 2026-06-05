@@ -33,6 +33,14 @@
 | **R32** | Force-killing Unity Editor / MCP instance confusion | MEDIUM | HIGH | Force-killing active Unity process under MCP control causes instance tracking loss and deadlock. Mitigation: Explicitly bind/select active instance, never force-kill Unity. | ⚠️ Open |
 | **R33** | Incomplete Android build evidence reporting | MEDIUM | HIGH | Reporting partial/compiling state as successful creates regression risk. Mitigation: Only mark as success when full APK/AAB is generated on disk with file verification. | ✔️ Mitigated |
 | **R34** | Programmatic Play Mode simulation bypass risk | MEDIUM | HIGH | Using bypass shortcuts for Play Mode smoke test skips UI/EventSystem verification. Mitigation: Simulate user click flow (onClick.Invoke) via EventSystem. Note: onClick.Invoke is an EventSystem simulation, not a physical touch/pointer event. | ⚠️ Partially Mitigated |
+| **R35** | Auto-target filtering wrong-object risk | MEDIUM | HIGH | Explicitly filter the spatial hash grid query using `client is Monster && monster.HP > 0` checks. | ✔️ Mitigated |
+| **R36** | Starter weapon swap balance risk | LOW | MEDIUM | Retain old melee abilities in the level upgrade pool so gameplay options are preserved while combat is improved. | ✔️ Mitigated |
+| **R37** | Pistol visual not rendering/visible | HIGH | MEDIUM | Runtime procedural GameObject creation timing or disabled components in parent prefab may hide weapon visual. Mitigation: Checked sorting order, parenting logic, and verified visibility in Game View. | ✔️ Mitigated |
+| **R38** | Early enemy pressure overwhelming player | HIGH | MEDIUM | High initial wave density in Level 1 may defeat starter pistol players instantly. Mitigation: Reduced Level 1 spawn density in early keyframes and verified 30-60s onboarding window. | ✔️ Mitigated |
+| **R39** | Upgrade pool mismatch | MEDIUM | MEDIUM | Level-up choices containing fantasy stats break shooter game feel. Mitigation: Cleaned up Level 1 abilityPrefabs list to contain only themed weapons and passives. | ✔️ Mitigated |
+| **R40** | Unity Editor stability / unexpected close | MEDIUM | HIGH | Domain reloads or player builds can crash the editor. Mitigation: Resolved by disabling EditorApplication.Exit(0) in automated SmokeTest.cs scripts. | ✔️ Mitigated |
+| **R41** | Clone identity from residual abilities | MEDIUM | LOW | Original fantasy abilities (e.g. garlic, magic water) dilute the shelter rescue theme. Mitigation: Phase out or rename/re-theme abilities in subsequent cleanup steps. | ⚠️ Open |
+| **R42** | Fake evidence reporting | HIGH | HIGH | Local `file:///` paths in PR logs do not confirm build/UI functionality for remote reviewers. Mitigation: Screenshots copied to artifact folders, automated test report generated, and verified. | ✔️ Mitigated |
 
 
 

@@ -38,23 +38,42 @@ namespace Vampire
             registeredUpgradeableValues = new FastList<IUpgradeableValue>();
 
             ownedAbilities = new WeightedAbilities();
-            foreach (GameObject abilityPrefab in playerCharacter.Blueprint.startingAbilities)
+            if (playerCharacter != null && playerCharacter.Blueprint != null && playerCharacter.Blueprint.startingAbilities != null)
             {
-                Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
-                ability.Init(abilityManager, entityManager, playerCharacter);
-                ability.Select();
-                ownedAbilities.Add(ability);
+                foreach (GameObject abilityPrefab in playerCharacter.Blueprint.startingAbilities)
+                {
+                    if (abilityPrefab == null) continue;
+                    Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
+                    if (ability == null) continue;
+                    ability.Init(abilityManager, entityManager, playerCharacter);
+                    ability.Select();
+                    ownedAbilities.Add(ability);
+                }
             }
             
             newAbilities = new WeightedAbilities();
-            foreach (GameObject abilityPrefab in levelBlueprint.abilityPrefabs)
+            if (levelBlueprint != null && levelBlueprint.abilityPrefabs != null)
             {
-                // Skip any abilities we already own
-                if (playerCharacter.Blueprint.startingAbilities.Contains(abilityPrefab)) continue;
-                
-                Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
-                ability.Init(abilityManager, entityManager, playerCharacter);
-                newAbilities.Add(ability);
+                foreach (GameObject abilityPrefab in levelBlueprint.abilityPrefabs)
+                {
+                    if (abilityPrefab == null)
+                    {
+                        Debug.LogWarning("Found null abilityPrefab in levelBlueprint.abilityPrefabs, skipping.");
+                        continue;
+                    }
+                    // Skip any abilities we already own
+                    if (playerCharacter != null && playerCharacter.Blueprint != null && 
+                        playerCharacter.Blueprint.startingAbilities != null && 
+                        playerCharacter.Blueprint.startingAbilities.Contains(abilityPrefab))
+                    {
+                        continue;
+                    }
+                    
+                    Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
+                    if (ability == null) continue;
+                    ability.Init(abilityManager, entityManager, playerCharacter);
+                    newAbilities.Add(ability);
+                }
             }
         }
 

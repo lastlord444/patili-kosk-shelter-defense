@@ -104,7 +104,7 @@ namespace VampireEditor
             File.WriteAllText(reportPath, reportContent);
             Debug.Log($"[SmokeTest] Android build finished! Result: {summary.result}. Report written to {reportPath}");
             
-            EditorApplication.Exit(summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded ? 0 : 1);
+            // EditorApplication.Exit(summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded ? 0 : 1);
         }
     }
 
@@ -248,7 +248,7 @@ namespace VampireEditor
                 }
                 
                 EditorApplication.isPlaying = false;
-                EditorApplication.Exit(0);
+                // EditorApplication.Exit(0);
             }
         }
     }

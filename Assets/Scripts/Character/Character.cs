@@ -76,6 +76,12 @@ namespace Vampire
             spriteAnimator = GetComponentInChildren<SpriteAnimator>();
             spriteRenderer = spriteAnimator.GetComponent<SpriteRenderer>();
             characterBlueprint = CrossSceneData.CharacterBlueprint;
+            if (characterBlueprint == null)
+            {
+#if UNITY_EDITOR
+                characterBlueprint = UnityEditor.AssetDatabase.LoadAssetAtPath<CharacterBlueprint>("Assets/Blueprints/Characters/Main Character Blueprint.asset");
+#endif
+            }
         }
 
         public virtual void Init(EntityManager entityManager, AbilityManager abilityManager, StatsManager statsManager)
@@ -100,6 +106,7 @@ namespace Vampire
             // Limit max speed using drag
             movementSpeed = new UpgradeableMovementSpeed();
             movementSpeed.Value = characterBlueprint.movespeed;
+            movementSpeed.OnChanged.AddListener(UpdateMoveSpeed);
             abilityManager.RegisterUpgradeableValue(movementSpeed, true);
             UpdateMoveSpeed();
             // Initialize upgradeable armor

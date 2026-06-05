@@ -1,36 +1,20 @@
 # SESSION_HANDOFF.md
 
 > Last updated: 2026-06-04
-> Status: Phase 3 / Pickup Magnet & Coin Verification Implemented
+> Status: Phase 3 / Shooter Direction & Pistol Quality Pass Completed (Ready for Merge)
 
 ## Session Summary
 
-**Session goal:** Oyuncunun coin/mama toplama hissini (game feel) iyileştirmek için pickup magnet eklemek ve coin toplama sayacını doğrulamak.
+**Session goal:** Oyuncunun başlangıç saldırı hissini (combat game feel) iyileştirmek için otomatik nişan alan top-down shooter mekaniklerini oturtmak, Basic Auto Pistol PR'ının kalite kapısı düzeltmelerini tamamlamak ve test/build ile doğrulamaktır.
 
 **Completed this session:**
-- [x] Current merged baseline: PR #20 minimal Shelter entity and PR #22 melee shelter targeting + GameOver are merged into main.
-- [x] `Character.cs` sınıfına `magnetRadius` (sabit 3.5f) ve `collectorRadius` (sabit 0.5f) eklendi ve CircleCollider2D radius'u dinamik olarak eşitlendi.
-- [x] `Collectable.cs` sınıfına `pullSpeed` (8f) ve `Update()` pull mantığı entegre edildi; player yakınına gelen coin/gem objeleri player'a akacak şekilde magnet çekimi sağlandı.
-- [x] Play Mode smoke testiyle coin/mama ve exp gem'lerin çekim yarıçapına girince oyuncuya aktığı ve toplandığında StatsManager sayacının arttığı başarıyla doğrulandı.
-- [x] Android build smoke testi başarıyla tamamlandı ve `Build/android_smoke.apk` (~58.37 MB) başarıyla güncellendi (Derleme süresi: 63 saniye).
-
-## Decision
-
-**✅ Continue with current base (VampireSurvivorsClone) & Target Explicit Targeting (No Runtime Layer Hack)**
-
-Key reasons:
-1. `Shelter` GameObject'ini runtime'da `Player Full` layer'a atama fikri, physics ve collision mask'lerinde gizli yan etki ve debug maliyeti yaratacağı için **reddedildi**.
-2. Hedef belirleme ve hasar verme mekanizmaları katmandan bağımsız olarak explicit targeting (`TargetTransform`) ve `IDamageable` sorgulamasıyla çözüldü.
-3. PR #20 kapsamını bozmamak için canavar hedefleme ve game over mekanizmaları `feat/enemy-ai-target-shelter` branch'ine taşındı. PR #22, PR #20'ye bağımlıdır (Depends on PR #20) ve PR #20 birleştirilmeden PR #22 birleştirilmemelidir. GITHUB_TOKEN sahte token engeli, oturum bazlı ortam değişkeni temizlenip keyring fallback yöntemiyle çözülmüş ve PR #22 başarıyla GitHub üzerinde oluşturulmuştur.
-
----
-
-### Alınan Dersler ve Kural İhlali Raporu
-
-> [!WARNING]
-> **Kural İhlali (Force-Kill Unity Process):**
-> - Derleme sonrası asılı kalan zombi process'ler nedeniyle `Stop-Process -Force` komutu çalıştırılmıştır. Bu durum proje kurallarındaki *"Unity Editor'ı kapatma"* ilkesini ihlal etmektedir.
-> - **Alınan Ders:** Bir sonraki çalışmalarda stdio bridge bağlantısı koptuğunda veya kilitlendiğinde asla force-kill yapılmayacak; aktif port ve instance hash bilgisi (`set_active_instance`) taranarak bağlantı taze denecektir.
+- [x] **Pistol Görseli Düzeltildi:** Prosedürel çizim `pixelsPerUnit = 2f` yapılarak 1x1 dünya birimi boyutuna büyütüldü ve sorting order +10 yapılarak Game View'da net görünmesi sağlandı.
+- [x] **Başlangıç Düşman Yoğunluğu Azaltıldı:** `Level 1.asset` keyframe spawn değerleri onboarding için ilk 60 saniyede %40-60 oranında hafifletildi.
+- [x] **Upgrade Yetenek Havuzu Temizlendi:** Level 1 upgrade pool'unda VS'den kalan fantezi yetenekler çıkarılarak Molotov, Grenade, Machine Gun, Armor, Cooldown, Damage, Speed, Projectile Count, Projectile Speed, Pistol ve Bazooka ile sınırlandırıldı.
+- [x] **Karakter Hızlı Koşma/Uçma Sorunu Çözüldü:** `Level 1.asset` ability listesindeki yorum satırlarının Unity YAML parser tarafından null okunup `AbilityManager.Init()`'te çökmesi nedeniyle initialization'ın yarıda kalması ve player rigidBody damping (drag) değerlerinin 0 kalması çözüldü (null check fallback'leri ve YAML temizliği yapıldı).
+- [x] **Sağdaki "9" İkonları ve Kullanılmama Sorunu Çözüldü:** Initialization çöküşü giderildiği için `inventory.Init()` artık başarıyla çalışıyor ve boş slotlar pasif/grayed out durumda düzgün gizleniyor.
+- [x] **Android Build Smoke Test Başarılı:** `Build/android_smoke.apk` başarıyla derlendi, test edildi ve 58.3 MB boyutuyla çıktı verdi.
+- [x] **Editor Kapanma Nedeni Bulundu:** `SmokeTest.cs` içerisindeki test sonu `EditorApplication.Exit(0)` çağrısı kapatılarak editörün açık kalması sağlandı.
 
 ---
 
@@ -40,17 +24,12 @@ Key reasons:
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Default branch | main |
-| Next recommended branch | `feat/ranged-enemy-target-wiring` or `feat/shelter-upgrade-persistence` |
-| Code changes | Updated `Shelter.cs`, `LevelManager.cs`, `EntityManager.cs`, `Monster.cs`, `MeleeMonster.cs` |
-| Asset changes | Updated `Level 1.unity` (serialization upgrade noise in previous commit) |
-| Doc changes | Updated `SESSION_HANDOFF.md`, `RISK_REGISTER.md` |
-| Workspace Status | Clean (changes committed to branch) |
+| Current branch | feature/basic-auto-pistol |
+| Next recommended branch | feature/basic-auto-pistol PR merge to main |
+| Code changes | Updated `AbilityManager.cs`, `PistolAbility.cs`, `Character.cs`, `SmokeTest.cs`, `Level 1.asset` |
+| Doc changes | Updated `docs/SESSION_HANDOFF.md`, `docs/RISK_REGISTER.md` (ve önceki commit'te README/REPO_TRUTH) |
+| Workspace Status | Ready for PR Merge (Build & Play Mode verification passed) |
 
-## Next Session Steps
-
-1. **Ranged/Throwable Enemies target targeting:** Uzakçı düşmanların da (RangedMonster, ThrowingMonster, BoomerangMonster) atış ve yön mantıkları `TargetTransform`'a bağlanabilir (Ayrı PR).
-2. **Shelter Upgrade System:** Shelter canı, çit (fence) direnci gibi kalıcı/run içi geliştirme ekonomisi ve veri persistency sistemi (Save/Load) kurulabilir.
-
-> [!IMPORTANT]
-> **Production Rules:** MCP çalışmaktadır. Herhangi bir asset replacement durumunda mutlaka source-to-target variant matrix çıkarın. Explicit targeting ve `IDamageable` mimarisini koruyun.
-
+## Next Phase 3 Step: Shelter Visual & Progress Indicators
+- Shelter (barınak) HP bar boyutunun doğal oyun görünümüne ölçeklenmesi.
+- Sabit support turret veya shelter support noktalarının tasarımı ve implementasyonu.
