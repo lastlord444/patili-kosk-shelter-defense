@@ -67,7 +67,7 @@ namespace Vampire
             damage.ConfigureRuntimeUpgrades(new float[] { 0.25f, 0f, 0.25f, 0f, 0.30f });
             cooldown.ConfigureRuntimeUpgrades(new float[] { 0f, -0.15f, 0f, 0f, 0f });
             speed.ConfigureRuntimeUpgrades(new float[] { 0f, 0f, 0f, 0.20f, 0f });
-            projectileCount.ConfigureRuntimeUpgrades(new int[] { 0, 0, 0, 0, 1 });
+            projectileCount.ConfigureRuntimeUpgrades(new int[] { 0, 0, 0, 0, 0 });
         }
 
         protected override void Use()
@@ -182,6 +182,44 @@ namespace Vampire
                 {
                     // Keep cooldown primed so it fires immediately when a target appears
                     timeSinceLastAttack = cooldown.Value;
+                }
+            }
+        }
+
+        protected override void Attack()
+        {
+            int count = projectileCount.Value;
+            if (count <= 1)
+            {
+                base.Attack();
+            }
+            else
+            {
+                // Simultaneous parallel fire
+                Vector3 baseDir = gunDirection;
+                Vector3 perpDir = new Vector3(-baseDir.y, baseDir.x, 0f).normalized;
+                
+                Vector3 spawnPos = playerCharacter.CenterTransform.position;
+                if (pistolVisual != null)
+                {
+                    Transform muzzle = pistolVisual.transform.Find("Muzzle");
+                    if (muzzle != null) spawnPos = muzzle.position;
+                }
+
+                float offsetDistance = 0.15f; // Small parallel offset to prevent bullet overlap
+
+                for (int i = 0; i < count; i++)
+                {
+                    float offsetFactor = i - (count - 1) / 2f;
+                    Vector3 projectileSpawnPos = spawnPos + perpDir * (offsetFactor * offsetDistance);
+                    Vector2 dir = baseDir; // Fire in the exact same direction
+
+                    Projectile projectile = entityManager.SpawnProjectile(projectileIndex, projectileSpawnPos, damage.Value, knockback.Value, speed.Value, monsterLayer);
+                    if (projectile != null)
+                    {
+                        projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
+                        projectile.Launch(dir);
+                    }
                 }
             }
         }

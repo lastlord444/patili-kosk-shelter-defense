@@ -49,12 +49,12 @@ namespace Vampire
                 if (ability is DamageUpgradeAbility)
                 {
                     name = "Tabanca Hasari+";
-                    description = "Tabanca hasarini artirir.";
+                    description = "Tabanca hasari +%40.";
                 }
                 else if (ability is CooldownUpgradeAbility)
                 {
-                    name = "Tabanca Atis Hizi+";
-                    description = "Tabanca daha hizli ates eder.";
+                    name = "Seri Atis+";
+                    description = "Tabanca %20 daha hizli ates eder.";
                 }
                 else if (ability is ProjectileSpeedAbilityUpgrade)
                 {
@@ -63,8 +63,8 @@ namespace Vampire
                 }
                 else if (ability is ProjectileCountUpgradeAbility)
                 {
-                    name = "Tabanca Cift Atis+";
-                    description = "Tabanca fazladan 1 mermi atar.";
+                    name = "Cift Atis+";
+                    description = "Tabanca +1 mermi atar.";
                 }
                 else if (ability is ArmorUpgradeAbility)
                 {
@@ -193,6 +193,31 @@ namespace Vampire
                     tex.SetPixel(x, 15, streakColor);
                 }
             }
+            else if (type == "DoubleShot")
+            {
+                // Cift Atis+: Two small bullets side-by-side with trail
+                Color bulletColor = new Color(0.95f, 0.75f, 0.1f, 1f);
+                Color streakColor = new Color(0.2f, 0.6f, 0.95f, 0.8f);
+                // Bullet 1
+                tex.SetPixel(20, 15, bulletColor);
+                tex.SetPixel(21, 15, bulletColor);
+                tex.SetPixel(22, 15, bulletColor);
+                tex.SetPixel(21, 16, bulletColor);
+                tex.SetPixel(21, 14, bulletColor);
+                // Trail 1
+                tex.SetPixel(18, 15, streakColor);
+                tex.SetPixel(19, 15, streakColor);
+
+                // Bullet 2
+                tex.SetPixel(26, 17, bulletColor);
+                tex.SetPixel(27, 17, bulletColor);
+                tex.SetPixel(28, 17, bulletColor);
+                tex.SetPixel(27, 18, bulletColor);
+                tex.SetPixel(27, 16, bulletColor);
+                // Trail 2
+                tex.SetPixel(24, 17, streakColor);
+                tex.SetPixel(25, 17, streakColor);
+            }
             
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
@@ -219,6 +244,10 @@ namespace Vampire
                 else if (ability is ProjectileSpeedAbilityUpgrade)
                 {
                     cardSprite = CreateProceduralUpgradeIcon("Speed");
+                }
+                else if (ability is ProjectileCountUpgradeAbility)
+                {
+                    cardSprite = CreateProceduralUpgradeIcon("DoubleShot");
                 }
             }
 

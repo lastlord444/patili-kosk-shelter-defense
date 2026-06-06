@@ -73,6 +73,12 @@
 | **R72** | Same-enemy hidden HP scaling confusion risk | LOW | HIGH | Disabled time-based HP multiplier scaling in Level 1. | ✔️ Mitigated |
 | **R73** | Enemy taxonomy clarity risk | LOW | MEDIUM | Assigned fixed HP roles to Junior (12), Medium (20), and Senior (30) enemies based on visual scale/sprites. | ✔️ Mitigated |
 | **R74** | Difficulty by composition balance risk | MEDIUM | HIGH | Scaled difficulty strictly via composition ratios (Junior/Medium/Senior) and active enemy count limits. | ✔️ Mitigated |
+| **R75** | Double Shot early power spike risk | MEDIUM | MEDIUM | Cap maximum projectile count upgrades to 1 step (+1 projectile, max 2 total) to prevent early game trivialization. | ✔️ Mitigated |
+| **R76** | Bullet spam/readability risk | LOW | MEDIUM | Fired simultaneous parallel shots with a tiny side-by-side offset to keep target logic, visuals, and hit feedback readable. | ✔️ Mitigated |
+| **R77** | First upgrade fun factor risk | LOW | HIGH | Replaced the low-impact Bullet Speed card with Double Shot in the Level 1 starter onboarding set to wow the user. | ✔️ Mitigated |
+| **R78** | Double shot spread readability risk | LOW | MEDIUM | Removed angular spread in favor of parallel offsets so both bullets hit the exact same target cleanly without scattering. | ✔️ Mitigated |
+| **R79** | Upgrade percentage clarity risk | LOW | MEDIUM | Updated card descriptions to show precise values (+%40 damage, %20 cooldown decrease, +1 projectile) for better player feedback. | ✔️ Mitigated |
+| **R80** | False clean git status reporting risk | LOW | HIGH | Commit all modified files and clean up build noise before final handoff, ensuring git status is 100% empty. | ✔️ Mitigated |
 
 ## Closed Risks
 

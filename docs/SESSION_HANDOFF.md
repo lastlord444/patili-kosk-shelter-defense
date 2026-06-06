@@ -7,12 +7,13 @@
 
 **Oturum Amacı:** Seviye 1 onboarding akışındaki kullanıcı geri bildirimlerini çözmek. İlk yükseltme (level up) seçimlerinin tabanca odaklı hissettirmesi, HUD butonlarının temizliği (çalışmayan tuşların gizlenmesi ve kopya görsellerin kaldırılması), canavar HP değerlerinin görsel tasarımlarıyla uyumlu ve sabit olması (taxonomy consistency) ve zorluğun HP şişirme yerine canavar kompozisyonuyla ayarlanması.
 
-**Tamamlanan Geliştirmelerin Özeti (ACIL FIX 4):**
-- [x] **Upgrade Card UX Fix:** Yükseltme kartları artık genel/generic ("Damage+", "Cooldown+", "Projectile Speed+") görünmek yerine ilk seviyede tamamen tabanca odaklıdır. Seviye 1'de ilk yükseltme ekranında sadece ve kesinlikle şu 3 kart sunulur:
-  - **Tabanca Hasari+** (*"Tabanca hasarini artirir."*) - Bullet/damage impact patlama efekti veren özel ikon.
-  - **Tabanca Atis Hizi+** (*"Tabanca daha hizli ates eder."*) - Cooldown/saat gösteren özel ikon.
-  - **Tabanca Mermi Hizi+** (*"Tabanca mermileri daha hizli gider."*) - Çizgili uçan mermi hareketi gösteren özel ikon.
-  - TMP/Font sorunlarını önlemek için Türkçe karakterler arındırılmıştır (Örn: Hasarı -> Hasari, Hızı -> Hizi).
+- [x] **First Upgrade Card Set Fix:** Yükseltme kartları artık genel/generic ("Damage+", "Cooldown+", "Projectile Speed+") görünmek yerine ilk seviyede tamamen tabanca odaklıdır. Seviye 1'de ilk yükseltme ekranında sadece ve kesinlikle şu 3 kart sunulur:
+  - **Tabanca Hasari+** (*"Tabanca hasari +%40."*) - Bullet/damage impact patlama efekti veren özel ikon.
+  - **Seri Atis+** (*"Tabanca %20 daha hizli ates eder."*) - Cooldown/saat gösteren özel ikon.
+  - **Cift Atis+** (*"Tabanca +1 mermi atar."*) - Aynı hedefe paralel giden iki küçük mermi ve iz çıkartan özel ikon.
+  - *Cift Atis+* artık spread/açı kullanmaz. Mermiler namludan (muzzle) çok küçük bir paralel offset ile çıkar ve aynı selected Monster hedefine parallel olarak gider.
+  - *Mermi Hizi* düşük onboarding etkisi nedeniyle ilk upgrade ekranından kaldırılmıştır.
+  - *Git Clean*: Final teslimatta git status --stop tamamen temiz (boş) olacak şekilde tüm dosyalar commit edilmiştir.
 - [x] **HUD Button Cleanup:** Sağdaki kullanılmayan veya pasif/gri duran butonlar tamamen gizlendi.
   - Sadece tek bir yetenek butonu (`Button [Right]`) görünmektedir ve bu buton `Level1SkillHUD` (Çoklu Atış / Multi Shot Burst) için çalışmaktadır.
   - `Button [Top]` ve `Button [Bottom]` butonları (hem birinci hem ikinci set) tamamen gizlenmiştir.

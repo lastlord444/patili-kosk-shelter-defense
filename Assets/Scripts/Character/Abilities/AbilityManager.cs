@@ -86,6 +86,10 @@ namespace Vampire
                     {
                         speedAbility.ConfigureUpgrades(new float[] { 0.25f, 0.25f, 0.25f, 0.25f, 0.25f });
                     }
+                    else if (ability is ProjectileCountUpgradeAbility countAbility)
+                    {
+                        countAbility.ConfigureUpgrades(new int[] { 1 });
+                    }
                     
                     ability.Init(abilityManager, entityManager, playerCharacter);
                     newAbilities.Add(ability);
@@ -145,33 +149,33 @@ namespace Vampire
             WeightedAbilities availableOwnedAbilities = ExtractAvailableAbilities(ownedAbilities);
             WeightedAbilities availableNewAbilities = ExtractAvailableAbilities(newAbilities);
 
-            // Guarantee first upgrade selection (first time on Level 1) is exactly Damage, Cooldown, and ProjectileSpeed upgrades of the pistol
+            // Guarantee first upgrade selection (first time on Level 1) is exactly Damage, Cooldown, and ProjectileCount upgrades of the pistol
             bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
             if (isLevel1 && !firstUpgradeOffered)
             {
                 firstUpgradeOffered = true;
                 Ability damageUpgrade = null;
                 Ability cooldownUpgrade = null;
-                Ability speedUpgrade = null;
+                Ability countUpgrade = null;
 
                 // Find in available lists
                 foreach (Ability ab in availableOwnedAbilities)
                 {
                     if (ab is DamageUpgradeAbility) damageUpgrade = ab;
                     else if (ab is CooldownUpgradeAbility) cooldownUpgrade = ab;
-                    else if (ab is ProjectileSpeedAbilityUpgrade) speedUpgrade = ab;
+                    else if (ab is ProjectileCountUpgradeAbility) countUpgrade = ab;
                 }
                 foreach (Ability ab in availableNewAbilities)
                 {
                     if (ab is DamageUpgradeAbility) damageUpgrade = ab;
                     else if (ab is CooldownUpgradeAbility) cooldownUpgrade = ab;
-                    else if (ab is ProjectileSpeedAbilityUpgrade) speedUpgrade = ab;
+                    else if (ab is ProjectileCountUpgradeAbility) countUpgrade = ab;
                 }
 
                 // If not found in available lists, find in master lists
                 if (damageUpgrade == null) damageUpgrade = ownedAbilities.FirstOrDefault(ab => ab is DamageUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is DamageUpgradeAbility);
                 if (cooldownUpgrade == null) cooldownUpgrade = ownedAbilities.FirstOrDefault(ab => ab is CooldownUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is CooldownUpgradeAbility);
-                if (speedUpgrade == null) speedUpgrade = ownedAbilities.FirstOrDefault(ab => ab is ProjectileSpeedAbilityUpgrade) ?? newAbilities.FirstOrDefault(ab => ab is ProjectileSpeedAbilityUpgrade);
+                if (countUpgrade == null) countUpgrade = ownedAbilities.FirstOrDefault(ab => ab is ProjectileCountUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is ProjectileCountUpgradeAbility);
 
                 // Add to selected list and remove from pools
                 if (damageUpgrade != null)
@@ -190,13 +194,13 @@ namespace Vampire
                     newAbilities.Remove(cooldownUpgrade);
                     selectedAbilities.Add(cooldownUpgrade);
                 }
-                if (speedUpgrade != null)
+                if (countUpgrade != null)
                 {
-                    availableOwnedAbilities.Remove(speedUpgrade);
-                    availableNewAbilities.Remove(speedUpgrade);
-                    ownedAbilities.Remove(speedUpgrade);
-                    newAbilities.Remove(speedUpgrade);
-                    selectedAbilities.Add(speedUpgrade);
+                    availableOwnedAbilities.Remove(countUpgrade);
+                    availableNewAbilities.Remove(countUpgrade);
+                    ownedAbilities.Remove(countUpgrade);
+                    newAbilities.Remove(countUpgrade);
+                    selectedAbilities.Add(countUpgrade);
                 }
 
                 // Return all remaining available abilities to their pools
@@ -260,35 +264,35 @@ namespace Vampire
                 }
             }
 
-            // Exclude ProjectileCountUpgradeAbility on first level-up (level <= 2)
-            Ability tempProjectileCountUpgrade = null;
+            // Exclude ProjectileSpeedAbilityUpgrade on first level-up (level <= 2)
+            Ability tempProjectileSpeedUpgrade = null;
             if (playerCharacter != null && playerCharacter.CurrentLevel <= 2)
             {
                 foreach (Ability ab in availableOwnedAbilities)
                 {
-                    if (ab is ProjectileCountUpgradeAbility)
+                    if (ab is ProjectileSpeedAbilityUpgrade)
                     {
-                        tempProjectileCountUpgrade = ab;
+                        tempProjectileSpeedUpgrade = ab;
                         break;
                     }
                 }
-                if (tempProjectileCountUpgrade != null)
+                if (tempProjectileSpeedUpgrade != null)
                 {
-                    availableOwnedAbilities.Remove(tempProjectileCountUpgrade);
+                    availableOwnedAbilities.Remove(tempProjectileSpeedUpgrade);
                 }
                 else
                 {
                     foreach (Ability ab in availableNewAbilities)
                     {
-                        if (ab is ProjectileCountUpgradeAbility)
+                        if (ab is ProjectileSpeedAbilityUpgrade)
                         {
-                            tempProjectileCountUpgrade = ab;
+                            tempProjectileSpeedUpgrade = ab;
                             break;
                         }
                     }
-                    if (tempProjectileCountUpgrade != null)
+                    if (tempProjectileSpeedUpgrade != null)
                     {
-                        availableNewAbilities.Remove(tempProjectileCountUpgrade);
+                        availableNewAbilities.Remove(tempProjectileSpeedUpgrade);
                     }
                 }
             }
@@ -316,13 +320,13 @@ namespace Vampire
                 selectedAbilities.Add(PullAbility(availableOwnedAbilities));
             }
 
-            // Return tempProjectileCountUpgrade back to the pool
-            if (tempProjectileCountUpgrade != null)
+            // Return tempProjectileSpeedUpgrade back to the pool
+            if (tempProjectileSpeedUpgrade != null)
             {
-                if (tempProjectileCountUpgrade.Owned)
-                    ownedAbilities.Add(tempProjectileCountUpgrade);
+                if (tempProjectileSpeedUpgrade.Owned)
+                    ownedAbilities.Add(tempProjectileSpeedUpgrade);
                 else
-                    newAbilities.Add(tempProjectileCountUpgrade);
+                    newAbilities.Add(tempProjectileSpeedUpgrade);
             }
 
             // Return any remaining available abilities that weren't selected back to the new abilities pool
