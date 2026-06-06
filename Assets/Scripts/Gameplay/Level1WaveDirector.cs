@@ -292,20 +292,30 @@ namespace Vampire
 
         private void TriggerMultiShotBurst()
         {
+            StartCoroutine(MultiShotBurstCoroutine());
+        }
+
+        private IEnumerator MultiShotBurstCoroutine()
+        {
             var player = FindFirstObjectByType<Character>();
-            if (player == null || entityManager == null) return;
+            if (player == null || entityManager == null) yield break;
             
             var pistol = player.GetComponentInChildren<PistolAbility>();
-            if (pistol == null) return;
+            if (pistol == null) yield break;
             
-            var type = typeof(ProjectileAbility);
-            var projIndexField = type.GetField("projectileIndex", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var damageField = type.GetField("damage", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var speedField = type.GetField("speed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var knockbackField = type.GetField("knockback", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var layerField = type.GetField("monsterLayer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var type = typeof(PistolAbility); // Use actual ability type to retrieve projectile details
+            var projIndexField = type.GetField("projectileIndex", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance) 
+                                 ?? typeof(ProjectileAbility).GetField("projectileIndex", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var damageField = type.GetField("damage", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                              ?? typeof(ProjectileAbility).GetField("damage", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var speedField = type.GetField("speed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                             ?? typeof(ProjectileAbility).GetField("speed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var knockbackField = type.GetField("knockback", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                                 ?? typeof(ProjectileAbility).GetField("knockback", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var layerField = type.GetField("monsterLayer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                             ?? typeof(ProjectileAbility).GetField("monsterLayer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-            if (projIndexField == null || damageField == null || speedField == null || knockbackField == null || layerField == null) return;
+            if (projIndexField == null || damageField == null || speedField == null || knockbackField == null || layerField == null) yield break;
 
             int projIndex = (int)projIndexField.GetValue(pistol);
             float dmg = ((UpgradeableDamage)damageField.GetValue(pistol)).Value * 0.8f;
@@ -313,45 +323,57 @@ namespace Vampire
             float kb = ((UpgradeableKnockback)knockbackField.GetValue(pistol)).Value;
             LayerMask mask = (LayerMask)layerField.GetValue(pistol);
 
-            Vector3 spawnPos = player.CenterTransform.position;
-            var nearby = entityManager.Grid.FindNearbyInRadius(spawnPos, 10f);
-            List<Monster> targets = new List<Monster>();
-            if (nearby != null)
-            {
-                foreach (var client in nearby)
-                {
-                    if (client is Monster monster && monster.HP > 0)
-                    {
-                        targets.Add(monster);
-                    }
-                }
-            }
-            
-            targets.Sort((a, b) => Vector2.Distance(a.Position, spawnPos).CompareTo(Vector2.Distance(b.Position, spawnPos)));
-            
-            int shotsCount = 8;
-            int targetIndex = 0;
-            
+            int shotsCount = 30;
+            float delayBetweenShots = 0.05f;
+
             for (int i = 0; i < shotsCount; i++)
             {
-                Vector2 dir;
-                if (targetIndex < targets.Count)
+                if (player == null) yield break;
+                Vector3 spawnPos = player.CenterTransform.position;
+
+                // Find closest living monster in range
+                Monster target = null;
+                float closestDist = float.MaxValue;
+                var nearby = entityManager.Grid.FindNearbyInRadius(spawnPos, 12f);
+                if (nearby != null)
                 {
-                    dir = ((Vector2)targets[targetIndex].CenterTransform.position - (Vector2)spawnPos).normalized;
-                    targetIndex++;
+                    foreach (var client in nearby)
+                    {
+                        if (client is Monster monster && monster.HP > 0)
+                        {
+                            float dist = Vector2.Distance(monster.CenterTransform.position, spawnPos);
+                            if (dist < closestDist)
+                            {
+                                closestDist = dist;
+                                target = monster;
+                            }
+                        }
+                    }
+                }
+
+                Vector2 dir;
+                if (target != null)
+                {
+                    dir = ((Vector2)target.CenterTransform.position - (Vector2)spawnPos).normalized;
                 }
                 else
                 {
-                    float angle = i * (360f / shotsCount);
+                    // No targets, fire in a rotating spiral
+                    float angle = (i * 12f) % 360f;
                     dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
                 }
-                
+
+                // Add slight spread/chaos offset
+                dir = (dir + new Vector2(UnityEngine.Random.Range(-0.08f, 0.08f), UnityEngine.Random.Range(-0.08f, 0.08f))).normalized;
+
                 Projectile projectile = entityManager.SpawnProjectile(projIndex, spawnPos, dmg, kb, spd, mask);
                 if (projectile != null)
                 {
                     projectile.OnHitDamageable.AddListener(player.OnDealDamage.Invoke);
                     projectile.Launch(dir);
                 }
+
+                yield return new WaitForSeconds(delayBetweenShots);
             }
         }
 
