@@ -76,7 +76,7 @@ namespace Vampire
                         // Hide any sub graphics (like Health, Bomb, Magnet icons) under the active button
                         foreach (Transform sub in child)
                         {
-                            if (sub.name != "CooldownOverlay")
+                            if (sub.name != "CooldownOverlay" && sub.name != "CooldownText")
                             {
                                 sub.gameObject.SetActive(false);
                             }
@@ -458,6 +458,21 @@ namespace Vampire
             else
             {
                 cooldownText = textTransform.GetComponent<TMPro.TextMeshProUGUI>();
+            }
+
+            // Ensure overlay image is active and does not block clicks
+            if (cooldownImage != null)
+            {
+                cooldownImage.raycastTarget = false;
+                cooldownImage.gameObject.SetActive(true);
+            }
+
+            // Ensure cooldown text is active, does not block clicks, and is brought to front
+            if (cooldownText != null)
+            {
+                cooldownText.raycastTarget = false;
+                cooldownText.gameObject.SetActive(true);
+                cooldownText.transform.SetAsLastSibling(); // Make sure text renders on top of overlay/button
             }
 
             UpdateVisuals();
