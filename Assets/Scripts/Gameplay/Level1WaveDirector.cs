@@ -300,7 +300,7 @@ namespace Vampire
             var player = FindFirstObjectByType<Character>();
             if (player == null || entityManager == null) yield break;
             
-            var pistol = player.GetComponentInChildren<PistolAbility>();
+            var pistol = FindFirstObjectByType<PistolAbility>();
             if (pistol == null) yield break;
             
             var type = typeof(PistolAbility); // Use actual ability type to retrieve projectile details
