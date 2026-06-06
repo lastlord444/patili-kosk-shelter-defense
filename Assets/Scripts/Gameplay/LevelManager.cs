@@ -45,12 +45,16 @@ namespace Vampire
                 shelter.OnDeath.AddListener(GameOver);
             }
             // Spawn initial gems (Bypassed for Level 1 to prevent instant level up at 00:00)
-            if (SceneManager.GetActiveScene().name != "Level 1" && SceneManager.GetActiveScene().buildIndex != 1)
+            bool isLevel1 = SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().buildIndex == 1;
+            if (!isLevel1)
             {
                 entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
             }
-            // Spawn a singular chest
-            entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+            // Spawn a singular chest (Bypassed for Level 1 to focus on shelter defense onboarding)
+            if (!isLevel1)
+            {
+                entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+            }
             // Initialize the infinite background
             infiniteBackground.Init(this.levelBlueprint.backgroundTexture, playerCharacter.transform);
             // Initialize inventory
@@ -82,6 +86,7 @@ namespace Vampire
         // Update is called once per frame
         void Update()
         {
+            bool isLevel1 = SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().buildIndex == 1;
             // Time
             levelTime += Time.deltaTime;
             gameTimer.SetTime(levelTime);
@@ -122,15 +127,18 @@ namespace Vampire
                 Monster finalBoss = entityManager.SpawnMonsterRandomPosition(levelBlueprint.monsters.Length, levelBlueprint.finalBoss.bossBlueprint);
                 finalBoss.OnKilled.AddListener(LevelPassed);
             }
-            // Chest spawning timer
-            timeSinceLastChestSpawned += Time.deltaTime;
-            if (timeSinceLastChestSpawned >= levelBlueprint.chestSpawnDelay)
+            // Chest spawning timer (Bypassed for Level 1 to focus on shelter defense)
+            if (!isLevel1)
             {
-                for (int i = 0; i < levelBlueprint.chestSpawnAmount; i++)
+                timeSinceLastChestSpawned += Time.deltaTime;
+                if (timeSinceLastChestSpawned >= levelBlueprint.chestSpawnDelay)
                 {
-                    entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+                    for (int i = 0; i < levelBlueprint.chestSpawnAmount; i++)
+                    {
+                        entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+                    }
+                    timeSinceLastChestSpawned = Mathf.Repeat(timeSinceLastChestSpawned, levelBlueprint.chestSpawnDelay);
                 }
-                timeSinceLastChestSpawned = Mathf.Repeat(timeSinceLastChestSpawned, levelBlueprint.chestSpawnDelay);
             }
         }
 

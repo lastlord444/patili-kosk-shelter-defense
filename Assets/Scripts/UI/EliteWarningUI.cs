@@ -8,6 +8,7 @@ namespace Vampire
     public class EliteWarningUI : MonoBehaviour
     {
         private CanvasGroup canvasGroup;
+        private GameObject spawnedArrow = null;
 
         public static void CreateProcedural(string messageText, float duration)
         {
@@ -76,6 +77,33 @@ namespace Vampire
             tmpText.color = new Color(1f, 0.85f, 0.85f, 1f); // light pinkish white
             tmpText.fontStyle = FontStyles.Bold;
 
+            // If message contains direction "SAG" or "RIGHT", spawn arrow at right side of the screen
+            if (messageText.Contains("SAG") || messageText.Contains("RIGHT"))
+            {
+                Canvas canvas = FindFirstObjectByType<Canvas>();
+                if (canvas != null)
+                {
+                    spawnedArrow = new GameObject("DirectionArrow");
+                    spawnedArrow.transform.SetParent(canvas.transform, false);
+                    RectTransform arrowRect = spawnedArrow.AddComponent<RectTransform>();
+                    arrowRect.anchorMin = new Vector2(0.9f, 0.5f);
+                    arrowRect.anchorMax = new Vector2(0.9f, 0.5f);
+                    arrowRect.pivot = new Vector2(0.5f, 0.5f);
+                    arrowRect.anchoredPosition = Vector2.zero;
+                    arrowRect.sizeDelta = new Vector2(100f, 100f);
+
+                    TextMeshProUGUI arrowText = spawnedArrow.AddComponent<TextMeshProUGUI>();
+                    arrowText.text = "\u2794"; // ➔
+                    arrowText.fontSize = 72;
+                    arrowText.alignment = TextAlignmentOptions.Center;
+                    arrowText.color = new Color(0.95f, 0.75f, 0.1f, 1f); // Warning Gold Yellow
+                    arrowText.fontStyle = FontStyles.Bold;
+
+                    var cg = spawnedArrow.AddComponent<CanvasGroup>();
+                    cg.alpha = 0f;
+                }
+            }
+
             // Add CanvasGroup for fading
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
             canvasGroup.alpha = 0f;
@@ -86,30 +114,50 @@ namespace Vampire
 
         private IEnumerator FadeSequence(float duration)
         {
+            CanvasGroup arrowCg = spawnedArrow != null ? spawnedArrow.GetComponent<CanvasGroup>() : null;
+
             // Fade in (0.4s)
             float t = 0f;
             while (t < 0.4f)
             {
                 t += Time.unscaledDeltaTime;
-                canvasGroup.alpha = Mathf.Clamp01(t / 0.4f);
+                float alpha = Mathf.Clamp01(t / 0.4f);
+                canvasGroup.alpha = alpha;
+                if (arrowCg != null) arrowCg.alpha = alpha;
                 yield return null;
             }
             canvasGroup.alpha = 1f;
+            if (arrowCg != null) arrowCg.alpha = 1f;
 
-            // Wait (duration minus fade times)
-            yield return new WaitForSecondsRealtime(Mathf.Max(0.1f, duration - 0.8f));
+            // Wait and Flash (duration minus fade times)
+            float waitDuration = Mathf.Max(0.1f, duration - 0.8f);
+            float elapsed = 0f;
+            while (elapsed < waitDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                if (arrowCg != null)
+                {
+                    // Flash effect between 0.4 and 1.0 alpha
+                    arrowCg.alpha = 0.4f + Mathf.PingPong(elapsed * 4f, 0.6f);
+                }
+                yield return null;
+            }
 
             // Fade out (0.4s)
             t = 0f;
             while (t < 0.4f)
             {
                 t += Time.unscaledDeltaTime;
-                canvasGroup.alpha = Mathf.Clamp01(1f - (t / 0.4f));
+                float alpha = Mathf.Clamp01(1f - (t / 0.4f));
+                canvasGroup.alpha = alpha;
+                if (arrowCg != null) arrowCg.alpha = alpha;
                 yield return null;
             }
             canvasGroup.alpha = 0f;
+            if (arrowCg != null) arrowCg.alpha = 0f;
 
             // Clean up
+            if (spawnedArrow != null) Destroy(spawnedArrow);
             Destroy(gameObject);
         }
     }

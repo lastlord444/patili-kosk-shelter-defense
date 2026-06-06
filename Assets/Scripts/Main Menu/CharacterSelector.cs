@@ -19,11 +19,22 @@ namespace Vampire
             {
                 characterCards[i] = Instantiate(characterCardPrefab, this.transform).GetComponent<CharacterCard>();
                 characterCards[i].Init(this, characterBlueprints[i], coinDisplay);
+
+                // Test Character 1 (index 1) hidden until identity pass
+                // Test Character 2 (index 2) retained as locked/future test character
+                // Full naming/art cleanup later PR.
+                if (i == 1)
+                {
+                    characterCards[i].gameObject.SetActive(false);
+                }
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
             for (int i = 0; i < characterBlueprints.Length; i++)
             {
-                characterCards[i].UpdateLayout();
+                if (characterCards[i].gameObject.activeSelf)
+                {
+                    characterCards[i].UpdateLayout();
+                }
             }
         }
         

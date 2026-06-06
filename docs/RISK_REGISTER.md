@@ -58,6 +58,21 @@
 | **R57** | Sonsuz Bölüm Belirsizliği Riski (Endless level clarity risk) | MEDIUM | MEDIUM | Bölümün bitiş süresinin belirsizliği. *Çözüm:* Seviye 1 için 120 saniyelik net win condition (LevelPassed) eklendi. | ✔️ Mitigated |
 | **R58** | Nitelik Yansıtma/Kayıt Hatası (Reflection value binding risk) | HIGH | HIGH | C# GetFields yansıtma yönteminin base sınıflardaki (örn. ProjectileAbility) protected alanları bulamaması nedeniyle yükseltmelerin tabancaya etki etmemesi riski. *Çözüm:* Init metodu base type hiyerarşisini tarayacak şekilde güncellendi. | ✔️ Mitigated |
 | **R59** | Uzaktan Fırlatan Düşman Riski (Level 1 projectile risk) | HIGH | HIGH | Seviye 1'de uzaktan projectile/nesne fırlatan canavarların haksız ölümlere yol açması. *Çözüm:* Ranged, Throwing, Boomerang düşmanları tamamen yasaklandı. | ✔️ Mitigated |
+| **R60** | Level 1 layout readability risk | MEDIUM | HIGH | Programmatically enforce lower-left Shelter, player starting near shelter, and right-only enemy spawns at start. | ✔️ Mitigated |
+| **R61** | Fake/inactive ability button risk | LOW | HIGH | Hide other action buttons in Level 1 and display a real, 8s radial cooldown Multi Shot Burst skill on the right button. | ✔️ Mitigated |
+| **R62** | Enemy HP curve jump risk | MEDIUM | HIGH | Implement a soft onboarding HP curve (12-15 HP, then 18-22 HP, then 24-30 HP) and clamp maximum active enemies to prevent sudden spikes. | ✔️ Mitigated |
+| **R63** | Victory UI mismatch risk | LOW | HIGH | Rename Try Again button to Continue on win, hide paid continue option, and route click event to return to Main Menu. | ✔️ Mitigated |
+| **R64** | Chest/box objective confusion risk | LOW | MEDIUM | Completely disable chest/box spawning in Level 1 so players focus entirely on shelter defense. | ✔️ Mitigated |
+| **R65** | Shelter defense target clarity risk | MEDIUM | HIGH | Split enemy targeting so 70% target the shelter directly and 30% target the player to build shelter defense onboarding feel. | ✔️ Mitigated |
+| **R66** | Pistol icon asset/license risk | LOW | MEDIUM | Created 100% self-authored procedural 32x32 sprite in editor script to avoid copyright/AI provenance issues. | ✔️ Mitigated |
+| **R67** | Manual skill overload risk | LOW | LOW | Maintained automatic 8-second multi-shot skill triggers, making manual click option optional and low-risk. | ✔️ Mitigated |
+| **R68** | Blueprint HP scaling difficulty regression risk | LOW | HIGH | Rejected direct blueprint HP multiplier scaling; implemented strict tutorial HP bands with minor visual-type scaling instead. | ✔️ Mitigated |
+| **R69** | Character Select placeholder identity risk | MEDIUM | MEDIUM | Deactivated the middle Test Character 1 card at runtime and added clear code documentation for future redesign passes. | ✔️ Mitigated |
+| **R70** | Generic upgrade label readability risk | LOW | MEDIUM | Overrode upgrade card text dynamically to Turkish no-accented pistol titles in Level 1. | ✔️ Mitigated |
+| **R71** | Inactive HUD button confusion risk | LOW | HIGH | Deactivated unused action buttons and hidden sub-graphics under the active button on start/update. | ✔️ Mitigated |
+| **R72** | Same-enemy hidden HP scaling confusion risk | LOW | HIGH | Disabled time-based HP multiplier scaling in Level 1. | ✔️ Mitigated |
+| **R73** | Enemy taxonomy clarity risk | LOW | MEDIUM | Assigned fixed HP roles to Junior (12), Medium (20), and Senior (30) enemies based on visual scale/sprites. | ✔️ Mitigated |
+| **R74** | Difficulty by composition balance risk | MEDIUM | HIGH | Scaled difficulty strictly via composition ratios (Junior/Medium/Senior) and active enemy count limits. | ✔️ Mitigated |
 
 ## Closed Risks
 

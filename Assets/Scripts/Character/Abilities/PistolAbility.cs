@@ -137,8 +137,6 @@ namespace Vampire
 
         protected override void Update()
         {
-            base.Update();
-
             if (pistolVisual == null)
             {
                 CreateProceduralVisual();
@@ -170,6 +168,22 @@ namespace Vampire
             float normTheta = Mathf.Repeat(theta + 180f, 360f) - 180f;
             float targetYScale = (Mathf.Abs(normTheta) > 90f) ? -initialGunScale.y : initialGunScale.y;
             pistolVisual.transform.localScale = new Vector3(initialGunScale.x, targetYScale, initialGunScale.z);
+
+            // Cooldown handling - ONLY attack if closestMonster is not null!
+            timeSinceLastAttack += Time.deltaTime;
+            if (timeSinceLastAttack >= cooldown.Value)
+            {
+                if (closestMonster != null)
+                {
+                    timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, cooldown.Value);
+                    Attack();
+                }
+                else
+                {
+                    // Keep cooldown primed so it fires immediately when a target appears
+                    timeSinceLastAttack = cooldown.Value;
+                }
+            }
         }
 
         protected override void LaunchProjectile()

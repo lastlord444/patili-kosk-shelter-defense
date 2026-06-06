@@ -37,11 +37,16 @@ namespace Vampire
         public int QueryID { get; set; } = -1;
         protected bool isElite = false;
         public bool IsElite { get => isElite; set => isElite = value; }
+        protected bool targetPlayerDirectly = false;
 
         public Transform TargetTransform
         {
             get
             {
+                if (targetPlayerDirectly && playerCharacter != null)
+                {
+                    return playerCharacter.transform;
+                }
                 if (entityManager != null && entityManager.Shelter != null && !entityManager.Shelter.IsDestroyed)
                 {
                     return entityManager.Shelter.transform;
@@ -83,6 +88,17 @@ namespace Vampire
             }
             isElite = false;
 
+            // Determine target type for Level 1 (70% shelter, 30% player)
+            bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
+            if (isLevel1)
+            {
+                targetPlayerDirectly = (UnityEngine.Random.value < 0.3f);
+            }
+            else
+            {
+                targetPlayerDirectly = false;
+            }
+
             // Reset health to max (negative hpBuff indicates absolute override)
             if (hpBuff < 0)
             {
@@ -116,7 +132,6 @@ namespace Vampire
             centerTransform.position = transform.position + (Vector3)monsterHitbox.offset;
 
             // Set the drag based on acceleration and movespeed
-            bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
             float spd = Random.Range(monsterBlueprint.movespeed-0.1f, monsterBlueprint.movespeed+0.1f);
             if (isLevel1)
             {

@@ -1,35 +1,47 @@
 # SESSION_HANDOFF.md
 
-> Son Güncelleme: 2026-06-05
-> Durum: Seviye 1 Balance Rescue & Tabanca Yükseltme Havuzu Hataları Düzeltildi (Merge-Ready)
+> Son Güncelleme: 2026-06-06
+> Durum: ACIL FIX 4 - Upgrade UX + Enemy Taxonomy Consistency + HUD Button Cleanup Tamamlandı (Merge-Ready)
 
 ## Oturum Özeti
 
-**Oturum Amacı:** Seviye 1'i tamamen öğretici bir onboarding aşamasına dönüştürmek, düşmanların haksız hasarlarını ve uzaktan fırlatma yeteneklerini engellemek, tabancanın ilk seviye yükseltme havuzunu %100 tabanca odaklı hale getirmek, C# Yansıtma (Reflection) hatasını çözerek tabanca yükseltmelerinin gerçekten tabancaya uygulanmasını sağlamak ve Android smoke build'i başarıyla üreterek PR'ı merge-ready duruma getirmek.
+**Oturum Amacı:** Seviye 1 onboarding akışındaki kullanıcı geri bildirimlerini çözmek. İlk yükseltme (level up) seçimlerinin tabanca odaklı hissettirmesi, HUD butonlarının temizliği (çalışmayan tuşların gizlenmesi ve kopya görsellerin kaldırılması), canavar HP değerlerinin görsel tasarımlarıyla uyumlu ve sabit olması (taxonomy consistency) ve zorluğun HP şişirme yerine canavar kompozisyonuyla ayarlanması.
 
-**Tamamlanan Geliştirmelerin Özeti (ACIL FIX 2):**
-- [x] **Level 1 Ranged Enemy Ban:** Seviye 1'de uzaktan bir şey fırlatan tüm düşmanlar engellendi. `RangedMonsterBlueprint`, `ThrowingMonsterBlueprint`, `BoomerangMonsterBlueprint` ve `BossMonsterBlueprint` sınıflarından türeyen tüm canavarların doğumu `Level1WaveDirector` içinde yasaklandı. Artık ilk 120 saniyede uzaktan projectile fırlatan düşman bulunmamaktadır.
-- [x] **Single-Direction Tutorial Waves:** Oyuncunun panik olmasını engellemek için düşmanlar tek yönden ve okunur dalgalar halinde geliyor:
-  - 0–45s: Sadece sağdan zayıf melee düşmanlar (Banner: `"DUSMAN SAGDAN GELIYOR"`)
-  - 45–90s: Sadece soldan zayıf melee düşmanlar (Banner: `"DUSMAN SOLDAN GELIYOR"`)
-  - 90–120s: Sağdan küçük son dalga (Banner: `"SON DALGA SAGDAN GELIYOR"`)
-- [x] **Early Enemy HP Override & Nerf:** Monster blueprint'in base HP'si üzerine ekleme yapan `hpBuff` mantığı düzeltildi. `Monster.Setup` metodu negatif `hpBuff` değerini mutlak HP değeri olarak kabul edecek şekilde güncellendi. `Level1WaveDirector` bu sayede HP'yi ilk 60 saniyede tam 10 HP'ye (tabanca ile 1 vuruşta ölüm), 60-120 saniyede ise tam 15 HP'ye (2 vuruşta ölüm) eşitledi. Ekranda aynı anda aktif olabilecek maksimum canavar sayıları 2 ila 5 arasında sınırlandırıldı.
-- [x] **Düşman Hasar & Cooldown Nerfi:** Level 1 melee düşmanlarının oyuncuya temas hasarı %90 azaltıldı. Shelter'a verdikleri hasar %70 azaltıldı (böylece barınak hızlıca yıkılmıyor). Temas hasarı verme sıklığı (attack tick speed) ise 2.5 kat yavaşlatıldı.
-- [x] **Pistol Starter Buff & Yansıtma (Reflection) Hatası Düzeltisi:** 
-  - Pistol başlangıç değerleri optimize edildi: Hasar = 12f, Bekleme Süresi = 0.7s, Mermi Hızı = 13f.
-  - C# `GetFields` metodu base sınıflardaki (örn. `ProjectileAbility`, `GunAbility`) private/protected alanları subclass (`PistolAbility`) üzerinden okuyamadığı için tabanca nitelikleri (`damage`, `speed`, `cooldown`) asla register olmuyor ve geliştirmeler tabancaya etki etmiyordu. `Ability.cs:Init()` fonksiyonu tüm kalıtım ağacını (`BaseType` boyunca) yukarı doğru tarayarak bu alanları bulacak şekilde güncellendi.
-- [x] **First Upgrade Full Pistol Only:** Seviye 1'deki ilk seviye atlama upgrade ekranı tamamen tabancaya ayrıldı. `AbilityManager` içindeki `firstUpgradeOffered` boolean durum kontrolü sayesinde ilk upgrade ekranında sadece `"Tabanca Hasari+"`, `"Tabanca Atis Hizi+"` ve `"Tabanca Mermi Hizi+"` seçenekleri çıkmakta; Grenade, Knockback gibi diğer yetenekler tamamen engellenmektedir.
-- [x] **Elite ve Warning Engeli:** Level 1'de Elit düşman doğumu tamamen kapatıldı ve elite warning devre dışı bırakıldı. Elit canavarlar sonraki bölümlere/docs'a not edildi.
-- [x] **Victory Win Condition:** Oyuncu 120 saniye hayatta kalırsa spawn durur, ekrana `"BARINAK KORUNDU - SEVIYE TAMAMLANDI!"` uyarısı gelir ve seviye tamamlama arayüzü tetiklenir.
-- [x] **Android Build Başarılı:** `SmokeTest/BuildAndroid` menü komutu ile Android smoke build'i temizlendi. APK üretimi başarıyla **Succeeded** olarak tamamlandı. APK boyutu: ~60.8 MB.
+**Tamamlanan Geliştirmelerin Özeti (ACIL FIX 4):**
+- [x] **Upgrade Card UX Fix:** Yükseltme kartları artık genel/generic ("Damage+", "Cooldown+", "Projectile Speed+") görünmek yerine ilk seviyede tamamen tabanca odaklıdır. Seviye 1'de ilk yükseltme ekranında sadece ve kesinlikle şu 3 kart sunulur:
+  - **Tabanca Hasari+** (*"Tabanca hasarini artirir."*) - Bullet/damage impact patlama efekti veren özel ikon.
+  - **Tabanca Atis Hizi+** (*"Tabanca daha hizli ates eder."*) - Cooldown/saat gösteren özel ikon.
+  - **Tabanca Mermi Hizi+** (*"Tabanca mermileri daha hizli gider."*) - Çizgili uçan mermi hareketi gösteren özel ikon.
+  - TMP/Font sorunlarını önlemek için Türkçe karakterler arındırılmıştır (Örn: Hasarı -> Hasari, Hızı -> Hizi).
+- [x] **HUD Button Cleanup:** Sağdaki kullanılmayan veya pasif/gri duran butonlar tamamen gizlendi.
+  - Sadece tek bir yetenek butonu (`Button [Right]`) görünmektedir ve bu buton `Level1SkillHUD` (Çoklu Atış / Multi Shot Burst) için çalışmaktadır.
+  - `Button [Top]` ve `Button [Bottom]` butonları (hem birinci hem ikinci set) tamamen gizlenmiştir.
+  - Aktif butonun altındaki `"Health"` (kalp simgesi) gibi çalışmayan kopya veya pasif görseller deaktif edilerek görsel çakışma (HUD visual clash) engellendi. Artık sadece dairesel cooldown göstergeli siyah/kırmızı hedef ikonu görünmektedir.
+  - Joystick ve yükseltme (Upgrade) ekranları sorunsuz çalışmaya devam etmektedir.
+  - Çoklu atış yeteneği otomatik 8 saniyede bir tetiklenmeye devam ederken, hedefleri sadece `Monster` sınıfı nesnelerle kısıtlandı (Coin, XP, Shelter veya Player hedeflenmez).
+  - Butonların başka kodlarca yanlışlıkla tekrar aktif edilmesini önlemek amacıyla, `Level1WaveDirector` her 30 karede bir HUD durumunu kontrol ederek deaktifliği zorunlu kılar.
+- [x] **Enemy Taxonomy Consistency:** Canavarların HP değerleri görsel tasarımlarıyla uyumlu ve tüm bölüm boyunca sabit kalacak şekilde ayarlandı. Aynı canavar tipinin zaman ilerledikçe süngerleşmesi engellendi:
+  - **Turuncu Yengec (Junior):** Sabit 12 HP (Normal Tabanca ile 1 vuruş).
+  - **Yesil Uzayli (Medium):** Sabit 20 HP (Normal Tabanca ile 2 vuruş).
+  - **Buyuk Canavar (Senior):** Sabit 30 HP (Normal Tabanca ile 3 vuruş).
+- [x] **Difficulty by Composition:** Zorluk artışı canavar canlarını gizlice artırarak değil, zamana bağlı canavar kompozisyonuyla sağlandı:
+  - **0–30s:** 100% Junior canavar. Aynı anda en fazla 2 canavar aktif.
+  - **30–75s:** 70% Junior, 30% Medium canavar. Aynı anda en fazla 3 canavar aktif.
+  - **75–120s:** 50% Junior, 35% Medium, 15% Senior canavar. Aynı anda en fazla 5 canavar aktif.
+  - Bölümde Ranged, Throwing, Boomerang düşmanları, Eliteler veya Boss'lar doğmamaktadır. Tek rota (sağdan spawn) korunmuştur.
+- [x] **Pistol Balance:** Başlangıç tabanca damage değeri 12, cooldown süresi 0.7s ve mermi hızı 13f olarak ayarlanarak canavar HP taksonomisiyle dengelendi. Geliştirme seçildiğinde fark bariz olarak hissedilmektedir.
+- [x] **Android Smoke Build Success:** `SmokeTest/BuildAndroid` menü göreviyle Android APK'sı sorunsuz derlendi.
+  - APK Konumu: `Build/android_smoke.apk`
+  - APK Boyutu: ~60.9 MB (60,908,015 bytes)
+  - Derleme Durumu: Succeeded (Derleme başarılı bitti ve Unity Editor açık kalmaya devam etti).
+  - Otomatik testler (EditMode & PlayMode) başarıyla tamamlandı.
 
 ---
 
 ## Sonraki Adımlar ve Riskler (Next Steps & Risks)
 
-- **Görsel Kalite İyileştirmeleri (Turret/Support Point Visuals later):** Destek kuleleri ve taretlerin görselleri programmer-art seviyesindedir. Bir sonraki aşamada bunların görsel kalitesi iyileştirilmeli ve kule savunması tür kayması riski (Tower-defense pivot risk) yönetilmelidir.
-- **Turret / Support Point Durumu:** Support point/turret bu PR'da yapılmamıştır. Sonraki PR adayı: "Fixed Support Point + Turret Visual Readability v1". Eski turret görselleri programmer-art riski taşımaktadır ve turret mekanikleri ana shooter oynanışını (shooter gameplay) gölgelemeyecek şekilde yardımcı seviyede tutulmalıdır. Destek noktalarının kullanıcı dostu ve anlaşılır olması (UX clarity) kritik hedeftir.
-- **Character Select Identity:** Karakter seçimi ekranındaki Blue/Test/Test gibi placeholder isimler ve identity eksiklikleri sonraki UI PR'ında giderilecektir.
+- **UI Resolution Adapters:** Farklı mobil ekran oranlarında joystick ve butonların Safe Area hizalamalarının kontrolü.
+- **Weapon Variety Integration:** Seviye 1 sonrasında diğer silah tiplerinin (Machine Gun, Bazooka vb.) ve genel yeteneklerin yükseltme havuzuna sorunsuz dahil edilmesi.
 
 ---
 
@@ -40,7 +52,5 @@
 | Repo | lastlord444/patili-kosk-shelter-defense |
 | Varsayılan Branch | main |
 | Mevcut Branch | feature/wave-pistol-upgrade-v1 |
-| Kod Değişiklikleri | `Ability.cs`, `AbilityManager.cs`, `PistolAbility.cs`, `MeleeMonster.cs`, `Monster.cs`, `Level1WaveDirector.cs`, `Character.cs`, `FloatUpgradeAbility.cs` |
-| Dokümanlar | `docs/SESSION_HANDOFF.md`, `docs/RISK_REGISTER.md`, `docs/LICENSE_AUDIT.md`, `docs/CONVERSION_PLAN.md` |
-| Workspace Durumu | Çalışma alanı temiz, Android derlemesi (Build Succeeded) ve test doğrulamaları başarılı. |
-
+| Değişen Dosyalar | `Assets/Scripts/Gameplay/Level1WaveDirector.cs`, `Assets/Scripts/Gameplay/AbilityCard.cs`, `Assets/Scripts/Character/Abilities/AbilityManager.cs`, `Assets/Scripts/Character/Abilities/PistolAbility.cs` |
+| Derleme Durumu | Android derlemesi (`Build/android_smoke.apk`) ve Unity Editör testleri başarıyla doğrulandı. |

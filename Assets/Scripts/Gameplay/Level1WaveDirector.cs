@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Vampire
 {
@@ -28,6 +29,97 @@ namespace Vampire
             shownWave2 = false;
             shownWave3 = false;
             Debug.Log("[Level1WaveDirector] Initialized for Level 1 single-lane tutorial onboarding.");
+
+            // Set Player and Shelter start positions for Level 1 layout contract
+            var player = FindFirstObjectByType<Character>();
+            if (player != null)
+            {
+                player.transform.position = new Vector3(-2f, -1.2f, 0f);
+                var playerRb = player.GetComponent<Rigidbody2D>();
+                if (playerRb != null) playerRb.position = new Vector2(-2f, -1.2f);
+            }
+            
+            var shelter = FindFirstObjectByType<PatiliKosk.Shelter>();
+            if (shelter != null)
+            {
+                shelter.transform.position = new Vector3(-5f, -3f, 0f);
+            }
+
+            SetupHUD();
+        }
+
+        void Start()
+        {
+            SetupHUD();
+        }
+
+        private void SetupHUD()
+        {
+            var invButtons = GameObject.Find("Inventory Buttons");
+            if (invButtons != null)
+            {
+                bool rightButtonActivated = false;
+                foreach (Transform child in invButtons.transform)
+                {
+                    if (child.name == "Button [Right]" && !rightButtonActivated)
+                    {
+                        child.gameObject.SetActive(true);
+                        rightButtonActivated = true;
+                        
+                        // Disable the InventorySlot component to prevent HUD visual clash in Level 1
+                        var slot = child.gameObject.GetComponent<InventorySlot>();
+                        if (slot != null)
+                        {
+                            slot.enabled = false;
+                        }
+
+                        // Hide any sub graphics (like Health, Bomb, Magnet icons) under the active button
+                        foreach (Transform sub in child)
+                        {
+                            if (sub.name != "CooldownOverlay")
+                            {
+                                sub.gameObject.SetActive(false);
+                            }
+                        }
+
+                        var hud = child.gameObject.GetComponent<Level1SkillHUD>();
+                        if (hud == null)
+                        {
+                            hud = child.gameObject.AddComponent<Level1SkillHUD>();
+                        }
+                        hud.Init(8f, 6f, TriggerMultiShotBurst); // cooldown: 8s, initial timer: 6s (so triggers at 2s)
+                    }
+                    else
+                    {
+                        // Hide all other duplicate or inactive buttons (Top, Bottom, Left, etc.)
+                        child.gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+
+        private void EnforceHUDDeactivation()
+        {
+            var invButtons = GameObject.Find("Inventory Buttons");
+            if (invButtons != null)
+            {
+                bool rightButtonActivated = false;
+                foreach (Transform child in invButtons.transform)
+                {
+                    if (child.name == "Button [Right]" && !rightButtonActivated)
+                    {
+                        child.gameObject.SetActive(true);
+                        rightButtonActivated = true;
+                    }
+                    else
+                    {
+                        if (child.gameObject.activeSelf)
+                        {
+                            child.gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
         }
 
         public bool IsActive(float levelTime)
@@ -42,6 +134,12 @@ namespace Vampire
 
             waveTimer += Time.deltaTime;
             
+            // Enforce HUD buttons deactivation periodically to prevent any external reactivation
+            if (Time.frameCount % 30 == 0)
+            {
+                EnforceHUDDeactivation();
+            }
+
             // Victory win condition at 120 seconds
             if (waveTimer >= 120f)
             {
@@ -63,37 +161,30 @@ namespace Vampire
                 float currentPeriod = waveTimer;
                 int activeCount = (entityManager.LivingMonsters != null) ? entityManager.LivingMonsters.Count : 0;
                 
-                // Active enemy limits on screen at once to prevent player or shelter overwhelm
-                int maxAllowed = 99;
-                if (currentPeriod < 10f) maxAllowed = 2;       // 0-10s: max 2
-                else if (currentPeriod < 30f) maxAllowed = 3;  // 10-30s: max 3
-                else if (currentPeriod < 45f) maxAllowed = 4;  // 30-45s: max 4
-                else if (currentPeriod < 60f) maxAllowed = 4;  // 45-60s: max 4
-                else maxAllowed = 5;                          // 60-120s: max 5
+                int maxAllowed = 2;
+                float cooldownTime = 4.5f;
+
+                if (currentPeriod < 30f)
+                {
+                    maxAllowed = 2;
+                    cooldownTime = 4.5f;
+                }
+                else if (currentPeriod < 75f)
+                {
+                    maxAllowed = 3;
+                    cooldownTime = 3.5f;
+                }
+                else
+                {
+                    maxAllowed = 5;
+                    cooldownTime = 2.5f;
+                }
 
                 if (activeCount < maxAllowed)
                 {
-                    if (currentPeriod >= 0f && currentPeriod < 45f)
-                    {
-                        // 0-45s: Spawns only from the Right side
-                        float cooldownTime = 3.5f;
-                        if (currentPeriod < 10f) cooldownTime = 5f;
-                        
-                        SpawnNormalMeleeEnemyAtDirection(Vector2.right);
-                        spawnCooldown = cooldownTime;
-                    }
-                    else if (currentPeriod >= 45f && currentPeriod < 90f)
-                    {
-                        // 45-90s: Spawns only from the Left side
-                        SpawnNormalMeleeEnemyAtDirection(Vector2.left);
-                        spawnCooldown = 3f;
-                    }
-                    else if (currentPeriod >= 90f && currentPeriod < 120f)
-                    {
-                        // 90-120s: Small final wave from the Right side
-                        SpawnNormalMeleeEnemyAtDirection(Vector2.right);
-                        spawnCooldown = 2.5f;
-                    }
+                    // Always spawn from the Right side
+                    SpawnNormalMeleeEnemyAtDirection(Vector2.right);
+                    spawnCooldown = cooldownTime;
                 }
                 else
                 {
@@ -105,17 +196,17 @@ namespace Vampire
 
         private void TriggerWaveAnnouncements()
         {
-            if (waveTimer >= 0f && waveTimer < 45f && !shownWave1)
+            if (waveTimer >= 0f && waveTimer < 30f && !shownWave1)
             {
                 shownWave1 = true;
-                EliteWarningUI.CreateProcedural("DUSMAN SAGDAN GELIYOR", 3.5f);
+                EliteWarningUI.CreateProcedural("DUSMAN SAG USTTEN GELIYOR", 3.5f);
             }
-            else if (waveTimer >= 45f && waveTimer < 90f && !shownWave2)
+            else if (waveTimer >= 30f && waveTimer < 75f && !shownWave2)
             {
                 shownWave2 = true;
-                EliteWarningUI.CreateProcedural("DUSMAN SOLDAN GELIYOR", 3.5f);
+                EliteWarningUI.CreateProcedural("YENI DALGA SAGDAN GELIYOR", 3.5f);
             }
-            else if (waveTimer >= 90f && waveTimer < 120f && !shownWave3)
+            else if (waveTimer >= 75f && waveTimer < 120f && !shownWave3)
             {
                 shownWave3 = true;
                 EliteWarningUI.CreateProcedural("SON DALGA SAGDAN GELIYOR", 3.5f);
@@ -126,40 +217,141 @@ namespace Vampire
         {
             if (levelBlueprint.monsters == null || levelBlueprint.monsters.Length == 0) return;
             
-            // Level 1 Ranged Enemy Ban: filter out any Ranged, Throwing, Boomerang or Boss blueprints
-            MonsterBlueprint blueprint = null;
-            int poolIndex = 0;
-            int tries = 0;
-            do
-            {
-                poolIndex = Random.Range(0, levelBlueprint.monsters.Length);
-                var container = levelBlueprint.monsters[poolIndex];
-                if (container.monsterBlueprints != null && container.monsterBlueprints.Length > 0)
-                {
-                    int blueprintIndex = Random.Range(0, container.monsterBlueprints.Length);
-                    blueprint = container.monsterBlueprints[blueprintIndex];
-                }
-                tries++;
-            } while ((blueprint == null || 
-                      blueprint is RangedMonsterBlueprint || 
-                      blueprint is ThrowingMonsterBlueprint || 
-                      blueprint is BoomerangMonsterBlueprint || 
-                      blueprint is BossMonsterBlueprint) && tries < 50);
+            // Gather all available blueprints by rank
+            List<(int pool, MonsterBlueprint bp)> juniors = new List<(int, MonsterBlueprint)>();
+            List<(int pool, MonsterBlueprint bp)> mediums = new List<(int, MonsterBlueprint)>();
+            List<(int pool, MonsterBlueprint bp)> seniors = new List<(int, MonsterBlueprint)>();
 
-            if (blueprint == null) return;
-            
-            // Early enemy HP override for onboarding balance (negative value sets absolute HP)
-            float hpValue = -blueprint.hp;
-            if (waveTimer < 60f)
+            for (int p = 0; p < levelBlueprint.monsters.Length; p++)
             {
-                hpValue = -10f; // Dies in exactly 1 hit of 12 damage
+                var container = levelBlueprint.monsters[p];
+                if (container.monsterBlueprints == null) continue;
+                for (int b = 0; b < container.monsterBlueprints.Length; b++)
+                {
+                    var bp = container.monsterBlueprints[b];
+                    if (bp == null) continue;
+                    if (bp is RangedMonsterBlueprint || 
+                        bp is ThrowingMonsterBlueprint || 
+                        bp is BoomerangMonsterBlueprint || 
+                        bp is BossMonsterBlueprint)
+                    {
+                        continue;
+                    }
+
+                    if (bp.hp <= 10f) juniors.Add((p, bp));
+                    else if (bp.hp <= 30f) mediums.Add((p, bp));
+                    else seniors.Add((p, bp));
+                }
+            }
+
+            // Decide which group to spawn based on composition rules
+            List<(int pool, MonsterBlueprint bp)> targetGroup = juniors;
+            float roll = Random.value;
+
+            if (waveTimer < 30f)
+            {
+                targetGroup = juniors;
+            }
+            else if (waveTimer < 75f)
+            {
+                if (roll < 0.70f) targetGroup = juniors;
+                else targetGroup = mediums;
             }
             else
             {
-                hpValue = -15f; // Dies in 2 hits of 12 damage
+                if (roll < 0.50f) targetGroup = juniors;
+                else if (roll < 0.85f) targetGroup = mediums;
+                else targetGroup = seniors;
             }
+
+            // Fallback chain to ensure we always get a valid group if lists are empty
+            if (targetGroup.Count == 0)
+            {
+                if (juniors.Count > 0) targetGroup = juniors;
+                else if (mediums.Count > 0) targetGroup = mediums;
+                else if (seniors.Count > 0) targetGroup = seniors;
+            }
+
+            if (targetGroup.Count == 0) return;
+
+            var chosen = targetGroup[Random.Range(0, targetGroup.Count)];
+            int poolIndex = chosen.pool;
+            MonsterBlueprint blueprint = chosen.bp;
+
+            // Differentiate HP strictly by taxonomy (constant throughout Level 1)
+            float hpOverride = 12f;
+            if (blueprint.hp <= 10f) hpOverride = 12f; // Junior (Crab)
+            else if (blueprint.hp <= 30f) hpOverride = 20f; // Medium (Alien)
+            else hpOverride = 30f; // Senior (PunchMonster)
+            
+            float hpValue = -hpOverride; // negative value sets absolute HP
             
             entityManager.SpawnMonsterAtDirection(poolIndex, blueprint, direction, hpValue);
+        }
+
+        private void TriggerMultiShotBurst()
+        {
+            var player = FindFirstObjectByType<Character>();
+            if (player == null || entityManager == null) return;
+            
+            var pistol = player.GetComponentInChildren<PistolAbility>();
+            if (pistol == null) return;
+            
+            var type = typeof(ProjectileAbility);
+            var projIndexField = type.GetField("projectileIndex", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var damageField = type.GetField("damage", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var speedField = type.GetField("speed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var knockbackField = type.GetField("knockback", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var layerField = type.GetField("monsterLayer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            if (projIndexField == null || damageField == null || speedField == null || knockbackField == null || layerField == null) return;
+
+            int projIndex = (int)projIndexField.GetValue(pistol);
+            float dmg = ((UpgradeableDamage)damageField.GetValue(pistol)).Value * 0.8f;
+            float spd = ((UpgradeableProjectileSpeed)speedField.GetValue(pistol)).Value;
+            float kb = ((UpgradeableKnockback)knockbackField.GetValue(pistol)).Value;
+            LayerMask mask = (LayerMask)layerField.GetValue(pistol);
+
+            Vector3 spawnPos = player.CenterTransform.position;
+            var nearby = entityManager.Grid.FindNearbyInRadius(spawnPos, 10f);
+            List<Monster> targets = new List<Monster>();
+            if (nearby != null)
+            {
+                foreach (var client in nearby)
+                {
+                    if (client is Monster monster && monster.HP > 0)
+                    {
+                        targets.Add(monster);
+                    }
+                }
+            }
+            
+            targets.Sort((a, b) => Vector2.Distance(a.Position, spawnPos).CompareTo(Vector2.Distance(b.Position, spawnPos)));
+            
+            int shotsCount = 8;
+            int targetIndex = 0;
+            
+            for (int i = 0; i < shotsCount; i++)
+            {
+                Vector2 dir;
+                if (targetIndex < targets.Count)
+                {
+                    dir = ((Vector2)targets[targetIndex].CenterTransform.position - (Vector2)spawnPos).normalized;
+                    targetIndex++;
+                }
+                else
+                {
+                    float angle = i * (360f / shotsCount);
+                    dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+                }
+                
+                Projectile projectile = entityManager.SpawnProjectile(projIndex, spawnPos, dmg, kb, spd, mask);
+                if (projectile != null)
+                {
+                    projectile.OnHitDamageable.AddListener(player.OnDealDamage.Invoke);
+                    projectile.Launch(dir);
+                }
+            }
         }
 
         private IEnumerator WinSequence()
@@ -169,7 +361,7 @@ namespace Vampire
             // Show Victory/Clear banner
             EliteWarningUI.CreateProcedural("BARINAK KORUNDU - SEVIYE TAMAMLANDI!", 4f);
             
-            // Wait for 3 seconds of real time (since Time.timeScale is still 1 here)
+            // Wait for 3 seconds of real time
             yield return new WaitForSeconds(3f);
             
             // Trigger victory screen in level manager
@@ -177,6 +369,120 @@ namespace Vampire
             {
                 levelManager.LevelPassed(null);
             }
+        }
+    }
+
+    public class Level1SkillHUD : MonoBehaviour
+    {
+        private UnityEngine.UI.Image cooldownImage;
+        private float cooldownDuration = 8f;
+        private float currentTimer = 6f; // starts at 6s so it triggers after 2s (which is in first 10s)
+        private System.Action onSkillReady;
+
+        public void Init(float duration, float startTimer, System.Action onReady)
+        {
+            this.cooldownDuration = duration;
+            this.currentTimer = startTimer;
+            this.onSkillReady = onReady;
+
+            // Set up button visual
+            var img = GetComponent<UnityEngine.UI.Image>();
+            if (img != null)
+            {
+                img.sprite = CreateProceduralSkillIcon();
+                img.color = Color.white;
+            }
+
+            // Remove persistent slot click listeners and bind custom click trigger
+            var btn = GetComponent<UnityEngine.UI.Button>();
+            if (btn != null)
+            {
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(OnButtonClicked);
+            }
+            
+            // Setup count object if any to hide it
+            var countObj = transform.Find("Count");
+            if (countObj != null) countObj.gameObject.SetActive(false);
+            
+            // Set up cooldown overlay if not already present
+            Transform overlayTransform = transform.Find("CooldownOverlay");
+            if (overlayTransform == null)
+            {
+                GameObject overlayGo = new GameObject("CooldownOverlay");
+                overlayGo.transform.SetParent(transform, false);
+                var rect = overlayGo.AddComponent<RectTransform>();
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.sizeDelta = Vector2.zero;
+                
+                cooldownImage = overlayGo.AddComponent<UnityEngine.UI.Image>();
+                cooldownImage.color = new Color(0f, 0f, 0f, 0.65f); // dark semi-transparent
+                cooldownImage.type = UnityEngine.UI.Image.Type.Filled;
+                cooldownImage.fillMethod = UnityEngine.UI.Image.FillMethod.Radial360;
+                cooldownImage.fillOrigin = (int)UnityEngine.UI.Image.Origin360.Top;
+                cooldownImage.fillClockwise = false;
+            }
+            else
+            {
+                cooldownImage = overlayTransform.GetComponent<UnityEngine.UI.Image>();
+            }
+        }
+
+        private void OnButtonClicked()
+        {
+            if (currentTimer >= cooldownDuration)
+            {
+                currentTimer = 0f;
+                onSkillReady?.Invoke();
+            }
+        }
+
+        private void Update()
+        {
+            if (cooldownImage == null) return;
+
+            currentTimer += Time.deltaTime;
+            if (currentTimer >= cooldownDuration)
+            {
+                currentTimer = 0f;
+                onSkillReady?.Invoke();
+            }
+
+            cooldownImage.fillAmount = Mathf.Clamp01(1f - (currentTimer / cooldownDuration));
+        }
+
+        private Sprite CreateProceduralSkillIcon()
+        {
+            Texture2D tex = new Texture2D(32, 32);
+            for (int x = 0; x < 32; x++)
+            {
+                for (int y = 0; y < 32; y++)
+                {
+                    float dist = Vector2.Distance(new Vector2(x, y), new Vector2(16, 16));
+                    if (dist < 14f && dist > 11f)
+                    {
+                        tex.SetPixel(x, y, new Color(0.95f, 0.75f, 0.1f, 1f)); // Golden outer ring
+                    }
+                    else if (dist <= 11f)
+                    {
+                        if (Mathf.Abs(x - 16) < 3 || Mathf.Abs(y - 16) < 3)
+                        {
+                            tex.SetPixel(x, y, new Color(0.95f, 0.2f, 0.2f, 1f)); // Red cross/burst
+                        }
+                        else
+                        {
+                            tex.SetPixel(x, y, new Color(0.2f, 0.2f, 0.2f, 0.8f)); // Dark background
+                        }
+                    }
+                    else
+                    {
+                        tex.SetPixel(x, y, Color.clear);
+                    }
+                }
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f));
         }
     }
 }

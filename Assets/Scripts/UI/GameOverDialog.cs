@@ -16,12 +16,51 @@ namespace Vampire
 
         public void Open(bool levelPassed, StatsManager statsManager)
         {
-            statusText.text = levelPassed ? levelPassedLocalization.GetLocalizedString() : levelLostLocalization.GetLocalizedString();
+            statusText.text = levelPassed ? "Barinak Korundu!" : levelLostLocalization.GetLocalizedString();
             coinsGained.text = "+" + statsManager.CoinsGained;
             enemiesRouted.text = statsManager.MonstersKilled.ToString();
             damageDealt.text = statsManager.DamageDealt.ToString();
             damageTaken.text = statsManager.DamageTaken.ToString();
             background.SetActive(true);
+
+            // Find buttons dynamically
+            Transform tryAgainBtn = null;
+            Transform payContinueBtn = null;
+
+            foreach (var child in GetComponentsInChildren<Transform>(true))
+            {
+                if (child.name == "再次挑戰") tryAgainBtn = child;
+                else if (child.name == "付費繼續") payContinueBtn = child;
+            }
+
+            if (tryAgainBtn != null)
+            {
+                var txt = tryAgainBtn.GetComponentInChildren<TextMeshProUGUI>();
+                if (txt != null)
+                {
+                    var localizer = txt.GetComponent<UnityEngine.Localization.Components.LocalizeStringEvent>();
+                    if (localizer != null) localizer.enabled = false;
+                    
+                    txt.text = levelPassed ? "Continue" : "Try Again";
+                }
+
+                var buttonComp = tryAgainBtn.GetComponent<UnityEngine.UI.Button>();
+                if (buttonComp != null && levelPassed)
+                {
+                    buttonComp.onClick.RemoveAllListeners();
+                    var lm = FindFirstObjectByType<LevelManager>();
+                    if (lm != null)
+                    {
+                        buttonComp.onClick.AddListener(lm.ReturnToMainMenu);
+                    }
+                }
+            }
+
+            if (payContinueBtn != null)
+            {
+                payContinueBtn.gameObject.SetActive(!levelPassed);
+            }
+
             base.Open();
         }
 

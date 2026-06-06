@@ -145,9 +145,9 @@ namespace Vampire
             WeightedAbilities availableOwnedAbilities = ExtractAvailableAbilities(ownedAbilities);
             WeightedAbilities availableNewAbilities = ExtractAvailableAbilities(newAbilities);
 
-            // Garantee first upgrade selection (level <= 2 or first time on Level 1) is exactly Damage, Cooldown, and ProjectileSpeed upgrades of the pistol
+            // Guarantee first upgrade selection (first time on Level 1) is exactly Damage, Cooldown, and ProjectileSpeed upgrades of the pistol
             bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
-            if ((playerCharacter != null && playerCharacter.CurrentLevel <= 2) || (isLevel1 && !firstUpgradeOffered))
+            if (isLevel1 && !firstUpgradeOffered)
             {
                 firstUpgradeOffered = true;
                 Ability damageUpgrade = null;
