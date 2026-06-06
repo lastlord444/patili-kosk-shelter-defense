@@ -87,7 +87,7 @@ namespace Vampire
                         {
                             hud = child.gameObject.AddComponent<Level1SkillHUD>();
                         }
-                        hud.Init(8f, 6f, TriggerMultiShotBurst); // cooldown: 8s, initial timer: 6s (so triggers at 2s)
+                        hud.Init(8f, 8f, TriggerMultiShotBurst); // cooldown: 8s, start ready
                     }
                     else
                     {
@@ -95,6 +95,7 @@ namespace Vampire
                         child.gameObject.SetActive(false);
                     }
                 }
+                Debug.Log("[SkillHUD] Disabled inactive buttons: top/bottom/left");
             }
         }
 
@@ -375,15 +376,20 @@ namespace Vampire
     public class Level1SkillHUD : MonoBehaviour
     {
         private UnityEngine.UI.Image cooldownImage;
+        private TMPro.TextMeshProUGUI cooldownText;
         private float cooldownDuration = 8f;
-        private float currentTimer = 6f; // starts at 6s so it triggers after 2s (which is in first 10s)
+        private float currentTimer = 8f; // Start ready
         private System.Action onSkillReady;
+        private bool wasReady = false;
 
         public void Init(float duration, float startTimer, System.Action onReady)
         {
             this.cooldownDuration = duration;
             this.currentTimer = startTimer;
             this.onSkillReady = onReady;
+            this.wasReady = (currentTimer >= cooldownDuration);
+
+            Debug.Log($"[SkillHUD] Found Button Right: {gameObject.name}");
 
             // Set up button visual
             var img = GetComponent<UnityEngine.UI.Image>();
@@ -399,7 +405,11 @@ namespace Vampire
             {
                 btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(OnButtonClicked);
+                btn.interactable = true;
+                Debug.Log($"[SkillHUD] Button interactable: {btn.interactable}");
             }
+            Debug.Log("[SkillHUD] Bound OnClick to Button Right");
+            Debug.Log($"[SkillHUD] Cooldown ready: {wasReady}");
             
             // Setup count object if any to hide it
             var countObj = transform.Find("Count");
@@ -427,29 +437,113 @@ namespace Vampire
             {
                 cooldownImage = overlayTransform.GetComponent<UnityEngine.UI.Image>();
             }
+
+            // Set up cooldown text if not already present
+            Transform textTransform = transform.Find("CooldownText");
+            if (textTransform == null)
+            {
+                GameObject textGo = new GameObject("CooldownText");
+                textGo.transform.SetParent(transform, false);
+                var rect = textGo.AddComponent<RectTransform>();
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.sizeDelta = Vector2.zero;
+
+                cooldownText = textGo.AddComponent<TMPro.TextMeshProUGUI>();
+                cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
+                cooldownText.fontSize = 28;
+                cooldownText.fontStyle = TMPro.FontStyles.Bold;
+                cooldownText.color = Color.white;
+            }
+            else
+            {
+                cooldownText = textTransform.GetComponent<TMPro.TextMeshProUGUI>();
+            }
+
+            UpdateVisuals();
         }
 
         private void OnButtonClicked()
         {
+            Debug.Log("[SkillHUD] Right skill clicked.");
             if (currentTimer >= cooldownDuration)
             {
                 currentTimer = 0f;
+                wasReady = false;
+
+                // Find active targets count
+                int targetCount = 0;
+                var player = Object.FindFirstObjectByType<Character>();
+                if (player != null)
+                {
+                    var em = Object.FindFirstObjectByType<EntityManager>();
+                    if (em != null && em.Grid != null)
+                    {
+                        var nearby = em.Grid.FindNearbyInRadius(player.CenterTransform.position, 10f);
+                        if (nearby != null)
+                        {
+                            foreach (var client in nearby)
+                            {
+                                if (client is Monster m && m.HP > 0) targetCount++;
+                            }
+                        }
+                    }
+                }
+
+                Debug.Log($"[SkillHUD] Multi Shot Burst fired. Target count: {targetCount}");
+                Debug.Log($"[SkillHUD] Cooldown started: {cooldownDuration:f1}s");
                 onSkillReady?.Invoke();
+            }
+            else
+            {
+                float remaining = cooldownDuration - currentTimer;
+                Debug.Log($"[SkillHUD] Skill not ready. Remaining: {remaining:f1}s");
             }
         }
 
         private void Update()
         {
-            if (cooldownImage == null) return;
-
-            currentTimer += Time.deltaTime;
-            if (currentTimer >= cooldownDuration)
+            if (currentTimer < cooldownDuration)
             {
-                currentTimer = 0f;
-                onSkillReady?.Invoke();
+                currentTimer += Time.deltaTime;
+                if (currentTimer >= cooldownDuration)
+                {
+                    currentTimer = cooldownDuration;
+                    if (!wasReady)
+                    {
+                        wasReady = true;
+                        Debug.Log("[SkillHUD] Cooldown complete. Skill ready.");
+                    }
+                }
             }
 
-            cooldownImage.fillAmount = Mathf.Clamp01(1f - (currentTimer / cooldownDuration));
+            UpdateVisuals();
+        }
+
+        private void UpdateVisuals()
+        {
+            var btn = GetComponent<UnityEngine.UI.Button>();
+            if (cooldownImage != null)
+            {
+                cooldownImage.fillAmount = Mathf.Clamp01(1f - (currentTimer / cooldownDuration));
+            }
+
+            if (cooldownText != null)
+            {
+                if (currentTimer >= cooldownDuration)
+                {
+                    cooldownText.text = "READY";
+                    cooldownText.color = new Color(0f, 1f, 0.2f, 1f); // Vibrant green when ready
+                    if (btn != null) btn.image.color = Color.white;
+                }
+                else
+                {
+                    float remaining = cooldownDuration - currentTimer;
+                    cooldownText.text = $"{remaining:f1}";
+                    cooldownText.color = new Color(1f, 0.3f, 0.3f, 1f); // Vibrant red/pink during cooldown
+                    if (btn != null) btn.image.color = new Color(0.5f, 0.5f, 0.5f, 1f); // Dimmed button background
+                }
+            }
         }
 
         private Sprite CreateProceduralSkillIcon()
