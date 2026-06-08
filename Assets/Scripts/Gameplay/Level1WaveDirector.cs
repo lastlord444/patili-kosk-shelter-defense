@@ -16,6 +16,32 @@ namespace Vampire
         private bool shownWave1 = false;
         private bool shownWave2 = false;
         private bool shownWave3 = false;
+        private PistolAbility cachedPistolAbility = null;
+
+        private PistolAbility GetPistolAbility()
+        {
+            if (cachedPistolAbility != null)
+            {
+                return cachedPistolAbility;
+            }
+
+            var pistols = Object.FindObjectsByType<PistolAbility>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            if (pistols != null && pistols.Length > 0)
+            {
+                cachedPistolAbility = pistols[0];
+                if (pistols.Length > 1)
+                {
+                    Debug.Log($"[SkillHUD] Multiple PistolAbilities found. Using first active one: {cachedPistolAbility.gameObject.name}");
+                }
+            }
+
+            if (cachedPistolAbility == null)
+            {
+                Debug.Log("[SkillHUD] PistolAbility not found; burst cancelled.");
+            }
+
+            return cachedPistolAbility;
+        }
 
         public void Init(LevelManager levelManager, EntityManager entityManager, LevelBlueprint levelBlueprint)
         {
@@ -300,7 +326,7 @@ namespace Vampire
             var player = FindFirstObjectByType<Character>();
             if (player == null || entityManager == null) yield break;
             
-            var pistol = FindFirstObjectByType<PistolAbility>();
+            var pistol = GetPistolAbility();
             if (pistol == null) yield break;
             
             var type = typeof(PistolAbility); // Use actual ability type to retrieve projectile details
@@ -318,48 +344,87 @@ namespace Vampire
             if (projIndexField == null || damageField == null || speedField == null || knockbackField == null || layerField == null) yield break;
 
             int projIndex = (int)projIndexField.GetValue(pistol);
-            float dmg = ((UpgradeableDamage)damageField.GetValue(pistol)).Value * 0.8f;
+            float dmg = ((UpgradeableDamage)damageField.GetValue(pistol)).Value * 0.7f;
             float spd = ((UpgradeableProjectileSpeed)speedField.GetValue(pistol)).Value;
             float kb = ((UpgradeableKnockback)knockbackField.GetValue(pistol)).Value;
             LayerMask mask = (LayerMask)layerField.GetValue(pistol);
 
-            int shotsCount = 30;
+            Vector3 spawnPos = player.CenterTransform.position;
+            List<Monster> sortedMonsters = new List<Monster>();
+            var nearby = entityManager.Grid.FindNearbyInRadius(spawnPos, 12f);
+            if (nearby != null)
+            {
+                foreach (var client in nearby)
+                {
+                    if (client is Monster monster && monster.HP > 0)
+                    {
+                        sortedMonsters.Add(monster);
+                    }
+                }
+            }
+
+            sortedMonsters.Sort((a, b) => 
+                Vector3.Distance(a.CenterTransform.position, spawnPos)
+                .CompareTo(Vector3.Distance(b.CenterTransform.position, spawnPos))
+            );
+
+            int targetCount = sortedMonsters.Count;
+            int totalBullets = 10;
+            int targetSeekingCount = 0;
+            int bulletsPerTarget = 1;
+            List<Monster> targets = new List<Monster>();
+
+            if (targetCount == 0)
+            {
+                totalBullets = 8;
+            }
+            else if (targetCount == 1)
+            {
+                totalBullets = 10;
+                targetSeekingCount = 4;
+                bulletsPerTarget = 4;
+                targets.Add(sortedMonsters[0]);
+            }
+            else
+            {
+                totalBullets = 10;
+                int maxTargets = Mathf.Min(targetCount, 5);
+                for (int i = 0; i < maxTargets; i++)
+                {
+                    targets.Add(sortedMonsters[i]);
+                }
+                bulletsPerTarget = 2;
+                targetSeekingCount = targets.Count * 2;
+            }
+
+            Debug.Log($"[SkillHUD] Multi Shot Burst fired. Projectile count: {totalBullets}");
+
             float delayBetweenShots = 0.05f;
 
-            for (int i = 0; i < shotsCount; i++)
+            for (int i = 0; i < totalBullets; i++)
             {
                 if (player == null) yield break;
-                Vector3 spawnPos = player.CenterTransform.position;
+                spawnPos = player.CenterTransform.position;
 
-                // Find closest living monster in range
-                Monster target = null;
-                float closestDist = float.MaxValue;
-                var nearby = entityManager.Grid.FindNearbyInRadius(spawnPos, 12f);
-                if (nearby != null)
+                bool isTargetSeeking = (i < targetSeekingCount);
+                Monster targetMonster = null;
+                if (isTargetSeeking)
                 {
-                    foreach (var client in nearby)
+                    int targetIdx = i / bulletsPerTarget;
+                    if (targetIdx < targets.Count)
                     {
-                        if (client is Monster monster && monster.HP > 0)
-                        {
-                            float dist = Vector2.Distance(monster.CenterTransform.position, spawnPos);
-                            if (dist < closestDist)
-                            {
-                                closestDist = dist;
-                                target = monster;
-                            }
-                        }
+                        targetMonster = targets[targetIdx];
                     }
                 }
 
                 Vector2 dir;
-                if (target != null)
+                if (isTargetSeeking && targetMonster != null && targetMonster.HP > 0)
                 {
-                    dir = ((Vector2)target.CenterTransform.position - (Vector2)spawnPos).normalized;
+                    dir = ((Vector2)targetMonster.CenterTransform.position - (Vector2)spawnPos).normalized;
                 }
                 else
                 {
-                    // No targets, fire in a rotating spiral
-                    float angle = (i * 12f) % 360f;
+                    float angle = (i * 45f) % 360f;
                     dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
                 }
 
@@ -502,33 +567,11 @@ namespace Vampire
 
         private void OnButtonClicked()
         {
-            Debug.Log("[SkillHUD] Right skill clicked.");
+            Debug.Log("[SkillHUD] Right skill clicked");
             if (currentTimer >= cooldownDuration)
             {
                 currentTimer = 0f;
                 wasReady = false;
-
-                // Find active targets count
-                int targetCount = 0;
-                var player = Object.FindFirstObjectByType<Character>();
-                if (player != null)
-                {
-                    var em = Object.FindFirstObjectByType<EntityManager>();
-                    if (em != null && em.Grid != null)
-                    {
-                        var nearby = em.Grid.FindNearbyInRadius(player.CenterTransform.position, 10f);
-                        if (nearby != null)
-                        {
-                            foreach (var client in nearby)
-                            {
-                                if (client is Monster m && m.HP > 0) targetCount++;
-                            }
-                        }
-                    }
-                }
-
-                Debug.Log($"[SkillHUD] Multi Shot Burst fired. Target count: {targetCount}");
-                Debug.Log($"[SkillHUD] Cooldown started: {cooldownDuration:f1}s");
                 onSkillReady?.Invoke();
             }
             else
