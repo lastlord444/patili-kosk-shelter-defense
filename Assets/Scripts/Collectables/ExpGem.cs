@@ -44,6 +44,7 @@ namespace Vampire
         protected override void OnCollected()
         {
             spriteRenderer.enabled = false;
+            Debug.Log($"[ExpGem] Picked up XP Gem! Type: {gemType}, XP Gained: {(float)gemType}");
             playerCharacter.GainExp((float)gemType);
             entityManager.DespawnGem(this);
             spriteRenderer.enabled = true;

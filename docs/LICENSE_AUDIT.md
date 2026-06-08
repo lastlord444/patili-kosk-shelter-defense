@@ -55,6 +55,7 @@ Orijinal projedeki tüm görsel ve işitsel referanslar Vampire Survivors esinti
 | `Assets/Sprites/Gems/Gems.png` | Experience Pickups | Belirsiz (RPG style) | **HIGH** | Replace with Yarn Ball / Feathers (Candidate: Kenney Generic Items - CC0) |
 | `Assets/Sprites/Gems/GemDarkBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | Replace with Blue Yarn Ball (Candidate: Kenney Generic Items - CC0) |
 | `Assets/Sprites/Gems/GemLightBlue.png` | Exp Gem Variant | Belirsiz (RPG style) | **HIGH** | Replace with Light Blue Yarn Ball (Candidate: Kenney Generic Items - CC0) |
+| `Assets/Sprites/Weapons/Pistol.png` | Ability Projectile / UI Icon | self-authored procedural pistol icon, no third-party source | **Mitigated** | **Created procedurally using in-editor C# generator** |
 | `Assets/Sprites/Weapons/Lightsaber.png` | Ability Projectile | self-created simple placeholder (project-owned / MIT-compatible) | **Mitigated** | **Replaced** |
 | `Assets/Sprites/Weapons/Bat.png` | Ability Projectile | Belirsiz | **MEDIUM** | **Replace** (Toy Bat / Ball) |
 | `Assets/Sprites/Weapons/Sword.png` | Ability Projectile | Belirsiz (RPG style) | **MEDIUM** | **Replace** (Cat Claw Slash) |
@@ -161,4 +162,15 @@ Tüm materyaller (`Assets/Materials/`) ve dokular (`Assets/Textures/`) Unity 6 B
   - Commercial use: Allowed
   - Attribution: Not required
   - AI Generated: No explicit AI usage claim found on the asset page; license is CC0.
+
+
+## Audit Update (2026-06-05)
+
+- No new assets imported. Only procedural visuals and existing code are used.
+
+## Audit Update (2026-06-06)
+
+- Created `Assets/Sprites/Weapons/Pistol.png` procedurally using a custom C# Editor script (`PistolIconGenerator.cs`). This image is 100% self-authored and uses no third-party or AI sources.
+- Configured import settings as a pixel-perfect 2D Sprite (32 PPU, point filtering, uncompressed).
+- Assigned it to the `Pistol Ability.prefab`'s `image` field and the child `SpriteRenderer`'s `m_Sprite` field, resolving the starting ability visual mismatch on the character selection screen.
 

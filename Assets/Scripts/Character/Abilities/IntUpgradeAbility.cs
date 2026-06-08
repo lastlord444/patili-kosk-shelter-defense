@@ -6,6 +6,13 @@ namespace Vampire
     public class IntUpgradeAbility<T> : Ability where T : UpgradeableInt
     {
         [SerializeField] protected int[] upgrades;
+
+        public void ConfigureUpgrades(int[] newUpgrades)
+        {
+            if (newUpgrades == null || newUpgrades.Length == 0) return;
+            upgrades = (int[])newUpgrades.Clone();
+        }
+
         public override string Description 
         { 
             get { 

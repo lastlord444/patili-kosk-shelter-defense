@@ -35,6 +35,7 @@ namespace Vampire
 
         protected override void OnCollected()
         {
+            Debug.Log($"[Coin] Picked up Coin! Type: {coinType}, Gold Gained: {(int)coinType}");
             entityManager.DespawnCoin(this);
         }
     }

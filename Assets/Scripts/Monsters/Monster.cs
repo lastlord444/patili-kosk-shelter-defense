@@ -35,11 +35,18 @@ namespace Vampire
         public Vector2 Size => monsterLegsCollider.bounds.size;
         public Dictionary<int, int> ListIndexByCellIndex { get; set; }
         public int QueryID { get; set; } = -1;
+        protected bool isElite = false;
+        public bool IsElite { get => isElite; set => isElite = value; }
+        protected bool targetPlayerDirectly = false;
 
         public Transform TargetTransform
         {
             get
             {
+                if (targetPlayerDirectly && playerCharacter != null)
+                {
+                    return playerCharacter.transform;
+                }
                 if (entityManager != null && entityManager.Shelter != null && !entityManager.Shelter.IsDestroyed)
                 {
                     return entityManager.Shelter.transform;
@@ -72,8 +79,36 @@ namespace Vampire
             this.monsterBlueprint = monsterBlueprint;
             rb.position = position;
             transform.position = position;
-            // Reset health to max
-            currentHealth = monsterBlueprint.hp + hpBuff;
+            
+            // Reset scale, color, and elite state
+            transform.localScale = Vector3.one;
+            if (monsterSpriteRenderer != null)
+            {
+                monsterSpriteRenderer.color = Color.white;
+            }
+            isElite = false;
+
+            // Determine target type for Level 1 (70% shelter, 30% player)
+            bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
+            if (isLevel1)
+            {
+                targetPlayerDirectly = (UnityEngine.Random.value < 0.3f);
+            }
+            else
+            {
+                targetPlayerDirectly = false;
+            }
+
+            // Reset health to max (negative hpBuff indicates absolute override)
+            if (hpBuff < 0)
+            {
+                currentHealth = -hpBuff;
+            }
+            else
+            {
+                currentHealth = monsterBlueprint.hp + hpBuff;
+            }
+            
             // Toggle alive flag on
             alive = true;
             // Add to list of living monsters
@@ -87,15 +122,52 @@ namespace Vampire
             monsterHitbox.size = monsterSpriteRenderer.bounds.size;
             monsterHitbox.offset = Vector2.up * monsterHitbox.size.y/2;
             monsterLegsCollider.radius = monsterHitbox.size.x/2.5f;
-            centerTransform = (new GameObject("Center Transform")).transform;
-            centerTransform.SetParent(transform);
+
+            // Reuse or create centerTransform to prevent memory/object leaks
+            if (centerTransform == null)
+            {
+                centerTransform = (new GameObject("Center Transform")).transform;
+                centerTransform.SetParent(transform);
+            }
             centerTransform.position = transform.position + (Vector3)monsterHitbox.offset;
+
             // Set the drag based on acceleration and movespeed
             float spd = Random.Range(monsterBlueprint.movespeed-0.1f, monsterBlueprint.movespeed+0.1f);
+            if (isLevel1)
+            {
+                spd *= 0.6f; // reduced speed for Level 1 melee enemies
+            }
             rb.linearDamping = monsterBlueprint.acceleration / (spd * spd);
             // Reset the velocity
             rb.linearVelocity = Vector2.zero;
             StopAllCoroutines();
+        }
+
+        public void ApplyEliteModifiers(float hpMultiplier, float speedMultiplier, float scaleMultiplier, Color tint)
+        {
+            isElite = true;
+            
+            // Apply scale
+            transform.localScale = Vector3.one * scaleMultiplier;
+            // Apply tint
+            if (monsterSpriteRenderer != null)
+            {
+                monsterSpriteRenderer.color = tint;
+            }
+            // Recalculate health
+            currentHealth *= hpMultiplier;
+            // Recalculate linearDamping for new terminal speed
+            float baseSpd = Random.Range(monsterBlueprint.movespeed - 0.1f, monsterBlueprint.movespeed + 0.1f);
+            float spd = baseSpd * speedMultiplier;
+            rb.linearDamping = monsterBlueprint.acceleration / (spd * spd);
+            
+            // Re-align centerTransform position for new scale
+            if (centerTransform != null && monsterHitbox != null)
+            {
+                monsterHitbox.size = monsterSpriteRenderer.bounds.size;
+                monsterHitbox.offset = Vector2.up * monsterHitbox.size.y / 2;
+                centerTransform.position = transform.position + (Vector3)monsterHitbox.offset;
+            }
         }
 
         protected virtual void Update()

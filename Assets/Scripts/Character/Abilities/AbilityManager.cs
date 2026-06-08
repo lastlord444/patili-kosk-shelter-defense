@@ -9,6 +9,7 @@ namespace Vampire
     {
         private LevelBlueprint levelBlueprint;
         private Character playerCharacter;
+        private bool firstUpgradeOffered = false;
         private WeightedAbilities newAbilities;
         private WeightedAbilities ownedAbilities;
         private FastList<IUpgradeableValue> registeredUpgradeableValues;
@@ -71,6 +72,25 @@ namespace Vampire
                     
                     Ability ability = Instantiate(abilityPrefab, transform).GetComponent<Ability>();
                     if (ability == null) continue;
+                    
+                    // Buff generic upgrade effectiveness programmatically
+                    if (ability is DamageUpgradeAbility damageAbility)
+                    {
+                        damageAbility.ConfigureUpgrades(new float[] { 0.40f, 0.40f, 0.40f, 0.40f, 0.40f });
+                    }
+                    else if (ability is CooldownUpgradeAbility cooldownAbility)
+                    {
+                        cooldownAbility.ConfigureUpgrades(new float[] { -0.20f, -0.20f, -0.20f, -0.20f, -0.20f });
+                    }
+                    else if (ability is ProjectileSpeedAbilityUpgrade speedAbility)
+                    {
+                        speedAbility.ConfigureUpgrades(new float[] { 0.25f, 0.25f, 0.25f, 0.25f, 0.25f });
+                    }
+                    else if (ability is ProjectileCountUpgradeAbility countAbility)
+                    {
+                        countAbility.ConfigureUpgrades(new int[] { 1 });
+                    }
+                    
                     ability.Init(abilityManager, entityManager, playerCharacter);
                     newAbilities.Add(ability);
                 }
@@ -93,6 +113,31 @@ namespace Vampire
             }
         }
 
+        private bool IsShooterRelevant(Ability ability)
+        {
+            if (ability is DamageUpgradeAbility || 
+                ability is CooldownUpgradeAbility || 
+                ability is ArmorUpgradeAbility || 
+                ability is IceSkatesAbility || 
+                ability is ProjectileSpeedAbilityUpgrade ||
+                ability is ProjectileCountUpgradeAbility ||
+                ability is KnockbackUpgradeAbility)
+            {
+                return true;
+            }
+
+            if (ability is PistolAbility || 
+                ability is MachineGunAbility || 
+                ability is BazookaGunAbility || 
+                ability is GrenadeThrowableAbility || 
+                ability is MolotovAbility)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Select abilities.
         /// </summary>
@@ -104,11 +149,157 @@ namespace Vampire
             WeightedAbilities availableOwnedAbilities = ExtractAvailableAbilities(ownedAbilities);
             WeightedAbilities availableNewAbilities = ExtractAvailableAbilities(newAbilities);
 
+            // Guarantee first upgrade selection (first time on Level 1) is exactly Damage, Cooldown, and ProjectileCount upgrades of the pistol
+            bool isLevel1 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1;
+            if (isLevel1 && !firstUpgradeOffered)
+            {
+                firstUpgradeOffered = true;
+                Ability damageUpgrade = null;
+                Ability cooldownUpgrade = null;
+                Ability countUpgrade = null;
+
+                // Find in available lists
+                foreach (Ability ab in availableOwnedAbilities)
+                {
+                    if (ab is DamageUpgradeAbility) damageUpgrade = ab;
+                    else if (ab is CooldownUpgradeAbility) cooldownUpgrade = ab;
+                    else if (ab is ProjectileCountUpgradeAbility) countUpgrade = ab;
+                }
+                foreach (Ability ab in availableNewAbilities)
+                {
+                    if (ab is DamageUpgradeAbility) damageUpgrade = ab;
+                    else if (ab is CooldownUpgradeAbility) cooldownUpgrade = ab;
+                    else if (ab is ProjectileCountUpgradeAbility) countUpgrade = ab;
+                }
+
+                // If not found in available lists, find in master lists
+                if (damageUpgrade == null) damageUpgrade = ownedAbilities.FirstOrDefault(ab => ab is DamageUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is DamageUpgradeAbility);
+                if (cooldownUpgrade == null) cooldownUpgrade = ownedAbilities.FirstOrDefault(ab => ab is CooldownUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is CooldownUpgradeAbility);
+                if (countUpgrade == null) countUpgrade = ownedAbilities.FirstOrDefault(ab => ab is ProjectileCountUpgradeAbility) ?? newAbilities.FirstOrDefault(ab => ab is ProjectileCountUpgradeAbility);
+
+                // Add to selected list and remove from pools
+                if (damageUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(damageUpgrade);
+                    availableNewAbilities.Remove(damageUpgrade);
+                    ownedAbilities.Remove(damageUpgrade);
+                    newAbilities.Remove(damageUpgrade);
+                    selectedAbilities.Add(damageUpgrade);
+                }
+                if (cooldownUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(cooldownUpgrade);
+                    availableNewAbilities.Remove(cooldownUpgrade);
+                    ownedAbilities.Remove(cooldownUpgrade);
+                    newAbilities.Remove(cooldownUpgrade);
+                    selectedAbilities.Add(cooldownUpgrade);
+                }
+                if (countUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(countUpgrade);
+                    availableNewAbilities.Remove(countUpgrade);
+                    ownedAbilities.Remove(countUpgrade);
+                    newAbilities.Remove(countUpgrade);
+                    selectedAbilities.Add(countUpgrade);
+                }
+
+                // Return all remaining available abilities to their pools
+                foreach (Ability ability in availableNewAbilities)
+                    newAbilities.Add(ability);
+                foreach (Ability ability in availableOwnedAbilities)
+                    ownedAbilities.Add(ability);
+
+                return selectedAbilities;
+            }
+
+            // Filter new abilities if we have the starting Pistol active
+            WeightedAbilities excludedNewAbilities = null;
+            bool hasPistol = playerCharacter != null && (ownedAbilities.Any(a => a is PistolAbility) || availableOwnedAbilities.Any(a => a is PistolAbility));
+            if (hasPistol)
+            {
+                WeightedAbilities filteredNewAbilities = new WeightedAbilities();
+                excludedNewAbilities = new WeightedAbilities();
+                foreach (Ability ability in availableNewAbilities)
+                {
+                    if (IsShooterRelevant(ability))
+                    {
+                        filteredNewAbilities.Add(ability);
+                    }
+                    else
+                    {
+                        excludedNewAbilities.Add(ability);
+                    }
+                }
+                
+                // Only use filtered ones if we have at least some, otherwise fallback to prevent empty pool
+                if (filteredNewAbilities.Count > 0)
+                {
+                    availableNewAbilities = filteredNewAbilities;
+                }
+                else
+                {
+                    excludedNewAbilities = null; // No exclusion if we had nothing else
+                }
+            }
+
             // Determine how many abilities will be selected in total (3 - 4)
             int selectedAbilitiesCount = 3 + (ResolveChance(FourthChance) ? 1 : 0);
 
+            // Guarantee at least one pistol-specific upgrade card (PistolAbility itself) on first level-up (level <= 2)
+            Ability pistolUpgrade = null;
+            if (playerCharacter != null && playerCharacter.CurrentLevel <= 2)
+            {
+                foreach (Ability ab in availableOwnedAbilities)
+                {
+                    if (ab is PistolAbility)
+                    {
+                        pistolUpgrade = ab;
+                        break;
+                    }
+                }
+                if (pistolUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(pistolUpgrade);
+                    selectedAbilities.Add(pistolUpgrade);
+                }
+            }
+
+            // Exclude ProjectileSpeedAbilityUpgrade on first level-up (level <= 2)
+            Ability tempProjectileSpeedUpgrade = null;
+            if (playerCharacter != null && playerCharacter.CurrentLevel <= 2)
+            {
+                foreach (Ability ab in availableOwnedAbilities)
+                {
+                    if (ab is ProjectileSpeedAbilityUpgrade)
+                    {
+                        tempProjectileSpeedUpgrade = ab;
+                        break;
+                    }
+                }
+                if (tempProjectileSpeedUpgrade != null)
+                {
+                    availableOwnedAbilities.Remove(tempProjectileSpeedUpgrade);
+                }
+                else
+                {
+                    foreach (Ability ab in availableNewAbilities)
+                    {
+                        if (ab is ProjectileSpeedAbilityUpgrade)
+                        {
+                            tempProjectileSpeedUpgrade = ab;
+                            break;
+                        }
+                    }
+                    if (tempProjectileSpeedUpgrade != null)
+                    {
+                        availableNewAbilities.Remove(tempProjectileSpeedUpgrade);
+                    }
+                }
+            }
+
             // Attempt to show the player up to 2 items they already own (so they can upgrade them)
-            int ownedAbilitiesCount = availableOwnedAbilities.Count < 2 ? availableOwnedAbilities.Count : 2;
+            int maxOwnedToSelect = (pistolUpgrade != null) ? 1 : 2;
+            int ownedAbilitiesCount = availableOwnedAbilities.Count < maxOwnedToSelect ? availableOwnedAbilities.Count : maxOwnedToSelect;
             for (int i = 0; i < ownedAbilitiesCount; i++)
             {
                 if (ResolveChance(OwnedChance))
@@ -129,9 +320,26 @@ namespace Vampire
                 selectedAbilities.Add(PullAbility(availableOwnedAbilities));
             }
 
+            // Return tempProjectileSpeedUpgrade back to the pool
+            if (tempProjectileSpeedUpgrade != null)
+            {
+                if (tempProjectileSpeedUpgrade.Owned)
+                    ownedAbilities.Add(tempProjectileSpeedUpgrade);
+                else
+                    newAbilities.Add(tempProjectileSpeedUpgrade);
+            }
+
             // Return any remaining available abilities that weren't selected back to the new abilities pool
             foreach (Ability ability in availableNewAbilities)
                 newAbilities.Add(ability);
+
+            // Return excluded ones back to the new abilities pool
+            if (excludedNewAbilities != null)
+            {
+                foreach (Ability ability in excludedNewAbilities)
+                    newAbilities.Add(ability);
+            }
+
             foreach (Ability ability in availableOwnedAbilities)
                 ownedAbilities.Add(ability);
 

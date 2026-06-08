@@ -202,6 +202,12 @@ namespace Vampire
         {
             if (alive)
             {
+                // Level 1 tutorial protection: reduce incoming damage by 80%
+                if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level 1" || UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1)
+                {
+                    damage *= 0.2f;
+                }
+
                 // Apply armor
                 if (armor.Value >= damage)
                     damage = damage < 1 ? damage : 1;

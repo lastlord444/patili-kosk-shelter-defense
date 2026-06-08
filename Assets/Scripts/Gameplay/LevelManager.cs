@@ -44,41 +44,73 @@ namespace Vampire
             {
                 shelter.OnDeath.AddListener(GameOver);
             }
-            // Spawn initial gems
-            entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
-            // Spawn a singular chest
-            entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+            // Spawn initial gems (Bypassed for Level 1 to prevent instant level up at 00:00)
+            bool isLevel1 = SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().buildIndex == 1;
+            if (!isLevel1)
+            {
+                entityManager.SpawnGemsAroundPlayer(this.levelBlueprint.initialExpGemCount, this.levelBlueprint.initialExpGemType);
+            }
+            // Spawn a singular chest (Bypassed for Level 1 to focus on shelter defense onboarding)
+            if (!isLevel1)
+            {
+                entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+            }
             // Initialize the infinite background
             infiniteBackground.Init(this.levelBlueprint.backgroundTexture, playerCharacter.transform);
             // Initialize inventory
             inventory.Init();
+
+            // Initialize Level 1 Wave Director if present
+            Level1WaveDirector waveDirector = GetComponent<Level1WaveDirector>();
+            if (waveDirector != null)
+            {
+                waveDirector.Init(this, entityManager, levelBlueprint);
+            }
         }
 
         // Start is called before the first frame update
         void Start()
         {
+            // Programmatically attach Level1WaveDirector for Level 1 scene
+            if (SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                if (gameObject.GetComponent<Level1WaveDirector>() == null)
+                {
+                    gameObject.AddComponent<Level1WaveDirector>();
+                }
+            }
+
             Init(levelBlueprint);
         }
 
         // Update is called once per frame
         void Update()
         {
+            bool isLevel1 = SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().buildIndex == 1;
             // Time
             levelTime += Time.deltaTime;
             gameTimer.SetTime(levelTime);
+
+            // Check if Level1WaveDirector is active and handling spawning
+            Level1WaveDirector waveDirector = GetComponent<Level1WaveDirector>();
+            bool waveDirectorActive = waveDirector != null && waveDirector.IsActive(levelTime);
+
             // Monster spawning timer
             if (levelTime < levelBlueprint.levelTime)
             {
-                timeSinceLastMonsterSpawned += Time.deltaTime;
-                float spawnRate = levelBlueprint.monsterSpawnTable.GetSpawnRate(levelTime/levelBlueprint.levelTime);
-                float monsterSpawnDelay = spawnRate > 0 ? 1.0f/spawnRate : float.PositiveInfinity;
-                if (timeSinceLastMonsterSpawned >= monsterSpawnDelay)
+                if (!waveDirectorActive)
                 {
-                    (int monsterIndex, float hpMultiplier) = levelBlueprint.monsterSpawnTable.SelectMonsterWithHPMultiplier(levelTime/levelBlueprint.levelTime);
-                    (int poolIndex, int blueprintIndex) = levelBlueprint.MonsterIndexMap[monsterIndex];
-                    MonsterBlueprint monsterBlueprint = levelBlueprint.monsters[poolIndex].monsterBlueprints[blueprintIndex];
-                    entityManager.SpawnMonsterRandomPosition(poolIndex, monsterBlueprint, monsterBlueprint.hp * hpMultiplier);
-                    timeSinceLastMonsterSpawned = Mathf.Repeat(timeSinceLastMonsterSpawned, monsterSpawnDelay);
+                    timeSinceLastMonsterSpawned += Time.deltaTime;
+                    float spawnRate = levelBlueprint.monsterSpawnTable.GetSpawnRate(levelTime/levelBlueprint.levelTime);
+                    float monsterSpawnDelay = spawnRate > 0 ? 1.0f/spawnRate : float.PositiveInfinity;
+                    if (timeSinceLastMonsterSpawned >= monsterSpawnDelay)
+                    {
+                        (int monsterIndex, float hpMultiplier) = levelBlueprint.monsterSpawnTable.SelectMonsterWithHPMultiplier(levelTime/levelBlueprint.levelTime);
+                        (int poolIndex, int blueprintIndex) = levelBlueprint.MonsterIndexMap[monsterIndex];
+                        MonsterBlueprint monsterBlueprint = levelBlueprint.monsters[poolIndex].monsterBlueprints[blueprintIndex];
+                        entityManager.SpawnMonsterRandomPosition(poolIndex, monsterBlueprint, monsterBlueprint.hp * hpMultiplier);
+                        timeSinceLastMonsterSpawned = Mathf.Repeat(timeSinceLastMonsterSpawned, monsterSpawnDelay);
+                    }
                 }
             }
             // Boss spawning
@@ -95,15 +127,18 @@ namespace Vampire
                 Monster finalBoss = entityManager.SpawnMonsterRandomPosition(levelBlueprint.monsters.Length, levelBlueprint.finalBoss.bossBlueprint);
                 finalBoss.OnKilled.AddListener(LevelPassed);
             }
-            // Chest spawning timer
-            timeSinceLastChestSpawned += Time.deltaTime;
-            if (timeSinceLastChestSpawned >= levelBlueprint.chestSpawnDelay)
+            // Chest spawning timer (Bypassed for Level 1 to focus on shelter defense)
+            if (!isLevel1)
             {
-                for (int i = 0; i < levelBlueprint.chestSpawnAmount; i++)
+                timeSinceLastChestSpawned += Time.deltaTime;
+                if (timeSinceLastChestSpawned >= levelBlueprint.chestSpawnDelay)
                 {
-                    entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+                    for (int i = 0; i < levelBlueprint.chestSpawnAmount; i++)
+                    {
+                        entityManager.SpawnChest(levelBlueprint.chestBlueprint);
+                    }
+                    timeSinceLastChestSpawned = Mathf.Repeat(timeSinceLastChestSpawned, levelBlueprint.chestSpawnDelay);
                 }
-                timeSinceLastChestSpawned = Mathf.Repeat(timeSinceLastChestSpawned, levelBlueprint.chestSpawnDelay);
             }
         }
 

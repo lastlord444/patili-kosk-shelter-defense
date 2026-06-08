@@ -9,15 +9,38 @@ namespace Vampire
         [Header("Pistol Settings")]
         [SerializeField] protected float targetRadius = 5f;
 
-        public override string Name => "Pistol";
+        public override string Name
+        {
+            get
+            {
+                if (!owned) return "Pistol";
+                switch (level)
+                {
+                    case 1: return "Tabanca Hasari+";
+                    case 2: return "Tabanca Atis Hizi+";
+                    case 3: return "Tabanca Hasari+";
+                    case 4: return "Tabanca Mermi Hizi+";
+                    case 5: return "Tabanca Cift Atis+";
+                    default: return "Pistol Upgrade+";
+                }
+            }
+        }
+
         public override string Description
         {
             get
             {
                 if (!owned)
-                    return "Automatically targets and shoots the nearest monster.";
-                else
-                    return GetUpgradeDescriptions();
+                    return "En yakin canavari otomatik olarak hedefler ve ates eder.";
+                switch (level)
+                {
+                    case 1: return "Tabanca hasari %25 artar.";
+                    case 2: return "Tabanca %15 daha hizli ates eder.";
+                    case 3: return "Tabanca hasari %25 artar.";
+                    case 4: return "Tabanca mermileri %20 daha hizli gider.";
+                    case 5: return "Fazladan 1 mermi atesler ve hasari %30 artar.";
+                    default: return "Tabanca nitelikleri gelistirilir.";
+                }
             }
         }
 
@@ -27,6 +50,25 @@ namespace Vampire
         protected Vector3 initialGunScale = new Vector3(0.8f, 0.8f, 1f); // default scale for procedural gun
 
         private Sprite whitePixelSprite;
+
+        public override void Init(AbilityManager abilityManager, EntityManager entityManager, Character playerCharacter)
+        {
+            ConfigurePistolUpgrades();
+            base.Init(abilityManager, entityManager, playerCharacter);
+
+            // Starter effectiveness tweaks:
+            if (cooldown.Value > 0.7f) cooldown.Value = 0.7f;
+            if (speed.Value < 13f) speed.Value = 13f;
+            if (damage.Value < 12f) damage.Value = 12f;
+        }
+
+        private void ConfigurePistolUpgrades()
+        {
+            damage.ConfigureRuntimeUpgrades(new float[] { 0.25f, 0f, 0.25f, 0f, 0.30f });
+            cooldown.ConfigureRuntimeUpgrades(new float[] { 0f, -0.15f, 0f, 0f, 0f });
+            speed.ConfigureRuntimeUpgrades(new float[] { 0f, 0f, 0f, 0.20f, 0f });
+            projectileCount.ConfigureRuntimeUpgrades(new int[] { 0, 0, 0, 0, 0 });
+        }
 
         protected override void Use()
         {
@@ -95,8 +137,6 @@ namespace Vampire
 
         protected override void Update()
         {
-            base.Update();
-
             if (pistolVisual == null)
             {
                 CreateProceduralVisual();
@@ -128,6 +168,60 @@ namespace Vampire
             float normTheta = Mathf.Repeat(theta + 180f, 360f) - 180f;
             float targetYScale = (Mathf.Abs(normTheta) > 90f) ? -initialGunScale.y : initialGunScale.y;
             pistolVisual.transform.localScale = new Vector3(initialGunScale.x, targetYScale, initialGunScale.z);
+
+            // Cooldown handling - ONLY attack if closestMonster is not null!
+            timeSinceLastAttack += Time.deltaTime;
+            if (timeSinceLastAttack >= cooldown.Value)
+            {
+                if (closestMonster != null)
+                {
+                    timeSinceLastAttack = Mathf.Repeat(timeSinceLastAttack, cooldown.Value);
+                    Attack();
+                }
+                else
+                {
+                    // Keep cooldown primed so it fires immediately when a target appears
+                    timeSinceLastAttack = cooldown.Value;
+                }
+            }
+        }
+
+        protected override void Attack()
+        {
+            int count = projectileCount.Value;
+            if (count <= 1)
+            {
+                base.Attack();
+            }
+            else
+            {
+                // Simultaneous parallel fire
+                Vector3 baseDir = gunDirection;
+                Vector3 perpDir = new Vector3(-baseDir.y, baseDir.x, 0f).normalized;
+                
+                Vector3 spawnPos = playerCharacter.CenterTransform.position;
+                if (pistolVisual != null)
+                {
+                    Transform muzzle = pistolVisual.transform.Find("Muzzle");
+                    if (muzzle != null) spawnPos = muzzle.position;
+                }
+
+                float offsetDistance = 0.15f; // Small parallel offset to prevent bullet overlap
+
+                for (int i = 0; i < count; i++)
+                {
+                    float offsetFactor = i - (count - 1) / 2f;
+                    Vector3 projectileSpawnPos = spawnPos + perpDir * (offsetFactor * offsetDistance);
+                    Vector2 dir = baseDir; // Fire in the exact same direction
+
+                    Projectile projectile = entityManager.SpawnProjectile(projectileIndex, projectileSpawnPos, damage.Value, knockback.Value, speed.Value, monsterLayer);
+                    if (projectile != null)
+                    {
+                        projectile.OnHitDamageable.AddListener(playerCharacter.OnDealDamage.Invoke);
+                        projectile.Launch(dir);
+                    }
+                }
+            }
         }
 
         protected override void LaunchProjectile()

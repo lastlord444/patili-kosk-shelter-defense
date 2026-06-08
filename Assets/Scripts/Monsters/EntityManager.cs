@@ -194,6 +194,35 @@ namespace Vampire
             return SpawnMonster(monsterPoolIndex, spawnPosition, monsterBlueprint, hpBuff);
         }
 
+        public Monster SpawnMonsterAtDirection(int monsterPoolIndex, MonsterBlueprint monsterBlueprint, Vector2 direction, float hpBuff = 0)
+        {
+            Vector2 spawnPosition = Vector2.zero;
+            float buffer = monsterSpawnBufferDistance;
+            
+            if (direction == Vector2.right)
+            {
+                spawnPosition = (Vector2)playerCharacter.transform.position + Vector2.right * (screenWidthWorldSpace / 2f + buffer) + Vector2.up * Random.Range(-screenHeightWorldSpace / 2f, screenHeightWorldSpace / 2f);
+            }
+            else if (direction == Vector2.left)
+            {
+                spawnPosition = (Vector2)playerCharacter.transform.position + Vector2.left * (screenWidthWorldSpace / 2f + buffer) + Vector2.up * Random.Range(-screenHeightWorldSpace / 2f, screenHeightWorldSpace / 2f);
+            }
+            else if (direction == Vector2.up)
+            {
+                spawnPosition = (Vector2)playerCharacter.transform.position + Vector2.up * (screenHeightWorldSpace / 2f + buffer) + Vector2.right * Random.Range(-screenWidthWorldSpace / 2f, screenWidthWorldSpace / 2f);
+            }
+            else if (direction == Vector2.down)
+            {
+                spawnPosition = (Vector2)playerCharacter.transform.position + Vector2.down * (screenHeightWorldSpace / 2f + buffer) + Vector2.right * Random.Range(-screenWidthWorldSpace / 2f, screenWidthWorldSpace / 2f);
+            }
+            else
+            {
+                spawnPosition = GetRandomMonsterSpawnPosition();
+            }
+
+            return SpawnMonster(monsterPoolIndex, spawnPosition, monsterBlueprint, hpBuff);
+        }
+
         public Monster SpawnMonster(int monsterPoolIndex, Vector2 position, MonsterBlueprint monsterBlueprint, float hpBuff = 0)
         {
             Monster newMonster = monsterPools[monsterPoolIndex].Get();

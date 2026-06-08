@@ -41,9 +41,44 @@
 | **R40** | Unity Editor stability / unexpected close | MEDIUM | HIGH | Domain reloads or player builds can crash the editor. Mitigation: Resolved by disabling EditorApplication.Exit(0) in automated SmokeTest.cs scripts. | ✔️ Mitigated |
 | **R41** | Clone identity from residual abilities | MEDIUM | LOW | Original fantasy abilities (e.g. garlic, magic water) dilute the shelter rescue theme. Mitigation: Phase out or rename/re-theme abilities in subsequent cleanup steps. | ⚠️ Open |
 | **R42** | Fake evidence reporting | HIGH | HIGH | Local `file:///` paths in PR logs do not confirm build/UI functionality for remote reviewers. Mitigation: Screenshots copied to artifact folders, automated test report generated, and verified. | ✔️ Mitigated |
-
-
-
+| **R43** | Tabancanın Zayıf Hissedilmesi (Pistol underpowered feel) | MEDIUM | HIGH | Başlangıç tabancasının hasar veya ateş hızının zayıf olması riski. *Çözüm:* Seviye atlandığında seçilebilecek programatik Pistol Upgrade v1 sistemi (hasar, bekleme süresi, mermi hızı, mermi sayısı) ile güç dengesi ayarlandı. | ✔️ Mitigated |
+| **R44** | Erken Aşama Canavar Baskısı (Spawn pressure risk) | HIGH | HIGH | Level 1 başlangıcında canavar sayısının oyuncuyu anında ezmesi riski. *Çözüm:* `Level1WaveDirector` ile ilk 10 saniye boyunca 5 saniyede bir canavar doğurulacak şekilde yumuşak geçiş sağlandı. | ✔️ Mitigated |
+| **R45** | Alakasız Geliştirme Havuzu (Upgrade mismatch risk) | MEDIUM | HIGH | Nişancı karakter oynarken havuzun büyüsel/yakın dövüş yetenekleriyle dolması riski. *Çözüm:* `AbilityManager` içinde başlangıç tabancası aktifken bu tür öğeleri engelleyen `IsShooterRelevant` filtresi uygulandı. | ✔️ Mitigated |
+| **R46** | Elit Canavar Görünürlük Eksikliği (Elite telegraph risk) | MEDIUM | HIGH | Güçlü/elit düşmanın ekrana aniden çıkıp oyuncuyu haksızca öldürmesi riski. *Çözüm:* 60. saniyede prosedürel top-center `EliteWarningUI` ile `"ELIT DUSMAN YAKLASIYOR"` uyarısı verilerek oyuncu hazırlandı. | ✔️ Mitigated |
+| **R47** | Ekonomi / Yetersiz Coin Düşüşü (Coin economy/drop risk) | LOW | MEDIUM | Canavarların az coin düşürmesi ve ilk dakikada yükseltme yapılamaması riski. *Çözüm:* MonsterBlueprint loot table kontrol edildi, mıknatıs ve coin toplama akışı manuel test edildi. | ✔️ Mitigated |
+| **R48** | Taret & Destek Noktası Görsel Kalitesi (Turret/support point visual quality risk) | HIGH | MEDIUM | Bu PR'da taret kodu eklenmedi, görsel kalitesi ve entegrasyonu sonraki aşamaya ertelendi. | ⚠️ Open |
+| **R49** | Kule Savunması Tür Kayması (Tower-defense pivot risk) | MEDIUM | HIGH | Destek noktaları ve taretler sadece yardımcı eleman olarak planlandı, serbest yerleştirme kaldırıldı. Eski turret görselleri shooter hissiyatını bozmamalı. | ⚠️ Open |
+| **R50** | Android Derleme Bozulması (Android build regression risk) | HIGH | HIGH | `SmokeTest/BuildAndroid` çalıştırılarak derlemenin hatasız bittiği ve APK'nın üretildiği doğrulandı. | ✔️ Mitigated |
+| **R51** | Destek Noktası Arayüz Anlaşılırlığı Riski (Support point UX clarity risk) | MEDIUM | HIGH | Oyuncuların taret yerleşim alanlarını ve interaktif noktaları anlamakta zorluk yaşaması riski. Sonraki PR'da görsel kılavuzlar ve belirgin UI vurguları eklenmeli. | ⚠️ Open |
+| **R52** | Şablon Değiştirme / Tür Kayması Riski (Base pivot risk) | LOW | HIGH | Başka bir kule savunma şablonuna geçildiğinde nişancı dinamiklerinin kaybolma riski. *Çözüm:* Mevcut survivors base'i korundu. | ✔️ Mitigated |
+| **R53** | Repo Değiştirme Maliyeti Riski (Repo switching cost risk) | LOW | HIGH | Repo değiştirildiğinde mobile input, pool, ve seviye sistemlerini sıfırdan kurmanın getirdiği zaman kaybı riski. *Çözüm:* Mevcut base'in korunmasına karar verildi. | ✔️ Mitigated |
+| **R54** | Level 1 Haksız Zorluk Riski (Level 1 unfair difficulty risk) | HIGH | HIGH | Canavar HP'lerinin fazla ve temas hasarının öldürücü olması. *Çözüm:* Melee hasarı %90 düşürüldü, HP'ler ilk 60s için mutlak 10'a, sonraki 60s için 15'e kilitlendi (negatif hpBuff). | ✔️ Mitigated |
+| **R55** | Elit Düşmanın Çok Erken Gelmesi (Elite too early risk) | MEDIUM | HIGH | Level 1'de elit düşmanın oyuncuyu ezmesi. *Çözüm:* Elit canavarlar ve uyarıları Seviye 1'de tamamen devre dışı bırakıldı. | ✔️ Mitigated |
+| **R56** | Gelişim ve Ekonomi Dengesizliği Riski (XP/coin pacing insufficiency risk) | MEDIUM | HIGH | Oyuncunun yeterli XP toplayamaması veya ilk geliştirmeyi tabanca harici alması. *Çözüm:* İlk upgrade ekranı `firstUpgradeOffered` ile %100 tabanca odaklı yapıldı. | ✔️ Mitigated |
+| **R57** | Sonsuz Bölüm Belirsizliği Riski (Endless level clarity risk) | MEDIUM | MEDIUM | Bölümün bitiş süresinin belirsizliği. *Çözüm:* Seviye 1 için 120 saniyelik net win condition (LevelPassed) eklendi. | ✔️ Mitigated |
+| **R58** | Nitelik Yansıtma/Kayıt Hatası (Reflection value binding risk) | HIGH | HIGH | C# GetFields yansıtma yönteminin base sınıflardaki (örn. ProjectileAbility) protected alanları bulamaması nedeniyle yükseltmelerin tabancaya etki etmemesi riski. *Çözüm:* Init metodu base type hiyerarşisini tarayacak şekilde güncellendi. | ✔️ Mitigated |
+| **R59** | Uzaktan Fırlatan Düşman Riski (Level 1 projectile risk) | HIGH | HIGH | Seviye 1'de uzaktan projectile/nesne fırlatan canavarların haksız ölümlere yol açması. *Çözüm:* Ranged, Throwing, Boomerang düşmanları tamamen yasaklandı. | ✔️ Mitigated |
+| **R60** | Level 1 layout readability risk | MEDIUM | HIGH | Programmatically enforce lower-left Shelter, player starting near shelter, and right-only enemy spawns at start. | ✔️ Mitigated |
+| **R61** | Fake/inactive ability button risk | LOW | HIGH | Hide other action buttons in Level 1 and display a real, 8s radial cooldown Multi Shot Burst skill on the right button. | ✔️ Mitigated |
+| **R62** | Enemy HP curve jump risk | MEDIUM | HIGH | Implement a soft onboarding HP curve (12-15 HP, then 18-22 HP, then 24-30 HP) and clamp maximum active enemies to prevent sudden spikes. | ✔️ Mitigated |
+| **R63** | Victory UI mismatch risk | LOW | HIGH | Rename Try Again button to Continue on win, hide paid continue option, and route click event to return to Main Menu. | ✔️ Mitigated |
+| **R64** | Chest/box objective confusion risk | LOW | MEDIUM | Completely disable chest/box spawning in Level 1 so players focus entirely on shelter defense. | ✔️ Mitigated |
+| **R65** | Shelter defense target clarity risk | MEDIUM | HIGH | Split enemy targeting so 70% target the shelter directly and 30% target the player to build shelter defense onboarding feel. | ✔️ Mitigated |
+| **R66** | Pistol icon asset/license risk | LOW | MEDIUM | Created 100% self-authored procedural 32x32 sprite in editor script to avoid copyright/AI provenance issues. | ✔️ Mitigated |
+| **R67** | Manual skill overload risk | LOW | LOW | Maintained automatic 8-second multi-shot skill triggers, making manual click option optional and low-risk. | ✔️ Mitigated |
+| **R68** | Blueprint HP scaling difficulty regression risk | LOW | HIGH | Rejected direct blueprint HP multiplier scaling; implemented strict tutorial HP bands with minor visual-type scaling instead. | ✔️ Mitigated |
+| **R69** | Character Select placeholder identity risk | MEDIUM | MEDIUM | Deactivated the middle Test Character 1 card at runtime and added clear code documentation for future redesign passes. | ✔️ Mitigated |
+| **R70** | Generic upgrade label readability risk | LOW | MEDIUM | Overrode upgrade card text dynamically to Turkish no-accented pistol titles in Level 1. | ✔️ Mitigated |
+| **R71** | Inactive HUD button confusion risk | LOW | HIGH | Deactivated unused action buttons and hidden sub-graphics under the active button on start/update. | ✔️ Mitigated |
+| **R72** | Same-enemy hidden HP scaling confusion risk | LOW | HIGH | Disabled time-based HP multiplier scaling in Level 1. | ✔️ Mitigated |
+| **R73** | Enemy taxonomy clarity risk | LOW | MEDIUM | Assigned fixed HP roles to Junior (12), Medium (20), and Senior (30) enemies based on visual scale/sprites. | ✔️ Mitigated |
+| **R74** | Difficulty by composition balance risk | MEDIUM | HIGH | Scaled difficulty strictly via composition ratios (Junior/Medium/Senior) and active enemy count limits. | ✔️ Mitigated |
+| **R75** | Double Shot early power spike risk | MEDIUM | MEDIUM | Cap maximum projectile count upgrades to 1 step (+1 projectile, max 2 total) to prevent early game trivialization. | ✔️ Mitigated |
+| **R76** | Bullet spam/readability risk | LOW | MEDIUM | Fired simultaneous parallel shots with a tiny side-by-side offset to keep target logic, visuals, and hit feedback readable. | ✔️ Mitigated |
+| **R77** | First upgrade fun factor risk | LOW | HIGH | Replaced the low-impact Bullet Speed card with Double Shot in the Level 1 starter onboarding set to wow the user. | ✔️ Mitigated |
+| **R78** | Double shot spread readability risk | LOW | MEDIUM | Removed angular spread in favor of parallel offsets so both bullets hit the exact same target cleanly without scattering. | ✔️ Mitigated |
+| **R79** | Upgrade percentage clarity risk | LOW | MEDIUM | Updated card descriptions to show precise values (+%40 damage, %20 cooldown decrease, +1 projectile) for better player feedback. | ✔️ Mitigated |
+| **R80** | False clean git status reporting risk | LOW | HIGH | Commit all modified files and clean up build noise before final handoff, ensuring git status is 100% empty. | ✔️ Mitigated |
 
 ## Closed Risks
 

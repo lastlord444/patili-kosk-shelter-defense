@@ -1,35 +1,57 @@
 # SESSION_HANDOFF.md
 
-> Last updated: 2026-06-04
-> Status: Phase 3 / Shooter Direction & Pistol Quality Pass Completed (Ready for Merge)
+> Son Güncelleme: 2026-06-06
+> Durum: ACIL FIX 4 - Upgrade UX + Enemy Taxonomy Consistency + HUD Button Cleanup Tamamlandı (Merge-Ready)
 
-## Session Summary
+## Oturum Özeti
 
-**Session goal:** Oyuncunun başlangıç saldırı hissini (combat game feel) iyileştirmek için otomatik nişan alan top-down shooter mekaniklerini oturtmak, Basic Auto Pistol PR'ının kalite kapısı düzeltmelerini tamamlamak ve test/build ile doğrulamaktır.
+**Oturum Amacı:** Seviye 1 onboarding akışındaki kullanıcı geri bildirimlerini çözmek. İlk yükseltme (level up) seçimlerinin tabanca odaklı hissettirmesi, HUD butonlarının temizliği (çalışmayan tuşların gizlenmesi ve kopya görsellerin kaldırılması), canavar HP değerlerinin görsel tasarımlarıyla uyumlu ve sabit olması (taxonomy consistency) ve zorluğun HP şişirme yerine canavar kompozisyonuyla ayarlanması.
 
-**Completed this session:**
-- [x] **Pistol Görseli Düzeltildi:** Prosedürel çizim `pixelsPerUnit = 2f` yapılarak 1x1 dünya birimi boyutuna büyütüldü ve sorting order +10 yapılarak Game View'da net görünmesi sağlandı.
-- [x] **Başlangıç Düşman Yoğunluğu Azaltıldı:** `Level 1.asset` keyframe spawn değerleri onboarding için ilk 60 saniyede %40-60 oranında hafifletildi.
-- [x] **Upgrade Yetenek Havuzu Temizlendi:** Level 1 upgrade pool'unda VS'den kalan fantezi yetenekler çıkarılarak Molotov, Grenade, Machine Gun, Armor, Cooldown, Damage, Speed, Projectile Count, Projectile Speed, Pistol ve Bazooka ile sınırlandırıldı.
-- [x] **Karakter Hızlı Koşma/Uçma Sorunu Çözüldü:** `Level 1.asset` ability listesindeki yorum satırlarının Unity YAML parser tarafından null okunup `AbilityManager.Init()`'te çökmesi nedeniyle initialization'ın yarıda kalması ve player rigidBody damping (drag) değerlerinin 0 kalması çözüldü (null check fallback'leri ve YAML temizliği yapıldı).
-- [x] **Sağdaki "9" İkonları ve Kullanılmama Sorunu Çözüldü:** Initialization çöküşü giderildiği için `inventory.Init()` artık başarıyla çalışıyor ve boş slotlar pasif/grayed out durumda düzgün gizleniyor.
-- [x] **Android Build Smoke Test Başarılı:** `Build/android_smoke.apk` başarıyla derlendi, test edildi ve 58.3 MB boyutuyla çıktı verdi.
-- [x] **Editor Kapanma Nedeni Bulundu:** `SmokeTest.cs` içerisindeki test sonu `EditorApplication.Exit(0)` çağrısı kapatılarak editörün açık kalması sağlandı.
+- [x] **First Upgrade Card Set Fix:** Yükseltme kartları artık genel/generic ("Damage+", "Cooldown+", "Projectile Speed+") görünmek yerine ilk seviyede tamamen tabanca odaklıdır. Seviye 1'de ilk yükseltme ekranında sadece ve kesinlikle şu 3 kart sunulur:
+  - **Tabanca Hasari+** (*"Tabanca hasari +%40."*) - Bullet/damage impact patlama efekti veren özel ikon.
+  - **Seri Atis+** (*"Tabanca %20 daha hizli ates eder."*) - Cooldown/saat gösteren özel ikon.
+  - **Cift Atis+** (*"Tabanca +1 mermi atar."*) - Aynı hedefe paralel giden iki küçük mermi ve iz çıkartan özel ikon.
+  - *Cift Atis+* artık spread/açı kullanmaz. Mermiler namludan (muzzle) çok küçük bir paralel offset ile çıkar ve aynı selected Monster hedefine parallel olarak gider.
+  - *Mermi Hizi* düşük onboarding etkisi nedeniyle ilk upgrade ekranından kaldırılmıştır.
+  - *Git Clean*: Final teslimatta git status --stop tamamen temiz (boş) olacak şekilde tüm dosyalar commit edilmiştir.
+- [x] **HUD Button Cleanup:** Sağdaki kullanılmayan veya pasif/gri duran butonlar tamamen gizlendi.
+  - Sadece tek bir yetenek butonu (`Button [Right]`) görünmektedir ve bu buton `Level1SkillHUD` (Çoklu Atış / Multi Shot Burst) için çalışmaktadır.
+  - `Button [Top]` ve `Button [Bottom]` butonları (hem birinci hem ikinci set) tamamen gizlenmiştir.
+  - Aktif butonun altındaki `"Health"` (kalp simgesi) gibi çalışmayan kopya veya pasif görseller deaktif edilerek görsel çakışma (HUD visual clash) engellendi. Artık sadece dairesel cooldown göstergeli siyah/kırmızı hedef ikonu görünmektedir.
+  - Joystick ve yükseltme (Upgrade) ekranları sorunsuz çalışmaya devam etmektedir.
+  - Çoklu atış yeteneği otomatik 8 saniyede bir tetiklenmeye devam ederken, hedefleri sadece `Monster` sınıfı nesnelerle kısıtlandı (Coin, XP, Shelter veya Player hedeflenmez).
+  - Butonların başka kodlarca yanlışlıkla tekrar aktif edilmesini önlemek amacıyla, `Level1WaveDirector` her 30 karede bir HUD durumunu kontrol ederek deaktifliği zorunlu kılar.
+- [x] **Enemy Taxonomy Consistency:** Canavarların HP değerleri görsel tasarımlarıyla uyumlu ve tüm bölüm boyunca sabit kalacak şekilde ayarlandı. Aynı canavar tipinin zaman ilerledikçe süngerleşmesi engellendi:
+  - **Turuncu Yengec (Junior):** Sabit 12 HP (Normal Tabanca ile 1 vuruş).
+  - **Yesil Uzayli (Medium):** Sabit 20 HP (Normal Tabanca ile 2 vuruş).
+  - **Buyuk Canavar (Senior):** Sabit 30 HP (Normal Tabanca ile 3 vuruş).
+- [x] **Difficulty by Composition:** Zorluk artışı canavar canlarını gizlice artırarak değil, zamana bağlı canavar kompozisyonuyla sağlandı:
+  - **0–30s:** 100% Junior canavar. Aynı anda en fazla 2 canavar aktif.
+  - **30–75s:** 70% Junior, 30% Medium canavar. Aynı anda en fazla 3 canavar aktif.
+  - **75–120s:** 50% Junior, 35% Medium, 15% Senior canavar. Aynı anda en fazla 5 canavar aktif.
+  - Bölümde Ranged, Throwing, Boomerang düşmanları, Eliteler veya Boss'lar doğmamaktadır. Tek rota (sağdan spawn) korunmuştur.
+- [x] **Pistol Balance:** Başlangıç tabanca damage değeri 12, cooldown süresi 0.7s ve mermi hızı 13f olarak ayarlanarak canavar HP taksonomisiyle dengelendi. Geliştirme seçildiğinde fark bariz olarak hissedilmektedir.
+- [x] **Android Smoke Build Success:** `SmokeTest/BuildAndroid` menü göreviyle Android APK'sı sorunsuz derlendi.
+  - APK Konumu: `Build/android_smoke.apk`
+  - APK Boyutu: ~60.9 MB (60,908,015 bytes)
+  - Derleme Durumu: Succeeded (Derleme başarılı bitti ve Unity Editor açık kalmaya devam etti).
+  - Otomatik testler (EditMode & PlayMode) başarıyla tamamlandı.
+
+---
+
+## Sonraki Adımlar ve Riskler (Next Steps & Risks)
+
+- **UI Resolution Adapters:** Farklı mobil ekran oranlarında joystick ve butonların Safe Area hizalamalarının kontrolü.
+- **Weapon Variety Integration:** Seviye 1 sonrasında diğer silah tiplerinin (Machine Gun, Bazooka vb.) ve genel yeteneklerin yükseltme havuzuna sorunsuz dahil edilmesi.
 
 ---
 
 ## Repo State at Handoff
 
-| Item | State |
+| Öğe | Durum |
 |---|---|
 | Repo | lastlord444/patili-kosk-shelter-defense |
-| Default branch | main |
-| Current branch | feature/basic-auto-pistol |
-| Next recommended branch | feature/basic-auto-pistol PR merge to main |
-| Code changes | Updated `AbilityManager.cs`, `PistolAbility.cs`, `Character.cs`, `SmokeTest.cs`, `Level 1.asset` |
-| Doc changes | Updated `docs/SESSION_HANDOFF.md`, `docs/RISK_REGISTER.md` (ve önceki commit'te README/REPO_TRUTH) |
-| Workspace Status | Ready for PR Merge (Build & Play Mode verification passed) |
-
-## Next Phase 3 Step: Shelter Visual & Progress Indicators
-- Shelter (barınak) HP bar boyutunun doğal oyun görünümüne ölçeklenmesi.
-- Sabit support turret veya shelter support noktalarının tasarımı ve implementasyonu.
+| Varsayılan Branch | main |
+| Mevcut Branch | feature/wave-pistol-upgrade-v1 |
+| Değişen Dosyalar | `Assets/Scripts/Gameplay/Level1WaveDirector.cs`, `Assets/Scripts/Gameplay/AbilityCard.cs`, `Assets/Scripts/Character/Abilities/AbilityManager.cs`, `Assets/Scripts/Character/Abilities/PistolAbility.cs` |
+| Derleme Durumu | Android derlemesi (`Build/android_smoke.apk`) ve Unity Editör testleri başarıyla doğrulandı. |
